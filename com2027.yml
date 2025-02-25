@@ -3,6 +3,12 @@ project_name: Project Name
 project_description: |
   Short description (100 words) about the web app proposed and developed. You can provide a brief overview of the project here, including which UN's SDGs this project is tackling.
 
+  Our web app is designed to help young adults navigate their first job's financial challenges through an negaging, game-based experience. 
+  
+  Players make financial decisions - such as budgeting, understanding payslips, and planning for pensions - while progressing through real-life jobs cenarios. By incorporating gamification and interactive challenges, the platform enhances financial literacy in an accessible and enjoyable way.
+
+  The app bridges the knowledge gap by providing practical insights, reducing financial stress, and empowering users to make informed money choices, ultimately promoting long-term financial stability.
+
   Line breaks are permitted.
 
 group_members:

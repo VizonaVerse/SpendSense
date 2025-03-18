@@ -6,6 +6,7 @@ import "./App.css";
 import Home from "./components/Home";
 import { JobSelect, jobs } from "./components/JobSelect";
 import SamplePayslip from "./components/SamplePayslip";
+import Chart from "./components/PieChart.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -42,6 +43,7 @@ function App() {
     goToSection(sectionIndices.budget);
   };
 
+
   return (
     <div id="main-wrapper">
 
@@ -70,6 +72,9 @@ function App() {
           </div>
         </section>
 
+        <section className="section budgeting-section">
+          <Chart /> {/* Add the Chart component here */}
+        </section>
       </div>
 
 

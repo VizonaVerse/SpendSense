@@ -62,9 +62,14 @@ const PieChart = () => {
   const handleDoubleClick = useCallback((event, elements) => {
     if (elements.length > 0) {
       const index = elements[0].index;
-      const newValue = parseInt(prompt('Enter new value:', chartData.datasets[0].data[index]), 10); // Parse as integer
-      if (!isNaN(newValue)) {
-        drag(index, newValue - chartData.datasets[0].data[index]); //function does nothing if not number
+      const currentValue = chartData.datasets[0].data[index];
+      const newValue = parseInt(prompt('Enter new value:', currentValue), 10); // Parse as integer
+      const MIN_VALUE = 5;
+      // Ensure the new value is not below the minimum threshold
+      if (!isNaN(newValue) && newValue >= MIN_VALUE) {
+        drag(index, newValue - currentValue); // Adjust the slice value
+      } else if (newValue < MIN_VALUE) {
+        alert(`Value cannot be less than ${MIN_VALUE}.`);
       }
     }
   }, [chartData, drag]);
@@ -90,7 +95,7 @@ const PieChart = () => {
           label: (context) => {
             const label = context.label || '';
             const value = context.raw || 0;
-            return `${label}: ${value}`;
+            return `${label}: ${value}%`;
           },
         },
       },

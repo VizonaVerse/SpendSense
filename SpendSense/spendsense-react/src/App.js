@@ -4,7 +4,8 @@ import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Home from "./components/Home";
-import { JobSelect, jobs } from "./components/JobSelect";
+import JobSelect, { initialJobs } from "./components/JobSelect";
+
 import SamplePayslip from "./components/SamplePayslip";
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
   };
 
   const handleJobSelect = (index) => {
-    setSelectedJob(jobs[index]);
+    setSelectedJob(initialJobs[index]);
     goToSection(sectionIndices.payslip);
   };
 

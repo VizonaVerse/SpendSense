@@ -5,13 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Home from "./components/Home";
 import JobSelect, { initialJobs } from "./components/JobSelect";
-
 import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [budgetCompleted, setBudgetCompleted] = useState(false);
 
   // Define section indices (order: home=0, jobSelect=1, payslip=2, budget=3), page scrolls down to these sections
   const sectionIndices = {
@@ -19,6 +19,7 @@ function App() {
     jobSelect: 1,
     payslip: 2,
     budget: 3,
+    jobSwitch: 4,
   };
 
   // Animate the container to show the target section
@@ -35,15 +36,23 @@ function App() {
     goToSection(sectionIndices.jobSelect);
   };
 
-  const handleJobSelect = (index) => {
-    setSelectedJob(initialJobs[index]);
-    goToSection(sectionIndices.payslip);
+  const handleJobSelect = (job) => {
+    setSelectedJob(job);
+
+    setTimeout(() => {
+     goToSection(sectionIndices.payslip); 
+    }, 200);
+    
   };
 
   const handleGoToBudget = () => {
     goToSection(sectionIndices.budget);
   };
 
+  const handleBudgetComplete = () => {
+    setBudgetCompleted(true); 
+    goToSection(sectionIndices.jobSwitch); 
+  };
 
   return (
     <div id="main-wrapper">
@@ -74,8 +83,14 @@ function App() {
         </section>
 
         <section className="section budgeting-section">
-          <Chart /> {/* Add the Chart component here */}
+          <Chart onComplete={handleBudgetComplete} /> {/* Add the Chart component here */}
         </section>
+        {/* "Time to Switch Things Up" - Only Show After Budget */}
+        {budgetCompleted && (
+          <section className="section job-switch-section">
+            <JobSelect showSwitchOptions={true} /> 
+          </section>
+        )}
       </div>
 
 

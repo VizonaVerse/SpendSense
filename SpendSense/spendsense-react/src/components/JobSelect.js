@@ -16,10 +16,9 @@ const newJobs = [
   { id: "freelancer", title: "Freelancer", salary: 35000, pension: "definedContribution" },
 ];
 
-function JobSelect() {
+function JobSelect({ onJobSelect, showSwitchOptions = false }) {
   const [firstJob, setFirstJob] = useState(null);
   const [secondJob, setSecondJob] = useState(null);
-  const [showSecondJobOptions, setShowSecondJobOptions] = useState(false);
   const cardRefs = useRef([]);
 
   const addToRefs = (el) => {
@@ -37,7 +36,7 @@ function JobSelect() {
   // First Job Selection
   const handleFirstJobSelect = (job) => {
     setFirstJob(job);
-    setShowSecondJobOptions(true); // Show second job options after first job is picked
+    onJobSelect(job);
   };
 
   // Second Job Selection (Pension choice)
@@ -70,8 +69,8 @@ function JobSelect() {
         ))}
       </div>
 
-      {/* Second Job Selection - Only shows after first job is selected */}
-      {showSecondJobOptions && (
+      {/* "Time to Switch Things Up?" - Only show AFTER Budgeting is done */}
+      {showSwitchOptions && (
         <div className="mt-5">
           <h2>Time to Switch Things Up?</h2>
           <p>Choose a new job or stay with your current job:</p>
@@ -83,7 +82,7 @@ function JobSelect() {
                 onClick={() => handleSecondJobSelect(firstJob)}
                 style={{ cursor: "pointer", backgroundColor: "#cce5ff" }}
               >
-                <h4>Stick with {firstJob.title}</h4>
+                <h4>Stick with {firstJob?.title}</h4>
                 <p>State Pension</p>
               </div>
             </div>

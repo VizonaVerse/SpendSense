@@ -3,12 +3,12 @@ import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
 const newJobs = [
-  { id: "dataScientist", title: "Data Scientist", salary: 70000, pension: "definedBenefit" },
+  { id: "dataScientist", title: "Data Scientist", salary: 70000, pension: "fixedPension" },
   { id: "entrepreneur", title: "Entrepreneur", salary: 50000, pension: "definedContribution" },
 ];
 
-function JobSwitch1({ onJobSelect, initialJob }) {
-  const [selectedJob, setSelectedJob] = useState(null);
+function JobSwitch({ onJobSelect, initialJob }) {
+  const [selectedJob, setSelectedJob] = useState(initialJob);
   const cardRefs = useRef([]);
 
   const addToRefs = (el) => {
@@ -57,7 +57,14 @@ function JobSwitch1({ onJobSelect, initialJob }) {
               style={{ cursor: "pointer" }}
             >
               <h4>{job.title}</h4>
-              <p>{job.pension === "definedBenefit" ? "Defined Benefit Pension" : "Defined Contribution Pension"}</p>
+              <p>
+                {job.pension === "fixedPension"
+                ? "Fixed Pension"
+                : job.pension === "definedBenefit"
+                ? "Defined Benefit Pension"
+                : "Defined Contribution Pension"
+                }
+              </p>
             </div>
           </div>
         ))}
@@ -69,4 +76,4 @@ function JobSwitch1({ onJobSelect, initialJob }) {
   );
 }
 
-export default JobSwitch1;
+export default JobSwitch;

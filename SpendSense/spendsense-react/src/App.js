@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import JobSelect, { initialJobs } from "./components/JobSelect";
 import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
-import JobSwitch1 from "./components/JobSwitch1";
+import JobSwitch from "./components/JobSwitch.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -91,7 +91,7 @@ function App() {
 
         {budgetCompleted && (
           <section className="section job-switch-section">
-            <JobSwitch1 onJobSelect={setSelectedJob} initialJob={initialJob} />
+            <JobSwitch onJobSelect={setSelectedJob} initialJob={initialJob} />
           </section>
         )}
       </div>

@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useRef, useState } from "react";
 import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,9 +11,10 @@ import JobSwitch1 from "./components/JobSwitch1";
 function App() {
   const scrollContainerRef = useRef(null);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
 
-  // Define section indices (order: home=0, jobSelect=1, payslip=2, budget=3), page scrolls down to these sections
+  // Define section indices (order: home=0, jobSelect=1, payslip=2, budget=3, jobSwitch1=4)
   const sectionIndices = {
     home: 0,
     jobSelect: 1,
@@ -39,11 +39,10 @@ function App() {
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
-
+    setInitialJob(job);
     setTimeout(() => {
      goToSection(sectionIndices.payslip); 
     }, 200);
-    
   };
 
   const handleGoToBudget = () => {
@@ -57,8 +56,6 @@ function App() {
 
   return (
     <div id="main-wrapper">
-
-      {/* Inner container that will slide between sections */}
       <div id="scroll-container" ref={scrollContainerRef}>
         <section className="section home-section">
           <Home onStart={handleStart} />
@@ -93,13 +90,11 @@ function App() {
         </section>
 
         {budgetCompleted && (
-  <section className="section job-switch-section">
-    <JobSwitch1 onJobSelect={setSelectedJob} initialJob={selectedJob} />
-  </section>
-)}
+          <section className="section job-switch-section">
+            <JobSwitch1 onJobSelect={setSelectedJob} initialJob={initialJob} />
+          </section>
+        )}
       </div>
-
-
     </div>
   );
 }

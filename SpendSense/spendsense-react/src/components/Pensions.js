@@ -23,13 +23,12 @@ const pensionDetails = {
 function Pensions({ selectedJob }) {
   const pensionRef = useRef(null);
 
-  //animation when a new job is selected
   useEffect(() => {
-    if (selectedJob) {
+    if (selectedJob && pensionRef.current) {
       gsap.fromTo(
         pensionRef.current,
-        { opacity: 0, y: 30 },  
-        { opacity: 1, y: 0, duration: 0.5 } 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5 }
       );
     }
   }, [selectedJob]);
@@ -38,19 +37,14 @@ function Pensions({ selectedJob }) {
     return <h2>Please select a job to see pension details.</h2>;
   }
 
-  let pensionType;
-  if (selectedJob.pension === "state") {
-    pensionType = pensionDetails.state;
-  } else if (selectedJob.pension === "definedBenefit") {
-    pensionType = pensionDetails.definedBenefit;
-  } else if (selectedJob.pension === "definedContribution") {
-    pensionType = pensionDetails.definedContribution;
-  } else {
-    return <h2>No pension information available.</h2>;
-  }
+  const pensionType = pensionDetails[selectedJob.pension] || {
+    title: "No Pension Information",
+    description: "No pension details available for this job.",
+    amount: "N/A",
+  };
 
   return (
-    <div ref={pensionRef} className="pension-container">
+    <div ref={pensionRef} className="pension-container text-center p-4 shadow-sm">
       <h2>{pensionType.title}</h2>
       <p>{pensionType.description}</p>
       <strong>Estimated Pension: {pensionType.amount}</strong>

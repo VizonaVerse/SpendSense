@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import JobSelect, { initialJobs } from "./components/JobSelect";
 import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
+import JobSwitch1 from "./components/JobSwitch1";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -19,7 +20,7 @@ function App() {
     jobSelect: 1,
     payslip: 2,
     budget: 3,
-    jobSwitch: 4,
+    jobSwitch1: 4,
   };
 
   // Animate the container to show the target section
@@ -51,7 +52,7 @@ function App() {
 
   const handleBudgetComplete = () => {
     setBudgetCompleted(true); 
-    goToSection(sectionIndices.jobSwitch); 
+    goToSection(sectionIndices.jobSwitch1); 
   };
 
   return (
@@ -82,15 +83,20 @@ function App() {
           </div>
         </section>
 
-        <section className="section budgeting-section">
-          <Chart onComplete={handleBudgetComplete} /> {/* Add the Chart component here */}
+        <section className="section budgeting-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+          <Chart onComplete={handleBudgetComplete} />
+          <div className="budget-button-wrapper" style={{ marginTop: '20px' }}>
+            <button onClick={handleBudgetComplete} className="btn btn-success">
+              Next
+            </button>
+          </div>
         </section>
-        {/* "Time to Switch Things Up" - Only Show After Budget */}
+
         {budgetCompleted && (
-          <section className="section job-switch-section">
-            <JobSelect showSwitchOptions={true} /> 
-          </section>
-        )}
+  <section className="section job-switch-section">
+    <JobSwitch1 onJobSelect={setSelectedJob} initialJob={selectedJob} />
+  </section>
+)}
       </div>
 
 

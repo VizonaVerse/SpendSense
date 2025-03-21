@@ -73,20 +73,44 @@ const PieChart = () => {
   const handleMouseMove = (event) => {
     const chart = chartRef.current;
     if (!chart) return;
-
+  
     const { offsetX, offsetY } = event.nativeEvent;
     const { chartArea } = chart;
     const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
     const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-
+  
     const x = offsetX - centerX;
     const y = offsetY - centerY;
-
+  
     let angle = Math.atan2(y, x);
-    if (angle < -Math.PI / 2) {
-      angle += 2 * Math.PI;
+    if (angle < 0) {
+      angle += 2 * Math.PI; // Normalize angle to [0, 2π]
     }
-
+  
+    const data = chart.data.datasets[0].data;
+    const total = data.reduce((sum, value) => sum + value, 0);
+    let startAngle = -Math.PI / 2;
+    const borderWidth = 0.05; // Adjust for sensitivity
+  
+    let isOnBorder = false;
+  
+    for (let i = 0; i < data.length; i++) {
+      const sliceAngle = (data[i] / total) * 2 * Math.PI;
+      const endAngle = startAngle + sliceAngle;
+  
+      if (Math.abs(angle - endAngle) <= borderWidth) {
+        isOnBorder = true;
+        break;
+      }
+      startAngle = endAngle;
+    }
+  
+    if (isOnBorder) {
+      chart.canvas.style.cursor = 'pointer';
+    } else if (!dragging) {
+      chart.canvas.style.cursor = 'default';
+    }
+  
     if (dragging && dragIndex !== null) {
       adjustSlices(dragIndex, angle);
     }

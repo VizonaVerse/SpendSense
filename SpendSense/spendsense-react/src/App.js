@@ -102,20 +102,13 @@ function App() {
   
         {budgetCompleted && (
           <section className="section job-switch-section">
-            <JobSwitch onJobSelect={(job) => {
-              setSelectedJob(job);
-              setSelectedPension(job.pension);
-            }} initialJob={initialJob} />
-            {selectedJob && (
-              <div className="payslip-button-wrapper">
-                <button
-                  onClick={() => handlePensionSelection(selectedJob.pension)}
-                  className="btn btn-primary mt-3"
-                >
-                  Continue to Pension Withdrawal
-                </button>
-              </div>
-            )}
+            <JobSwitch 
+  onJobSelect={(job) => setSelectedJob(job)} 
+  onPensionSelect={handlePensionSelection}
+  initialJob={initialJob} 
+/>
+
+         
           </section>
         )}
   

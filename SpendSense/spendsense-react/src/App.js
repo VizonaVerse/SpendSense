@@ -7,12 +7,14 @@ import JobSelect, { initialJobs } from "./components/JobSelect";
 import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
+import PensionWithdrawal from "./components/PensionWithdrawal.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
+  const [selectedPension, setSelectedPension] = useState(null);
 
   // Define section indices (order: home=0, jobSelect=1, payslip=2, budget=3, jobSwitch1=4)
   const sectionIndices = {
@@ -20,7 +22,9 @@ function App() {
     jobSelect: 1,
     payslip: 2,
     budget: 3,
-    jobSwitch1: 4,
+    jobSwitch: 4,
+    pensions: 5,
+    PensionWithdrawal:  6
   };
 
   // Animate the container to show the target section
@@ -30,8 +34,10 @@ function App() {
       duration: 1,
       y: yValue,
       ease: "power2.out",
+      onComplete: () => console.log(`Scrolled to section: ${sectionIndex}`),
     });
   };
+  
 
   const handleStart = () => {
     goToSection(sectionIndices.jobSelect);
@@ -40,6 +46,7 @@ function App() {
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setInitialJob(job);
+    setSelectedPension(job.pension);
     setTimeout(() => {
      goToSection(sectionIndices.payslip); 
     }, 200);
@@ -51,7 +58,12 @@ function App() {
 
   const handleBudgetComplete = () => {
     setBudgetCompleted(true); 
-    goToSection(sectionIndices.jobSwitch1); 
+    goToSection(sectionIndices.jobSwitch); 
+  };
+
+  const handlePensionSelection = (pensionType) => {
+    setSelectedPension(pensionType);
+    goToSection(sectionIndices.PensionWithdrawal);
   };
 
   return (
@@ -91,12 +103,35 @@ function App() {
 
         {budgetCompleted && (
           <section className="section job-switch-section">
-            <JobSwitch onJobSelect={setSelectedJob} initialJob={initialJob} />
+            <JobSwitch onJobSelect={(job) => {
+              setSelectedJob(job);
+              setSelectedPension(job.pension);
+            }} initialJob={initialJob} />
+            {selectedJob && (
+              <div className="payslip-button-wrapper">
+                <button
+                  onClick={() => handlePensionSelection(selectedJob.pension)}
+                  className="btn btn-primary mt-3"
+                >
+                  Continue to Pension Withdrawal
+                </button>
+              </div>
+            )}
           </section>
         )}
+
+        <section className="section pension-withdrawal-section">
+          {selectedPension && (
+            <PensionWithdrawal
+              selectedPension={selectedPension}
+              onContinue={() => console.log("Proceeding to next step...")}
+            />
+          )}
+        </section>
       </div>
     </div>
   );
 }
 
 export default App;
+

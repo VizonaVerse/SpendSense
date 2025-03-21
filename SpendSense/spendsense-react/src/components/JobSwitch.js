@@ -25,9 +25,11 @@ function JobSwitch({ onJobSelect, initialJob }) {
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
-    onJobSelect(job);
+    setTimeout(() => {
+      onJobSelect(job);
+    }, 100); 
   };
-
+  
   return (
     <div className="section-content job-select-section text-center">
       <h2>Time to Switch Things Up?</h2>

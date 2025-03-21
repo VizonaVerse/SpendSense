@@ -10,7 +10,7 @@ function PensionWithdrawal({ selectedPension, onContinue }){
         if (withdrawalRef.current){
             gsap.fromTo(
                 withdrawalRef.current,
-                { opacity: 0, y: 50 },  
+                { opacity: 0, y: 20 },  
                 { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" } 
             );
         }

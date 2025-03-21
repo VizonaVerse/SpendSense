@@ -23,8 +23,7 @@ function App() {
     payslip: 2,
     budget: 3,
     jobSwitch: 4,
-    pensions: 5,
-    PensionWithdrawal:  6
+    PensionWithdrawal: 5,
   };
 
   // Animate the container to show the target section
@@ -69,14 +68,15 @@ function App() {
   return (
     <div id="main-wrapper">
       <div id="scroll-container" ref={scrollContainerRef}>
+  
         <section className="section home-section">
           <Home onStart={handleStart} />
         </section>
-
+  
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
         </section>
-
+  
         <section className="section payslip-section">
           <div className="payslip-wrapper">
             <div className="payslip-content">
@@ -92,15 +92,14 @@ function App() {
           </div>
         </section>
 
-        <section className="section budgeting-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+  
+        <section className="section budgeting-section">
           <Chart onComplete={handleBudgetComplete} />
-          <div className="budget-button-wrapper" style={{ marginTop: '20px' }}>
-            <button onClick={handleBudgetComplete} className="btn btn-success">
-              Next
-            </button>
-          </div>
+          <button onClick={handleBudgetComplete} className="btn btn-success mt-3">
+            Next
+          </button>
         </section>
-
+  
         {budgetCompleted && (
           <section className="section job-switch-section">
             <JobSwitch onJobSelect={(job) => {
@@ -119,19 +118,23 @@ function App() {
             )}
           </section>
         )}
-
+  
+        {/* Pension withdrawal section: always present, content is conditional */}
         <section className="section pension-withdrawal-section">
-          {selectedPension && (
+          {selectedPension ? (
             <PensionWithdrawal
               selectedPension={selectedPension}
               onContinue={() => console.log("Proceeding to next step...")}
             />
+          ) : (
+            <div className="d-flex justify-content-center align-items-center h-100">
+              <p>Please select a pension option to continue.</p>
+            </div>
           )}
         </section>
+  
       </div>
     </div>
   );
-}
-
+}  
 export default App;
-

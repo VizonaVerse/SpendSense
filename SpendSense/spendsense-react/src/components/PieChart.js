@@ -8,7 +8,6 @@ const MIN_SLICE_VALUE = 1; // Minimum slice value in percentage
 
 const PieChart = () => {
   const chartRef = useRef(null);
-
   const [chartData, setChartData] = useState({
     labels: ['Rent', 'Food', 'Transport', 'Utilities', 'Entertainment'],
     datasets: [
@@ -38,28 +37,25 @@ const PieChart = () => {
     const nextSliceIndex = (index + 1) % data.length;
     const nextSlice = data[nextSliceIndex];
 
-    // Calculate the new percentage for the current slice
-    const newPercentage = Math.round((newAngle / (2 * Math.PI)) * 100);
+    let newPercentage = Math.round((newAngle / (2 * Math.PI)) * 100);
 
-    // Ensure the new slice values are positive and respect the minimum slice value
+    if (currentSlice <= MIN_SLICE_VALUE && newPercentage < currentSlice) {
+      newPercentage = currentSlice;
+    }
+
+    const maxPercentage = currentSlice + nextSlice - MIN_SLICE_VALUE;
+    if (nextSlice <= MIN_SLICE_VALUE && newPercentage > maxPercentage) {
+      newPercentage = maxPercentage;
+    }
+
     const newCurrentSlice = Math.max(newPercentage, MIN_SLICE_VALUE);
     const newNextSlice = Math.max(currentSlice + nextSlice - newCurrentSlice, MIN_SLICE_VALUE);
 
-    // Normalize the data to ensure the total is 100%
     let normalizedData = data.map((value, i) => {
       if (i === index) return newCurrentSlice;
       if (i === nextSliceIndex) return newNextSlice;
       return value;
     });
-
-    const normalizedTotal = normalizedData.reduce((sum, value) => sum + value, 0);
-
-    // Adjust the last slice to ensure the total is exactly 100%
-    const adjustment = 100 - normalizedTotal;
-    normalizedData[normalizedData.length - 1] = Math.max(
-      normalizedData[normalizedData.length - 1] + adjustment,
-      MIN_SLICE_VALUE
-    );
 
     setChartData({
       ...chartData,
@@ -80,66 +76,73 @@ const PieChart = () => {
     const { chartArea } = chart;
     const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
     const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-    const radius = (chartArea.right - chartArea.left) / 2;
 
     const x = offsetX - centerX;
     const y = offsetY - centerY;
-    const distance = Math.sqrt(x * x + y * y);
 
-    if (distance > radius - 10 && distance < radius + 10) {
-      chart.canvas.style.cursor = 'pointer';
-    } else {
-      chart.canvas.style.cursor = 'default';
+    let angle = Math.atan2(y, x);
+    if (angle < -Math.PI / 2) {
+      angle += 2 * Math.PI;
     }
 
     if (dragging && dragIndex !== null) {
-      let angle = Math.atan2(y, x);
-      angle -= Math.PI / 2;
-      if (angle < 0) {
-        angle += 2 * Math.PI;
-      }
       adjustSlices(dragIndex, angle);
     }
   };
 
   const handleMouseDown = (event) => {
     const chart = chartRef.current;
+    if (!chart) return;
+
     const { offsetX, offsetY } = event.nativeEvent;
     const { chartArea } = chart;
     const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
     const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
+    const radius = (chartArea.right - chartArea.left) / 2;
 
     const x = offsetX - centerX;
     const y = offsetY - centerY;
 
     let angle = Math.atan2(y, x);
-    angle -= Math.PI / 2;
     if (angle < 0) {
       angle += 2 * Math.PI;
     }
 
     const data = chart.data.datasets[0].data;
     const total = data.reduce((sum, value) => sum + value, 0);
-
     let startAngle = -Math.PI / 2;
+    const borderWidth = 0.05;
+
+    // Store the angle of the first border
+    const firstBorderAngle = -Math.PI / 2;
+
     for (let i = 0; i < data.length; i++) {
       const sliceAngle = (data[i] / total) * 2 * Math.PI;
+      const endAngle = startAngle + sliceAngle;
 
-      if (angle >= startAngle && angle <= startAngle + sliceAngle) {
+      // Prevent dragging the border before the first slice
+      if (i === 4) {
+          return; // Prevent dragging this border
+      }
+
+      if (Math.abs(angle - endAngle) <= borderWidth) {
         setDragging(true);
-        setDragIndex(i); // Correctly set the index of the slice being dragged
+        setDragIndex(i);
+        chart.canvas.style.cursor = 'grabbing';
         break;
       }
-      startAngle += sliceAngle;
+      startAngle = endAngle;
     }
   };
 
   const handleMouseUp = () => {
     setDragging(false);
     setDragIndex(null);
+    if (chartRef.current) {
+      chartRef.current.canvas.style.cursor = 'default';
+    }
   };
 
-  // Custom plugin to draw borders
   const borderPlugin = {
     id: 'borderPlugin',
     afterDraw: (chart) => {
@@ -153,21 +156,44 @@ const PieChart = () => {
 
       let startAngle = -Math.PI / 2;
 
-      data.forEach((value, index) => {
-        const angle = (value / total) * 2 * Math.PI;
+      for (let i = 0; i < data.length; i++) {
+        const angle = (data[i] / total) * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+
+        const isHovered = dragging && dragIndex === i;
+
+        ctx.strokeStyle = isHovered ? 'rgba(255, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = isHovered ? 3 : 2;
 
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
+
+        let mouseAngle;
+        if (dragging && dragIndex === i) {
+          // Get mouse position relative to the chart
+          const { offsetX, offsetY } = chart.canvas;
+          const x = offsetX - centerX;
+          const y = offsetY - centerY;
+
+          // Calculate the angle from the center to the mouse position
+          mouseAngle = Math.atan2(y, x);
+
+          // Normalize the angle to be between 0 and 2*PI
+          if (mouseAngle < 0) {
+            mouseAngle += 2 * Math.PI;
+          }
+        } else {
+          mouseAngle = endAngle; // Default to the end of the slice
+        }
+
         ctx.lineTo(
-          centerX + radius * Math.cos(startAngle),
-          centerY + radius * Math.sin(startAngle)
+          centerX + radius * Math.cos(mouseAngle),
+          centerY + radius * Math.sin(mouseAngle)
         );
-        ctx.strokeStyle = dragging && dragIndex === index ? 'rgba(0, 0, 255, 0.8)' : 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = dragging && dragIndex === index ? 3 : 2;
         ctx.stroke();
 
-        startAngle += angle;
-      });
+        startAngle = endAngle;
+      }
     },
   };
 
@@ -188,17 +214,15 @@ const PieChart = () => {
         const angle = (value / total) * 2 * Math.PI;
         const midAngle = startAngle + angle / 2;
 
-        // Calculate the position for the percentage text
         const textX = centerX + (radius / 1.5) * Math.cos(midAngle);
         const textY = centerY + (radius / 1.5) * Math.sin(midAngle);
 
-        // Draw the percentage text
-        const percentage = ((value / total) * 100).toFixed(1) + '%';
+        const percentage = Math.round((value / total) * 100);
         ctx.fillStyle = 'black';
         ctx.font = '14px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(percentage, textX, textY);
+        ctx.fillText(percentage + '%', textX, textY);
 
         startAngle += angle;
       });
@@ -215,7 +239,7 @@ const PieChart = () => {
             const label = context.label || '';
             const value = context.raw || 0;
             const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-            const percentage = ((value / total) * 100).toFixed(2);
+            const percentage = Math.round((value / total) * 100);
             return `${label}: ${percentage}%`;
           },
         },
@@ -225,14 +249,19 @@ const PieChart = () => {
 
   return (
     <div
-      style={{ position: 'relative', width: '600px', height: '600px' }}
+      style={{
+        position: 'relative',
+        width: '800px',
+        height: '800px',
+        border: '2px solid black',
+        borderRadius: '10px',
+      }}
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
       <Pie ref={chartRef} data={chartData} options={options} />
     </div>
-    
   );
 };
 

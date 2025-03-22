@@ -51,7 +51,7 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
 
     return (
         <div ref={withdrawalRef} className="pension-withdrawal-container text-center p-4 shadow-sm">
-            <h2>How Do You Want to Take Out Your Pension?</h2>
+            <h2>Time to retire! How Do You Want to Take Out Your Pension?</h2>
             <div className="row mt-4 justify-content-center">
                 {withdrawalOptions.map((option, index) => (
                     <div key={index} className="col-md-5 mb-3">

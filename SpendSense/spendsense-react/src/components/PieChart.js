@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -175,7 +175,7 @@ const PieChart = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (!dragging) return;
     
     setDragging(false);
@@ -195,7 +195,7 @@ const PieChart = () => {
       previousAngleRef.current = null;
       dragTimeout.current = null;
     }, 10);
-  };
+  }, [dragging]); // Add 'dragging' as a dependency
 
   const borderPlugin = {
     id: 'borderPlugin',
@@ -296,7 +296,6 @@ const PieChart = () => {
         callbacks: {
           label: (context) => {
             const label = context.label || '';
-            const value = context.raw || 0;
             const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
             
             // Use the same calculation as in the percentagePlugin
@@ -336,7 +335,7 @@ const PieChart = () => {
     return () => {
       window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [dragging]); // Only re-bind when dragging state changes
+  }, [dragging, handleMouseUp]); // Add 'handleMouseUp' to the dependency array
 
   // Add a new useEffect to ensure event binding is consistent
   useEffect(() => {

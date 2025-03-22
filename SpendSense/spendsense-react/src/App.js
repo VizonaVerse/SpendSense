@@ -50,7 +50,7 @@ function App() {
       {/* Inner container that will slide between sections */}
       <div id="scroll-container" ref={scrollContainerRef}>
         <section className="section home-section">
-          <Chart onStart={handleStart} />
+          <Home onStart={handleStart} />
         </section>
 
         <section className="section job-select-section">

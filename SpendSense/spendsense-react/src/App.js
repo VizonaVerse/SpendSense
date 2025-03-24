@@ -3,11 +3,12 @@ import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Home from "./components/Home";
-import JobSelect, { initialJobs } from "./components/JobSelect";
+import JobSelect, {selectedJob} from "./components/JobSelect";
 import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
+import Navbar from "./components/Navbar.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -67,6 +68,7 @@ function App() {
 
   return (
     <div id="main-wrapper">
+      <Navbar />
       <div id="scroll-container" ref={scrollContainerRef}>
   
         <section className="section home-section">

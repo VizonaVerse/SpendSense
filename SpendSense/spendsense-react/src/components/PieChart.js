@@ -88,7 +88,7 @@ const PieChart = () => {
 
   const handleMouseMove = (event) => {
     const chart = chartRef.current;
-    if (!chart || !dragging || dragIndex === null) return;
+    if (!chart) return;
   
     const { offsetX, offsetY } = event.nativeEvent;
     const { chartArea } = chart;
@@ -99,29 +99,58 @@ const PieChart = () => {
     const y = offsetY - centerY;
   
     // Calculate current angle
+    let angle = Math.atan2(y, x);
+    if (angle < 0) {
+      angle += 2 * Math.PI;
+    }
+  
+    const data = chart.data.datasets[0].data;
+    const total = data.reduce((sum, value) => sum + value, 0);
+    let startAngle = -Math.PI / 2;
+    const borderWidth = 0.05; // Adjust for sensitivity
+  
+    let isHovering = false;
+  
+    for (let i = 0; i < data.length - 1; i++) { // Exclude the final border
+      const sliceAngle = (data[i] / total) * 2 * Math.PI;
+      const endAngle = startAngle + sliceAngle;
+  
+      // Check if mouse is near the handle
+      const angleDiff = Math.abs(((angle - endAngle) + 2 * Math.PI) % (2 * Math.PI));
+      if (angleDiff <= borderWidth || 2 * Math.PI - angleDiff <= borderWidth) {
+        isHovering = true;
+        break;
+      }
+      startAngle = endAngle;
+    }
+  
+    // Change cursor to pointer if hovering over a draggable border
+    if (chart.canvas) {
+      chart.canvas.style.cursor = isHovering ? 'pointer' : dragging ? 'grabbing' : 'default';
+    }
+  
+    if (!dragging || dragIndex === null) return;
+  
+    // Handle dragging logic
     let currentAngle = Math.atan2(y, x);
     if (currentAngle < 0) {
       currentAngle += 2 * Math.PI;
     }
-    
-    // Handle the initial state or after mouseup
+  
     if (previousAngleRef.current === null) {
       previousAngleRef.current = currentAngle;
       return;
     }
-    
-    // Calculate the angle difference, handling the wrap-around at 2π
+  
     let angleDiff = currentAngle - previousAngleRef.current;
-    
-    // Handle wrap-around for smoother experience
+  
     if (Math.abs(angleDiff) > Math.PI) {
       angleDiff = angleDiff > 0 
-        ? angleDiff - 2 * Math.PI  // Going counterclockwise across 0
-        : angleDiff + 2 * Math.PI; // Going clockwise across 0
+        ? angleDiff - 2 * Math.PI 
+        : angleDiff + 2 * Math.PI;
     }
-    
-    // Only make changes if there's a meaningful difference
-    if (Math.abs(angleDiff) > 0.001) {
+  
+    if (Math.abs(angleDiff) > 0.0001) {
       adjustSlices(dragIndex, angleDiff);
       previousAngleRef.current = currentAngle;
     }
@@ -214,16 +243,21 @@ const PieChart = () => {
         const angle = (value / total) * 2 * Math.PI;
         const endAngle = startAngle + angle;
 
-        // Highlight the border if the mouse is over it
-        const isHovered = dragging && dragIndex === index;
-        ctx.strokeStyle = isHovered ? 'rgba(0, 0, 255, 0.8)' : 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = isHovered ? 3 : 2;
+        // Make the border invisible
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0)'; // Fully transparent
+        ctx.lineWidth = 2;
+
+        const innerRadius = radius * 0.3;
+        const outerRadius = radius * 0.7;
 
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
+        ctx.moveTo(
+          centerX + innerRadius * Math.cos(endAngle),
+          centerY + innerRadius * Math.sin(endAngle)
+        );
         ctx.lineTo(
-          centerX + radius * Math.cos(endAngle),
-          centerY + radius * Math.sin(endAngle)
+          centerX + outerRadius * Math.cos(endAngle),
+          centerY + outerRadius * Math.sin(endAngle)
         );
         ctx.stroke();
 
@@ -291,6 +325,8 @@ const PieChart = () => {
 
   ChartJS.register(borderPlugin, percentagePlugin);
   const options = {
+    responsive: true, // Enable responsiveness
+    maintainAspectRatio: true, // Allow the chart to resize freely
     plugins: {
       tooltip: {
         callbacks: {
@@ -352,8 +388,6 @@ const PieChart = () => {
         position: 'relative',
         width: '800px',
         height: '800px',
-        border: '2px solid black',
-        borderRadius: '10px',
       }}
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}

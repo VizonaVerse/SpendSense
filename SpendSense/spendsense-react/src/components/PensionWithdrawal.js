@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 
 function PensionWithdrawal({ selectedPension, onContinue }) {
     const [selectedOption, setSelectedOption] = useState(null);
-    const [hoveredTooltipIndex, setHoveredTooltipIndex] = useState(null); // Moved here ✅
+    const [hoveredTooltipIndex, setHoveredTooltipIndex] = useState(null); 
     const withdrawalRef = useRef(null);
     const cardRefs = useRef([]);
 
@@ -109,12 +109,16 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
                                                 borderRadius: "5px",
                                                 padding: "8px",
                                                 marginTop: "5px",
-                                                zIndex: 10,
+                                                zIndex: 9999,
                                                 whiteSpace: "normal",
                                                 width: "220px",
                                                 fontSize: "0.85rem",
                                                 boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-                                            }}
+                                                pointerEvents: "auto",
+                                                display: "block",
+                                                color: "#000",
+                                              }}
+                                              
                                         >
                                             {optionInfo[option]}
                                         </div>

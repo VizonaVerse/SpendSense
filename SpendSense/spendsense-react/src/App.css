@@ -146,3 +146,8 @@ html, body {
 .hover-info:hover .info-box {
   opacity: 1;
 }
+
+/* hover info for pension withdrawal */
+.hover-info:hover .info-box {
+  display: block !important;
+}

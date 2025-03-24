@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 
 function PensionWithdrawal({ selectedPension, onContinue }) {
     const [selectedOption, setSelectedOption] = useState(null);
+    const [hoveredTooltipIndex, setHoveredTooltipIndex] = useState(null); // Moved here ✅
     const withdrawalRef = useRef(null);
     const cardRefs = useRef([]);
 
@@ -30,7 +31,7 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
         withdrawalOptions = ["Govt pay into bank/Building society", "Paid in weekly multiples"];
     }
 
-    // 🔹 GSAP Hover Animations
+    // GSAP Hover Animations
     const handleHover = (element) => {
         gsap.to(element, {
             backgroundColor: "#cce5ff",
@@ -49,6 +50,18 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
         });
     };
 
+    const optionInfo = {
+        "Weekly Taxed Payments": "You receive your pension weekly with tax already deducted.",
+        "Lump Sum Withdrawal": "Take your entire pension pot at once — may result in a large tax bill.",
+        "Withdraw via Insurance Company": "They manage your pension withdrawals over time.",
+        "Deposit into a Bank": "You manage the money yourself once deposited.",
+        "Govt pay into bank/Building society": "Standard state pension paid directly into your account.",
+        "Paid in weekly multiples": "Receive pension in multiple smaller weekly payments.",
+    }
+
+    
+
+
     return (
         <div ref={withdrawalRef} className="pension-withdrawal-container text-center p-4 shadow-sm">
             <h2>Time to retire! How Do You Want to Take Out Your Pension?</h2>
@@ -65,9 +78,50 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
                                 cursor: "pointer",
                                 backgroundColor: selectedOption === option ? "#cce5ff" : "white",
                                 transition: "background-color 0.3s ease",
+                                position: "relative",
                             }}
                         >
-                            <h4>{option}</h4>
+                            <h4 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                {option}
+                                <span
+                                    className="hover-info ms-2"
+                                    style={{
+                                        position: "relative",
+                                        cursor: "help",
+                                        fontSize: "0.9em",
+                                        color: "#007bff",
+                                        marginLeft: "8px",
+                                    }}
+                                    onMouseEnter={() => setHoveredTooltipIndex(index)}
+                                    onMouseLeave={() => setHoveredTooltipIndex(null)}
+                                >
+                                    (i)
+                                    {hoveredTooltipIndex === index && (
+                                        <div
+                                            className="info-box"
+                                            style={{
+                                                position: "absolute",
+                                                top: "100%",
+                                                left: "50%",
+                                                transform: "translateX(-50%)",
+                                                backgroundColor: "#fff",
+                                                border: "1px solid #ccc",
+                                                borderRadius: "5px",
+                                                padding: "8px",
+                                                marginTop: "5px",
+                                                zIndex: 10,
+                                                whiteSpace: "normal",
+                                                width: "220px",
+                                                fontSize: "0.85rem",
+                                                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+                                            }}
+                                        >
+                                            {optionInfo[option]}
+                                        </div>
+                                    )}
+                                </span>
+
+                            </h4>
                         </div>
                     </div>
                 ))}

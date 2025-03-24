@@ -1,13 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const MIN_SLICE_VALUE = 1; // Minimum slice value in percentage
 
 const PieChart = () => {
+  const chartRef = useRef(null);
+  const previousAngleRef = useRef(null);
+  const dragTimeout = useRef(null);
+
   const [chartData, setChartData] = useState({
     labels: ['Rent', 'Food', 'Transport', 'Utilities', 'Entertainment'],
     datasets: [
@@ -21,31 +24,55 @@ const PieChart = () => {
           'rgba(75, 192, 192, 0.6)',
           'rgba(153, 102, 255, 0.6)',
         ],
-        hoverOffset: 20, // Add hover offset for 3D effect
+        hoverOffset: 20,
       },
     ],
   });
 
-  const [lastClickTime, setLastClickTime] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [dragIndex, setDragIndex] = useState(null);
 
-  const drag = useCallback((index, deltaValue) => {
+  // Clean up any ongoing timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (dragTimeout.current) {
+        clearTimeout(dragTimeout.current);
+      }
+    };
+  }, []);
+
+  // Track continuous movements instead of absolute angles
+  const adjustSlices = (index, angleDiff) => {
     const data = [...chartData.datasets[0].data];
     const total = data.reduce((sum, value) => sum + value, 0);
-    const newValue = Math.round(data[index] + deltaValue); // Round to nearest integer
-
-    // Ensure values are within 0 and total range
-    if (newValue < 0 || newValue > total) {
-      return;
+    
+    // Convert the angle difference to percentage difference
+    // The full circle is 2π radians = 100% of the total
+    const percentageDiff = (angleDiff / (2 * Math.PI)) * total;
+    
+    const currentSlice = data[index];
+    const nextSliceIndex = (index + 1) % data.length;
+    const nextSlice = data[nextSliceIndex];
+    
+    // Calculate new slice values based on the difference
+    let newCurrentSlice = currentSlice + percentageDiff;
+    let newNextSlice = nextSlice - percentageDiff;
+    
+    // Apply minimum constraints
+    if (newCurrentSlice < MIN_SLICE_VALUE) {
+      newCurrentSlice = MIN_SLICE_VALUE;
+      newNextSlice = currentSlice + nextSlice - MIN_SLICE_VALUE;
     }
-
-    const remainingTotal = total - data[index];
-    const remainingNewTotal = total - newValue;
-
-    const normalizedData = data.map((value, i) => {
-      if (i === index) {
-        return newValue;
-      }
-      return Math.round((value / remainingTotal) * remainingNewTotal); // Round to nearest integer
+    
+    if (newNextSlice < MIN_SLICE_VALUE) {
+      newNextSlice = MIN_SLICE_VALUE;
+      newCurrentSlice = currentSlice + nextSlice - MIN_SLICE_VALUE;
+    }
+    
+    let normalizedData = data.map((value, i) => {
+      if (i === index) return newCurrentSlice;
+      if (i === nextSliceIndex) return newNextSlice;
+      return value;
     });
 
     setChartData({
@@ -57,59 +84,318 @@ const PieChart = () => {
         },
       ],
     });
-  }, [chartData]);
+  };
 
-  const handleDoubleClick = useCallback((event, elements) => {
-    if (elements.length > 0) {
-      const index = elements[0].index;
-      const newValue = parseInt(prompt('Enter new value:', chartData.datasets[0].data[index]), 10); // Parse as integer
-      if (!isNaN(newValue)) {
-        drag(index, newValue - chartData.datasets[0].data[index]); //function does nothing if not number
-      }
+  const handleMouseMove = (event) => {
+    const chart = chartRef.current;
+    if (!chart) return;
+  
+    const { offsetX, offsetY } = event.nativeEvent;
+    const { chartArea } = chart;
+    const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
+    const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
+  
+    const x = offsetX - centerX;
+    const y = offsetY - centerY;
+  
+    // Calculate current angle
+    let angle = Math.atan2(y, x);
+    if (angle < 0) {
+      angle += 2 * Math.PI;
     }
-  }, [chartData, drag]);
-
-  const handleClick = useCallback((event, elements) => {
-    const currentTime = new Date().getTime();
-    if (currentTime - lastClickTime < 200) { // double click within 200ms
-      handleDoubleClick(event, elements);
-    } else {
-      if (elements.length > 0) {
-        const index = elements[0].index;
-        const deltaValue = 5; // value for how much slice changes per click
-        drag(index, deltaValue);
+  
+    const data = chart.data.datasets[0].data;
+    const total = data.reduce((sum, value) => sum + value, 0);
+    let startAngle = -Math.PI / 2;
+    const borderWidth = 0.05; // Adjust for sensitivity
+  
+    let isHovering = false;
+  
+    for (let i = 0; i < data.length - 1; i++) { // Exclude the final border
+      const sliceAngle = (data[i] / total) * 2 * Math.PI;
+      const endAngle = startAngle + sliceAngle;
+  
+      // Check if mouse is near the handle
+      const angleDiff = Math.abs(((angle - endAngle) + 2 * Math.PI) % (2 * Math.PI));
+      if (angleDiff <= borderWidth || 2 * Math.PI - angleDiff <= borderWidth) {
+        isHovering = true;
+        break;
       }
+      startAngle = endAngle;
     }
-    setLastClickTime(currentTime);
-  }, [lastClickTime, handleDoubleClick, drag]);
+  
+    // Change cursor to pointer if hovering over a draggable border
+    if (chart.canvas) {
+      chart.canvas.style.cursor = isHovering ? 'pointer' : dragging ? 'grabbing' : 'default';
+    }
+  
+    if (!dragging || dragIndex === null) return;
+  
+    // Handle dragging logic
+    let currentAngle = Math.atan2(y, x);
+    if (currentAngle < 0) {
+      currentAngle += 2 * Math.PI;
+    }
+  
+    if (previousAngleRef.current === null) {
+      previousAngleRef.current = currentAngle;
+      return;
+    }
+  
+    let angleDiff = currentAngle - previousAngleRef.current;
+  
+    if (Math.abs(angleDiff) > Math.PI) {
+      angleDiff = angleDiff > 0 
+        ? angleDiff - 2 * Math.PI 
+        : angleDiff + 2 * Math.PI;
+    }
+  
+    if (Math.abs(angleDiff) > 0.0001) {
+      adjustSlices(dragIndex, angleDiff);
+      previousAngleRef.current = currentAngle;
+    }
+  };
 
+  const handleMouseDown = (event) => {
+    // Clear any existing timeouts
+    if (dragTimeout.current) {
+      clearTimeout(dragTimeout.current);
+      dragTimeout.current = null;
+    }
+    
+    const chart = chartRef.current;
+    if (!chart) return;
+    
+    const { offsetX, offsetY } = event.nativeEvent;
+    const { chartArea } = chart;
+    const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
+    const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
+  
+    const x = offsetX - centerX;
+    const y = offsetY - centerY;
+  
+    let angle = Math.atan2(y, x);
+    if (angle < 0) {
+      angle += 2 * Math.PI;
+    }
+  
+    const data = chart.data.datasets[0].data;
+    const total = data.reduce((sum, value) => sum + value, 0);
+    let startAngle = -Math.PI / 2;
+    const borderWidth = 0.05; // Adjust for sensitivity
+  
+    for (let i = 0; i < data.length; i++) {
+      const sliceAngle = (data[i] / total) * 2 * Math.PI;
+      const endAngle = startAngle + sliceAngle;
+      if (i === 4) {
+        return;
+      }
+      // Check if mouse is near the handle
+      // Use modulo to handle the wrap-around at 2*PI
+      const angleDiff = Math.abs(((angle - endAngle) + 2 * Math.PI) % (2 * Math.PI));
+      if (angleDiff <= borderWidth || 2 * Math.PI - angleDiff <= borderWidth) {
+        setDragging(true);
+        setDragIndex(i);
+        previousAngleRef.current = angle; // Set the initial angle
+        chart.canvas.style.cursor = 'grabbing';
+        break;
+      }
+      startAngle = endAngle;
+    }
+  };
+
+  const handleMouseUp = useCallback(() => {
+    if (!dragging) return;
+    
+    setDragging(false);
+    setDragIndex(null);
+    
+    if (chartRef.current) {
+      chartRef.current.canvas.style.cursor = 'default';
+    }
+    
+    // Use a timeout to clear the angle reference after the current event cycle
+    // This fixes the issue with handles not being draggable after first use
+    if (dragTimeout.current) {
+      clearTimeout(dragTimeout.current);
+    }
+    
+    dragTimeout.current = setTimeout(() => {
+      previousAngleRef.current = null;
+      dragTimeout.current = null;
+    }, 10);
+  }, [dragging]); // Add 'dragging' as a dependency
+
+  const borderPlugin = {
+    id: 'borderPlugin',
+    afterDraw: (chart) => {
+      const { ctx, chartArea } = chart;
+      const data = chart.data.datasets[0].data;
+      const total = data.reduce((sum, value) => sum + value, 0);
+
+      const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
+      const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
+      const radius = (chartArea.right - chartArea.left) / 2;
+
+      let startAngle = -Math.PI / 2;
+
+      data.forEach((value, index) => {
+        const angle = (value / total) * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+
+        // Make the border invisible
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0)'; // Fully transparent
+        ctx.lineWidth = 2;
+
+        const innerRadius = radius * 0.3;
+        const outerRadius = radius * 0.7;
+
+        ctx.beginPath();
+        ctx.moveTo(
+          centerX + innerRadius * Math.cos(endAngle),
+          centerY + innerRadius * Math.sin(endAngle)
+        );
+        ctx.lineTo(
+          centerX + outerRadius * Math.cos(endAngle),
+          centerY + outerRadius * Math.sin(endAngle)
+        );
+        ctx.stroke();
+
+        startAngle = endAngle;
+      });
+    },
+  };
+
+  const percentagePlugin = {
+    id: 'percentagePlugin',
+    afterDraw: (chart) => {
+      const { ctx, chartArea } = chart;
+      const data = chart.data.datasets[0].data;
+      const total = data.reduce((sum, value) => sum + value, 0);
+
+      const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
+      const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
+      const radius = (chartArea.right - chartArea.left) / 2;
+
+      let startAngle = -Math.PI / 2;
+
+      // Calculate exact percentages first
+      const exactPercentages = data.map(value => (value / total) * 100);
+      
+      // Floor all percentages initially and track remainders
+      const floored = exactPercentages.map(p => Math.floor(p));
+      const remainders = exactPercentages.map((p, i) => ({
+        index: i,
+        remainder: p - floored[i]
+      }));
+      
+      // Sort by remainder in descending order
+      remainders.sort((a, b) => b.remainder - a.remainder);
+      
+      // Calculate how many percentage points we need to distribute
+      const totalFloored = floored.reduce((sum, p) => sum + p, 0);
+      const pointsToDistribute = 100 - totalFloored;
+      
+      // Distribute remaining points to slices with largest remainders
+      const adjustedPercentages = [...floored];
+      for (let i = 0; i < pointsToDistribute; i++) {
+        adjustedPercentages[remainders[i % remainders.length].index]++;
+      }
+
+      // Now draw the percentages
+      data.forEach((value, index) => {
+        const angle = (value / total) * 2 * Math.PI;
+        const midAngle = startAngle + angle / 2;
+
+        // Calculate the position for the percentage text
+        const textX = centerX + (radius / 1.5) * Math.cos(midAngle);
+        const textY = centerY + (radius / 1.5) * Math.sin(midAngle);
+
+        // Draw the percentage text
+        ctx.fillStyle = 'black';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(adjustedPercentages[index] + '%', textX, textY);
+
+        startAngle += angle;
+      });
+    },
+  };
+
+  ChartJS.register(borderPlugin, percentagePlugin);
   const options = {
+    responsive: true, // Enable responsiveness
+    maintainAspectRatio: true, // Allow the chart to resize freely
     plugins: {
       tooltip: {
         callbacks: {
           label: (context) => {
             const label = context.label || '';
-            const value = context.raw || 0;
-            return `${label}: ${value}`;
+            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+            
+            // Use the same calculation as in the percentagePlugin
+            const exactPercentages = context.dataset.data.map(v => (v / total) * 100);
+            const floored = exactPercentages.map(p => Math.floor(p));
+            const remainders = exactPercentages.map((p, i) => ({
+              index: i,
+              remainder: p - floored[i]
+            })).sort((a, b) => b.remainder - a.remainder);
+            
+            const totalFloored = floored.reduce((sum, p) => sum + p, 0);
+            const pointsToDistribute = 100 - totalFloored;
+            
+            const adjustedPercentages = [...floored];
+            for (let i = 0; i < pointsToDistribute; i++) {
+              adjustedPercentages[remainders[i % remainders.length].index]++;
+            }
+            
+            return `${label}: ${adjustedPercentages[context.dataIndex]}%`;
           },
         },
       },
-      datalabels: {
-        display: false,
-        color: '#fff',
-        textShadowBlur: 10,
-        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+      legend: {
+        onClick: null, // Disable legend click functionality
       },
     },
-    onClick: handleClick, // Use handleClick for both single and double-click
   };
 
+  // Add window event listeners for mouse events outside the component
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      handleMouseUp();
+    };
+    
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [dragging, handleMouseUp]); // Add 'handleMouseUp' to the dependency array
+
+  // Add a new useEffect to ensure event binding is consistent
+  useEffect(() => {
+    // Force reset angle reference when dependencies change
+    previousAngleRef.current = null;
+    
+    // No need to return cleanup as we're not adding event listeners here
+  }, [chartData]); // Re-run when chart data changes
+
+  // Return your existing JSX
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div style={{ position: 'relative', width: '300px', height: '300px' }}>
-        <Pie data={chartData} options={options} />
-      </div>
-    </DndProvider>
+    <div
+      style={{
+        position: 'relative',
+        width: '800px',
+        height: '800px',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp} // Add this to handle mouse leaving the component
+    >
+      <Pie ref={chartRef} data={chartData} options={options} />
+    </div>
   );
 };
 

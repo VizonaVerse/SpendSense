@@ -5,9 +5,9 @@ import { gsap } from "gsap";
 
 // Initial Job Choices
 const initialJobs = [
-  { id: "softwareEngineer", title: "Software Engineer", salary: 60000, pension: "state" },
-  { id: "graphicDesigner", title: "Graphic Designer", salary: 45000, pension: "state" },
-  { id: "teacher", title: "Teacher", salary: 40000, pension: "state" },
+  { id: "Part_Time_Tutor", title: "Part-time Tutor", salary: 10000, pension: "state" },
+  { id: "Family_Business_Waiter", title: "Family Business Waiter", salary: 11000, pension: "state" },
+  { id: "McDonalds_Employee", title: "McDonalds Employee", salary: 15000, pension: "state" },
 ];
 
 function JobSelect({ onJobSelect }) {

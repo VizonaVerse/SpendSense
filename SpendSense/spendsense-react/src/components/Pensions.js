@@ -1,4 +1,3 @@
-// src/components/Pensions.js
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
@@ -6,10 +5,10 @@ const pensionDetails = {
   state: {
     title: "State Pension",
     description: "A government-provided pension upon reaching retirement age.",
-    amount: "£203.85 per week (as of 2025)", 
+    amount: "£203.85 per week (as of 2025)",
   },
-  definedBenefit: {
-    title: "Defined Benefit Pension",
+  fixedPension: {
+    title: "Fixed Pension",
     description: "A fixed pension amount based on salary and years of service.",
     amount: "£20,000 per year (example estimate)",
   },

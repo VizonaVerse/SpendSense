@@ -23,19 +23,28 @@ export default function SamplePayslip({ job }) {
   }
 
   // Calculate monthly values based on the selected job's annual salary. Placeholder calculations
-  const monthlyGross = job.salary / 12;
-  const monthlyTax = monthlyGross * 0.2; // 20% Income Tax
-  const monthlyNI = monthlyGross * 0.12; // 12% National Insurance
-  const pension = monthlyGross * 0.05; // 5% Pension Contribution
-  const studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
+  const monthlyGross = Math.ceil(job.salary / 12);
+  let pension = monthlyGross * 0.05; // 5% Pension Contribution
+
+  let monthlyTax = 0; // 0% Income Tax
+  let monthlyNI = monthlyGross * 0.0; // 0% National Insurance
+  let studentLoan = monthlyGross * 0.00; // 0% Student Loan Repayment
+
+  if (monthlyGross > 960){
+    let monthlyNI = monthlyGross * 0.8; // 8% National Insurance
+    let studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
+    let monthlyTax = (monthlyGross - (pension + monthlyNI + monthlyGross)) * 0.2; // 20% Income Tax
+  }
+  
+
   const totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
   const netPay = monthlyGross - totalDeductions;
-  const employerContribution = monthlyGross * 0.1; // 10% Employer Contribution
+  const employerContribution = monthlyGross * 0.03; // 10% Employer Contribution
 
   return (
     <div className="payslip-container">
       <div className="card payslip-card p-3 shadow-sm">
-        <h2 className="mb-3">Payslip</h2>
+        <h2 className="mb-3">Monthly Payslip</h2>
         {/* Company & Employee Details */}
         <div className="row mb-2">
           <div className="col-6 text-start">

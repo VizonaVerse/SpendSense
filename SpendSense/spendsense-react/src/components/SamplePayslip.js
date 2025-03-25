@@ -31,15 +31,15 @@ export default function SamplePayslip({ job }) {
   let studentLoan = monthlyGross * 0.00; // 0% Student Loan Repayment
 
   if (monthlyGross > 960){
-    let monthlyNI = monthlyGross * 0.8; // 8% National Insurance
+    let monthlyNI = monthlyGross * 0.08; // 8% National Insurance
     let studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
-    let monthlyTax = (monthlyGross - (pension + monthlyNI + monthlyGross)) * 0.2; // 20% Income Tax
+    let monthlyTax = (monthlyGross - (pension + studentLoan + monthlyNI)) * 0.2; // 20% Income Tax
   }
   
 
-  const totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
-  const netPay = monthlyGross - totalDeductions;
-  const employerContribution = monthlyGross * 0.03; // 10% Employer Contribution
+  let totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
+  let netPay = monthlyGross - totalDeductions;
+  let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
 
   return (
     <div className="payslip-container">

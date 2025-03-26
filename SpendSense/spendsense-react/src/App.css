@@ -184,7 +184,7 @@ html, body {
 }
 .payslip-card {
   width: 100%;
-  height: 95vh;
+  height: 80vh;
   max-width: 100%;
   box-sizing: border-box;
   position: relative;
@@ -192,6 +192,7 @@ html, body {
 }
 .payslip-button-wrapper {
   text-align: center;
+  z-index: 100;
   padding: 0;
 }
 

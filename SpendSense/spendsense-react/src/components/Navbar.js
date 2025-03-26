@@ -213,7 +213,7 @@ function Navbar() {
             alignItems: 'center',
             justifyContent: 'center',
             flexGrow: 1,
-            gap: '20px' // Space between list items
+            gap: '20px'
           }}
         >
           <li>

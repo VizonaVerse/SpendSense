@@ -12,7 +12,6 @@ import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
 import EndShop from "./components/EndShop.js"; // ✅ NEW
 import EndScreen from "./components/EndScreen.js";
-import Navbar from "./components/Navbar.js";
 import CharacterSidebar from "./components/CharacterSideBar.js";
 import Information from "./components/Information.js";
 
@@ -89,7 +88,6 @@ function App() {
 
   return (
     <div id="main-wrapper">
-      <Navbar />
       <Information />
       
       <div id="scroll-container" ref={scrollContainerRef}>

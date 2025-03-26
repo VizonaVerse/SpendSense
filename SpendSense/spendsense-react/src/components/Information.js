@@ -134,17 +134,17 @@ function Information() {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          width: '12vmin',
-          height: '12vmin',
-          maxWidth: '64px',
-          maxHeight: '64px',
+          width: '10vmin',
+          height: '10vmin',
+          maxWidth: '128px',
+          maxHeight: '128px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
         }}
       >
         <img
-          src="images/info.png"
+          src="images/menu.png"
           alt="Menu"
           style={{ 
             width: '100%', 
@@ -179,28 +179,7 @@ function Information() {
             padding: '15px'
           }}
         >
-          <button 
-            id="close-menu-button" 
-            onClick={handleButtonClick(closeNav)}
-            className="close-button"
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <section 
-              className="icon-list" 
-              style={{ 
-                filter: 'invert(1)', 
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <i className="nes-icon close is-medium"></i> 
-            </section>
-          </button>
+          
         </div>
 
         <ul 
@@ -216,6 +195,35 @@ function Information() {
             gap: '20px' 
           }}
         >
+          <li>
+            <button
+              className="nes-btn is-success"
+              onClick={handleButtonClick(closeNav)}
+              style={{ width: '200px' }}
+            >
+              Continue
+            </button>
+          </li>
+          <li>
+            <button
+              className="nes-btn is-primary"
+              onClick={handleButtonClick(handleNewGame)}
+              style={{ width: '200px' }}
+            >
+              New Game
+            </button>
+          </li>
+          <li>
+            <button
+              className="nes-btn is-primary"
+              onClick={handleButtonClick(() => {
+                console.log("About Us clicked");
+              })}
+              style={{ width: '200px' }}
+            >
+              About Us
+            </button>
+          </li>
           <li>
             <button
               className="nes-btn is-primary"

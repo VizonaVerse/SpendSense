@@ -23,19 +23,27 @@ export default function SamplePayslip({ job }) {
   }
 
   // Calculate monthly values based on the selected job's annual salary. Placeholder calculations
-  const monthlyGross = job.salary / 12;
-  const monthlyTax = monthlyGross * 0.2; // 20% Income Tax
-  const monthlyNI = monthlyGross * 0.12; // 12% National Insurance
-  const pension = monthlyGross * 0.05; // 5% Pension Contribution
-  const studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
-  const totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
-  const netPay = monthlyGross - totalDeductions;
-  const employerContribution = monthlyGross * 0.1; // 10% Employer Contribution
+  // Calculate monthly values based on the selected job's annual salary. Placeholder calculations
+let monthlyGross = Math.ceil(job.salary / 12);
+let pension = monthlyGross * 0.05; // 5% Pension Contribution
+let monthlyTax = 0; // 0% Income Tax
+let monthlyNI = 0; // 0% National Insurance
+let studentLoan = 0; // 0% Student Loan Repayment
+
+if (monthlyGross > 960) {
+    monthlyNI = monthlyGross * 0.08; // 8% National Insurance
+    studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
+    monthlyTax = (monthlyGross - (pension + studentLoan + monthlyNI)) * 0.2; // 20% Income Tax
+}
+
+let totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
+let netPay = monthlyGross - totalDeductions;
+let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
 
   return (
     <div className="payslip-container">
       <div className="card payslip-card p-3 shadow-sm">
-        <h2 className="mb-3">Payslip</h2>
+        <h2 className="mb-3">Monthly Payslip</h2>
         {/* Company & Employee Details */}
         <div className="row mb-2">
           <div className="col-6 text-start">
@@ -225,7 +233,7 @@ export default function SamplePayslip({ job }) {
             <table className="table table-sm table-bordered">
               <tbody>
                 <tr>
-                  <td>Annual Salary</td>
+                  <td>Annual Salary (before Tax)</td>
                   <td>
                     {job.salary.toLocaleString("en-UK", {
                       style: "currency",

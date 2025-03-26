@@ -121,13 +121,18 @@ function App() {
           </div>
         </section>
 
-        {/* Budget Section */}
-        <section className="section budgeting-section">
-          <Chart onComplete={handleBudgetComplete} />
-          <button onClick={handleBudgetComplete} className="btn btn-success mt-3">
-            Next
-          </button>
-        </section>
+{/* Budget Section */}
+<section className="section budgeting-section">
+  <div className="d-flex flex-column align-items-center">
+    <Chart onComplete={handleBudgetComplete} />
+    <button 
+      onClick={handleBudgetComplete} 
+      className="btn btn-success mt-4"
+    >
+      Next
+    </button>
+  </div>
+</section>
 
         {/* Job Switch Section */}
         {budgetCompleted && (

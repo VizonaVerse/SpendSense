@@ -383,12 +383,13 @@ const PieChart = () => {
 
   // Return your existing JSX
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '800px',
-        height: '800px',
-      }}
+<div
+  style={{
+    position: 'relative',
+    width: '600px',
+    height: '600px',
+    margin: '0 auto',
+  }}
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}

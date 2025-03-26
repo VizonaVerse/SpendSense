@@ -13,6 +13,8 @@ import PensionWithdrawal from "./components/PensionWithdrawal.js";
 import EndShop from "./components/EndShop.js"; // ✅ NEW
 import EndScreen from "./components/EndScreen.js";
 import Navbar from "./components/Navbar.js";
+import CharacterSidebar from "./components/CharacterSideBar.js";
+import Information from "./components/Information.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -88,13 +90,17 @@ function App() {
   return (
     <div id="main-wrapper">
       <Navbar />
+      <Information />
+      
       <div id="scroll-container" ref={scrollContainerRef}>
         {/* Home Section */}
         <section className="section home-section">
           <Home onStart={handleStart} />
         </section>
 
+        <CharacterSidebar />
         {/* Job Selection */}
+
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
         </section>

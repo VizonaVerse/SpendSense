@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 
-function Navbar() {
+function Information() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navRef = useRef(null);
   const overlayRef = useRef(null);
@@ -29,7 +29,7 @@ function Navbar() {
           ease: 'power1.inOut'
         })
         .fromTo(navRef.current, 
-          { x: '-100%', opacity: 0 },
+          { x: '100%', opacity: 0 }, // Changed from '-100%' to '100%'
           { 
             x: '0%', 
             opacity: 1,
@@ -50,7 +50,7 @@ function Navbar() {
           ease: 'power1.inOut'
         })
         .to(navRef.current, {
-          x: '-100%',
+          x: '100%', // Changed from '-100%' to '100%'
           opacity: 0,
           duration: 0.3,
           ease: 'power1.in',
@@ -129,22 +129,22 @@ function Navbar() {
         style={{ 
           position: "fixed", 
           top: "1vmin", 
-          left: "1vmin", 
+          right: "1vmin", // Changed from left to right
           zIndex: 1000,
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          width: '20vmin',
-          height: '20vmin',
-          maxWidth: '128px',
-          maxHeight: '128px',
+          width: '12vmin',
+          height: '12vmin',
+          maxWidth: '64px',
+          maxHeight: '64px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
         }}
       >
         <img
-          src="images/menu.png"
+          src="images/info.png"
           alt="Menu"
           style={{ 
             width: '100%', 
@@ -160,12 +160,12 @@ function Navbar() {
         ref={navRef}
         style={{
           position: 'fixed',
-          left: 0,
+          right: 0,
           top: 0,
           width: '300px',
           height: '100%',
           backgroundColor: 'rgba(0,0,0,0.8)',
-          transform: 'translateX(-100%)',
+          transform: 'translateX(100%)', 
           opacity: 0,
           zIndex: 1001,
           display: 'flex',
@@ -175,7 +175,7 @@ function Navbar() {
         <div 
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-start', 
             padding: '15px'
           }}
         >
@@ -213,27 +213,9 @@ function Navbar() {
             alignItems: 'center',
             justifyContent: 'center',
             flexGrow: 1,
-            gap: '20px' // Space between list items
+            gap: '20px' 
           }}
         >
-          <li>
-            <button
-              className="nes-btn is-success"
-              onClick={handleButtonClick(closeNav)}
-              style={{ width: '200px' }}
-            >
-              Continue
-            </button>
-          </li>
-          <li>
-            <button
-              className="nes-btn is-primary"
-              onClick={handleButtonClick(handleNewGame)}
-              style={{ width: '200px' }}
-            >
-              New Game
-            </button>
-          </li>
           <li>
             <button
               className="nes-btn is-primary"
@@ -242,9 +224,22 @@ function Navbar() {
               })}
               style={{ width: '200px' }}
             >
-              About Us
+              API 1
             </button>
           </li>
+
+          <li>
+            <button
+              className="nes-btn is-primary"
+              onClick={handleButtonClick(() => {
+                console.log("About Us clicked");
+              })}
+              style={{ width: '200px' }}
+            >
+              API 2
+            </button>
+          </li>
+
         </ul>
       </nav>
 
@@ -267,4 +262,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Information;

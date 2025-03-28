@@ -67,7 +67,7 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
               <span className="hover-info">
                 (i)
                 <div className="info-box">
-                  Tax code indicates how much you can earn before tax.
+                  Tax code indicates your tax bracket
                 </div>
               </span>
             </div>
@@ -119,7 +119,14 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
 
           <div className="col-6">
             <div className="section-header mb-2">
-              <h4>Deductions</h4>
+              <h4>Deductions
+              <span className="hover-info">
+                (i)
+                <div className="info-box">
+                  You have a personal allowance of £12,570 which is tax free
+                </div>
+              </span>
+              </h4>
               <div className="info-box">This section lists all your deductions.</div>
             </div>
             <table className="table table-sm table-bordered">
@@ -247,7 +254,7 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
                     <span className="hover-info">
                       (i)
                       <div className="info-box">
-                        NI Number uniquely identifies the employee for HMRC records.
+                        National Insurance Number for HMRC Records.
                       </div>
                     </span>
                   </td>

@@ -3,19 +3,19 @@ import { gsap } from "gsap";
 
 const pensionDetails = {
   state: {
-    title: "State Pension",
-    description: "A government-provided pension upon reaching retirement age.",
-    amount: "£203.85 per week (as of 2025)",
+    title: "Basic Pension",
+    description: "A Company-provided pension upon reaching retirement age.",
+    amount: "5% from you (Tax Free) and 3% from your Employer",
   },
   fixedPension: {
-    title: "Fixed Pension",
+    title: "Defined Benefits Pension",
     description: "A fixed pension amount based on salary and years of service.",
-    amount: "£20,000 per year (example estimate)",
+    amount: "This is based off your average salary and years of service",
   },
   definedContribution: {
     title: "Defined Contribution Pension",
-    description: "Pension amount depends on contributions and market performance.",
-    amount: "Varies based on contributions and returns.",
+    description: "A Company-provided pension upon reaching retirement age.",
+    amount: "5% from you (Tax Free) and 5% from your Employer",
   },
 };
 

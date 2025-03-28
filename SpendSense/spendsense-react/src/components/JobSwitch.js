@@ -3,8 +3,9 @@ import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
 const newJobs = [
-  { id: "dataScientist", title: "Data Scientist", salary: 70000, pension: "fixedPension" },
   { id: "entrepreneur", title: "Entrepreneur", salary: 50000, pension: "definedContribution" },
+  { id: "dataScientist", title: "Data Scientist", salary: 70000, pension: "fixedPension" },
+  
 ];
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
@@ -50,7 +51,8 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   return (
     <div className="section-content job-select-section text-center">
       <h2>Time to Switch Things Up?</h2>
-      <p>Choose a new job or stay with your current job:</p>
+      <p>The government provides a basic £220 weekly pension</p>
+      <p>Want to look for something better?:</p>
       <div className="row mt-4 justify-content-center">
         {/* Stay with initial job option */}
         {initialJob && (
@@ -68,7 +70,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
               }}
             >
               <h4>Stay as {initialJob.title}</h4>
-              <p>State Pension</p>
+              <p>Basic Pension</p>
             </div>
           </div>
         )}

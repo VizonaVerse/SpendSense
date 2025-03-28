@@ -10,3 +10,4 @@ djangorestframework
 django-cors-headers
 data-wizard
 Pillow
+cryptography

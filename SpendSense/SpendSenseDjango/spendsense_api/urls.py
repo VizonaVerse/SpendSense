@@ -11,4 +11,6 @@ urlpatterns = [
     path('api/job/<int:pk>/', api_views.JobDetail.as_view(), name='job-detail'),
     path('api/ending/', api_views.EndingList.as_view(), name='ending-list'),
     path('api/ending/<int:pk>/', api_views.EndingDetail.as_view(), name='ending-detail'),
+    path('api/userform/', api_views.UserDataCreateView.as_view(), name='userdata-create'),
+    path('api/userdata/', api_views.UserDataListView.as_view(), name='userdata-list'),
 ]

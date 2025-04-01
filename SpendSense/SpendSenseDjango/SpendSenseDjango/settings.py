@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'data_wizard.sources',
     'spendsense_api',
     'corsheaders', #for cors
+    'cryptography', #for encryption
 ]
 
 MIDDLEWARE = [

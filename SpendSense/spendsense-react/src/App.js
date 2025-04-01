@@ -12,7 +12,9 @@ import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
 import EndShop from "./components/EndShop.js"; // ✅ NEW
 import EndScreen from "./components/EndScreen.js";
-import Navbar from "./components/Navbar.js";
+import CharacterSidebar from "./components/CharacterSideBar.js";
+import Information from "./components/Information.js";
+import UserDataForm from "./components/UserDataForm.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -27,13 +29,14 @@ function App() {
   // Define section indices
   const sectionIndices = {
     home: 0,
-    jobSelect: 1,
-    payslip: 2,
-    budget: 3,
-    jobSwitch: 4,
-    PensionWithdrawal: 5,
-    endShop: 6, // ✅ NEW
-    end: 7,
+    form: 1,
+    jobSelect: 2,
+    payslip: 3,
+    budget: 4,
+    jobSwitch: 5,
+    PensionWithdrawal: 6,
+    endShop: 7, // ✅ NEW
+    end: 8,
   };
 
   // Animate scroll to a section
@@ -49,7 +52,17 @@ function App() {
 
   // Section handlers
   const handleStart = () => {
+    goToSection(sectionIndices.form);
+  };
+
+  const handleFormSubmit = () => {
+    console.log('Navigating to jobSelect section after form submission');
     goToSection(sectionIndices.jobSelect);
+  };
+
+  const handleSkipForm = () => {
+    console.log('Form skipped, navigating to jobSelect section');
+    goToSection(sectionIndices.jobSelect); // Navigate to the jobSelect section
   };
 
   const handleJobSelect = (job) => {
@@ -87,14 +100,28 @@ function App() {
 
   return (
     <div id="main-wrapper">
-      <Navbar />
+      <Information />
+      
       <div id="scroll-container" ref={scrollContainerRef}>
         {/* Home Section */}
         <section className="section home-section">
           <Home onStart={handleStart} />
         </section>
 
+        <CharacterSidebar />
+
+        {/* User Data Form Section */}
+        <section className="section form-section">
+          <div className="form-wrapper">
+            <h2 className="text-center">User Data Form</h2>
+            <div className="form-content">
+              <UserDataForm onSubmit={handleFormSubmit} onSkip={handleSkipForm} />
+            </div>
+          </div>
+        </section>
+        
         {/* Job Selection */}
+
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
         </section>

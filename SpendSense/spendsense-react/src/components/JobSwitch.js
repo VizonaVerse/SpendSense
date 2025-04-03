@@ -9,7 +9,7 @@ const newJobs = [
 ];
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
-  const [selectedJob, setSelectedJob] = useState(initialJob);
+  let [selectedJob, setSelectedJob] = useState(initialJob);
   const cardRefs = useRef([]);
 
   const addToRefs = (el) => {

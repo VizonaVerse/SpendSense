@@ -29,7 +29,7 @@ const items = {
     { name: "Mansion", price: 2000000 },
     { name: "House", price: 600000 },
     { name: "Homeless", price: 0 }
-  ],  
+  ],   ✅ Accep
   Thing: [
     { name: "thing good", price: 300 },
     { name: "thing ok", price: 200 },

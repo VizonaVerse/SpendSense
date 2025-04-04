@@ -5,7 +5,7 @@ import { initialJobs } from './JobSelect';
 import PieChart from "./PieChart";
  
 
-const salary_savings = initialJobs[0].salary * 40 ; //This is how much you've saved over your career
+const salary_savings = initialJobs[1].salary * 40 ; //This is how much you've saved over your career
 
 
 const categories = [

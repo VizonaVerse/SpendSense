@@ -1,13 +1,5 @@
 asgiref==3.8.1
-npm==0.1.1
-Django==5.1.6
-optional-django==0.1.0
-setuptools==75.8.2
+Django==5.1.7
+djangorestframework==3.16.0
 sqlparse==0.5.3
-tzdata==2025.1
-wheel==0.45.1
-djangorestframework
-django-cors-headers
-data-wizard
-Pillow
-cryptography
+tzdata==2025.2

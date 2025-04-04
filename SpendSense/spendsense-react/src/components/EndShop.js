@@ -2,13 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import "../App.css"; 
 import { initialJobs } from './JobSelect';
-<<<<<<< HEAD
 import PieChart from "./PieChart";
- 
-
-const salary_savings = initialJobs[1].salary * 40 ; //This is how much you've saved over your career
-=======
->>>>>>> 63180ee28a6bda3004a19da639f317080ff477fc
 
 const salary_savings = initialJobs[0].salary * 40; // This is how much you've saved over your career
 

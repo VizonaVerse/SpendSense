@@ -59,6 +59,5 @@ function JobSelect({ onJobSelect }) {
     </div>
   );
 }
-
-export { initialJobs };
+export {initialJobs};
 export default JobSelect;

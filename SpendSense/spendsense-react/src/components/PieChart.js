@@ -397,5 +397,5 @@ const PieChart = () => {
     </div>
   );
 };
-export const getChartData = (chartData) => chartData;
+
 export default PieChart;

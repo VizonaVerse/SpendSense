@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import "../App.css"; 
 import { initialJobs } from './JobSelect';
-import { getChartData } from './PieChart'; 
+import PieChart from "./PieChart";
+ 
 
 const salary_savings = initialJobs[0].salary * 40 ; //This is how much you've saved over your career
+
 
 const categories = [
   "Phone",
@@ -21,7 +23,7 @@ const items = {
   ],
   Car: [
     { name: "Cool car", price: 55000 },
-    { name: "car ", price: 18000 },
+    { name: "car ", price: 18000 },  
     { name: "shit can", price: 2000 }
   ],
   House: [

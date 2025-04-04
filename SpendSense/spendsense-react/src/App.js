@@ -26,6 +26,9 @@ function App() {
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [showEndShop, setShowEndShop] = useState(false);
 
+  // ✅ Add state to store PieChart data
+  const [budgetData, setBudgetData] = useState(null);
+
   // Define section indices
   const sectionIndices = {
     home: 0,
@@ -78,7 +81,8 @@ function App() {
     goToSection(sectionIndices.budget);
   };
 
-  const handleBudgetComplete = () => {
+  const handleBudgetComplete = (data) => {
+    setBudgetData(data); // ✅ Save PieChart data
     setBudgetCompleted(true);
     goToSection(sectionIndices.jobSwitch);
   };
@@ -144,16 +148,16 @@ function App() {
 
 {/* Budget Section */}
 <section className="section budgeting-section">
-  <div className="d-flex flex-column align-items-center">
-    <Chart onComplete={handleBudgetComplete} />
-    <button 
-      onClick={handleBudgetComplete} 
-      className="btn btn-success mt-4"
-    >
-      Next
-    </button>
-  </div>
-</section>
+          <div className="d-flex flex-column align-items-center">
+            <Chart onComplete={handleBudgetComplete} /> {/* Pass callback */}
+            <button 
+              onClick={() => handleBudgetComplete({ exampleData: 123 })} 
+              className="btn btn-success mt-4"
+            >
+              Next
+            </button>
+          </div>
+        </section>
 
         {/* Job Switch Section */}
         {budgetCompleted && (
@@ -183,7 +187,7 @@ function App() {
         {/* ✅ Retirement Shop Section */}
         {showEndShop && (
           <section className="section end-shop-section">
-            <EndShop handleGoToEndScreen={handleShowEndScreen} />
+            <EndShop budgetData={budgetData} handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
           </section>
         )}
 

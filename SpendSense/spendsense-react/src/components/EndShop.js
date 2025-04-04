@@ -10,30 +10,30 @@ const categories = [
   "Phone",
   "Car",
   "House",
-  "Thing",
+  "Leisure",
 ];
 
 // Placeholder objects
 const items = {
   Phone: [
-    { name: "phone 3", price: 1200 },
-    { name: "phone 2", price: 800 },
-    { name: "phone 1", price: 450 }
+    { name: "Iphone 16 pro", price: 1000 },
+    { name: "Samsung S25", price: 750 },
+    { name: "Nokia", price: 80 }
   ],
   Car: [
-    { name: "Cool car", price: 55000 },
-    { name: "car ", price: 18000 },  
-    { name: "shit can", price: 2000 }
+    { name: "BMW X5", price: 70000 },
+    { name: "Volvo ", price: 18000 },  
+    { name: "VW Polo", price: 2000 }
   ],
   House: [
-    { name: "Mansion", price: 2000000 },
-    { name: "House", price: 600000 },
+    { name: "House", price: 500000 },
+    { name: "Flat", price: 250000 },
     { name: "Homeless", price: 0 }
   ], 
-  Thing: [
-    { name: "thing good", price: 300 },
-    { name: "thing ok", price: 200 },
-    { name: "thing bad", price: 100 }
+  Leisure: [
+    { name: "Headphones", price: 200 },
+    { name: "New shoes", price: 100 },
+    { name: "Skateboard", price: 50 }
   ]
 };
 

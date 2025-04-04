@@ -2,11 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import "../App.css"; 
 import { initialJobs } from './JobSelect';
+<<<<<<< HEAD
 import PieChart from "./PieChart";
  
 
 const salary_savings = initialJobs[1].salary * 40 ; //This is how much you've saved over your career
+=======
+>>>>>>> 63180ee28a6bda3004a19da639f317080ff477fc
 
+const salary_savings = initialJobs[0].salary * 40; // This is how much you've saved over your career
 
 const categories = [
   "Phone",
@@ -14,7 +18,8 @@ const categories = [
   "House",
   "Thing",
 ];
-// placeholder objs
+
+// Placeholder objects
 const items = {
   Phone: [
     { name: "phone 3", price: 1200 },
@@ -38,23 +43,49 @@ const items = {
   ]
 };
 
-function EndShop({ handleGoToEndScreen }) {
+function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept budgetData as a prop
   const [activeCategories, setActiveCategories] = useState([]);
-  const [money, setMoney] = useState(salary_savings); // placeholder
-  
+  const [money, setMoney] = useState(salary_savings); // Placeholder
   const itemRefs = useRef({});
-  
-  // initialise the ref object array
+  const [processedBudgetData, setProcessedBudgetData] = useState(null);
+
+  // Process budget data to round values and ensure they add up to 100%
   useEffect(() => {
-    categories.forEach(category => {
-      if (!itemRefs.current[category]) {
-        itemRefs.current[category] = null;
-      }
-    });
-  }, []);
+    if (budgetData) {
+      const exactPercentages = Object.entries(budgetData).map(([key, value]) => ({
+        key,
+        value: value,
+        floored: Math.floor(value),
+        remainder: value - Math.floor(value),
+      }));
+
+      // Calculate the total floored percentage
+      const totalFloored = exactPercentages.reduce((sum, item) => sum + item.floored, 0);
+
+      // Calculate how many percentage points need to be distributed
+      const pointsToDistribute = 100 - totalFloored;
+
+      // Sort by remainder in descending order
+      exactPercentages.sort((a, b) => b.remainder - a.remainder);
+
+      // Distribute remaining points to the items with the largest remainders
+      const adjustedPercentages = exactPercentages.map((item, index) => ({
+        key: item.key,
+        value: item.floored + (index < pointsToDistribute ? 1 : 0),
+      }));
+
+      // Convert back to an object
+      const finalBudgetData = adjustedPercentages.reduce((acc, item) => {
+        acc[item.key] = item.value;
+        return acc;
+      }, {});
+
+      setProcessedBudgetData(finalBudgetData);
+    }
+  }, [budgetData]);
 
   const handleCategoryClick = (category) => {
-    // retrieve element for category item
+    // Retrieve element for category item
     const itemElement = itemRefs.current[category];
     
     if (!itemElement) return;
@@ -72,7 +103,7 @@ function EndShop({ handleGoToEndScreen }) {
         }
       });
     } else {
-      // add category to active list 
+      // Add category to active list 
       setActiveCategories(arr => [...arr, category]);
       
       // Animate down
@@ -93,7 +124,7 @@ function EndShop({ handleGoToEndScreen }) {
     if (money >= price) {
       setMoney(m => m - price);
     } else {
-        setMoney(m => m);
+      setMoney(m => m); // No change if insufficient funds
     }
   };
 
@@ -101,19 +132,28 @@ function EndShop({ handleGoToEndScreen }) {
 
   return (
     <div className="container-fluid d-flex flex-column align-items-center min-vh-100 p-3">
-      {/* ph money */}
+      {/* Display remaining money */}
       <div className="position-absolute start-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
         <span className="fw-bold">£{money.toLocaleString()}</span>
       </div>
-      
+
+      {/* Display budget data */}
       <div className="text-center mt-4 mb-4">
         <h1 className="fw-bold">Retirement Store</h1>
         <p className="text-secondary">Spend your pension money</p>
+        {processedBudgetData && (
+          <div className="mb-3">
+            <p><strong>Budget Breakdown:</strong></p>
+            <p>Wants: {processedBudgetData.Wants}%</p>
+            <p>Needs: {processedBudgetData.Needs}%</p>
+            <p>Savings: {processedBudgetData.Savings}%</p>
+          </div>
+        )}
       </div>
-      
+
       {/* Shop grid container */}
       <div className="w-100" style={{ maxWidth: "900px" }}>
-        {/* Categories row  */}
+        {/* Categories row */}
         <div className="row g-0">
           {categories.map((category, i) => (
             <div key={i} className="col text-center">
@@ -131,6 +171,7 @@ function EndShop({ handleGoToEndScreen }) {
             </div>
           ))}
         </div>
+
         {/* Shop Items */}
         <div className="row g-0">
           {categories.map((category, i) => (
@@ -162,6 +203,7 @@ function EndShop({ handleGoToEndScreen }) {
           ))}
         </div>
       </div>
+
       {/* End screen button */}
       <button
         onClick={handleGoToEndScreen}

@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const MIN_SLICE_VALUE = 1; // Minimum slice value in percentage
 
-const PieChart = () => {
+const PieChart = ({ onComplete }) => { // ✅ Accept onComplete as a prop
   const chartRef = useRef(null);
   const previousAngleRef = useRef(null);
   const dragTimeout = useRef(null);
@@ -224,6 +224,7 @@ const PieChart = () => {
     }, 10);
   }, [dragging]); // Add 'dragging' as a dependency
 
+
   const borderPlugin = {
     id: 'borderPlugin',
     afterDraw: (chart) => {
@@ -379,6 +380,20 @@ const PieChart = () => {
     // No need to return cleanup as we're not adding event listeners here
   }, [chartData]); // Re-run when chart data changes
 
+  // ✅ Define the handleNext function
+  const handleNext = () => {
+    // Call onComplete with the current chart data
+    if (onComplete) {
+      const data = chartData.datasets[0].data;
+      const labels = chartData.labels;
+      const result = labels.reduce((acc, label, index) => {
+        acc[label] = data[index];
+        return acc;
+      }, {});
+      onComplete(result); // Send data to App.js
+    }
+  };
+
   // Return your existing JSX
   return (
 <div
@@ -394,6 +409,14 @@ const PieChart = () => {
       onMouseLeave={handleMouseUp} // Add this to handle mouse leaving the component
     >
       <Pie ref={chartRef} data={chartData} options={options} />
+      {/* Add a Next button to trigger onComplete */}
+      <button
+        onClick={handleNext}
+        className="btn btn-primary mt-4"
+        style={{ display: 'block', margin: '0 auto' }}
+      >
+        Next
+      </button>
     </div>
   );
 };

@@ -21,13 +21,14 @@ function App() {
 
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
+  const [selectedJobSalary, setSelectedJobSalary] = useState(null); // ✅ Add state for job salary
   const [budgetCompleted, setBudgetCompleted] = useState(false);
   const [selectedPension, setSelectedPension] = useState(null);
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [showEndShop, setShowEndShop] = useState(false);
-
-  // ✅ Add state to store PieChart data
+  const [annualContributions, setAnnualContributions] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
+  const [processedBudgetData, setProcessedBudgetData] = useState(null); // Finalized data for EndShop
 
   // Define section indices
   const sectionIndices = {
@@ -59,31 +60,64 @@ function App() {
   };
 
   const handleFormSubmit = () => {
-    console.log('Navigating to jobSelect section after form submission');
+    console.log("Navigating to jobSelect section after form submission");
     goToSection(sectionIndices.jobSelect);
   };
 
   const handleSkipForm = () => {
-    console.log('Form skipped, navigating to jobSelect section');
+    console.log("Form skipped, navigating to jobSelect section");
     goToSection(sectionIndices.jobSelect); // Navigate to the jobSelect section
   };
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setInitialJob(job);
+    setSelectedJobSalary(job.salary); // ✅ Save the selected job's salary
     setSelectedPension(job.pension);
     setTimeout(() => {
       goToSection(sectionIndices.payslip);
     }, 200);
   };
 
-  const handleGoToBudget = () => {
-    goToSection(sectionIndices.budget);
+  const handleGoToBudget = (annualContributions) => {
+    setAnnualContributions(annualContributions); // Set the annual contributions
+    goToSection(sectionIndices.budget); // Navigate to the budget section
   };
 
   const handleBudgetComplete = (data) => {
     setBudgetData(data); // ✅ Save PieChart data
     setBudgetCompleted(true);
+
+    // Process and finalize the budget data
+    const exactPercentages = Object.entries(data).map(([key, value]) => ({
+      key,
+      value: value,
+      floored: Math.floor(value),
+      remainder: value - Math.floor(value),
+    }));
+
+    // Calculate the total floored percentage
+    const totalFloored = exactPercentages.reduce((sum, item) => sum + item.floored, 0);
+
+    // Calculate how many percentage points need to be distributed
+    const pointsToDistribute = 100 - totalFloored;
+
+    // Sort by remainder in descending order
+    exactPercentages.sort((a, b) => b.remainder - a.remainder);
+
+    // Distribute remaining points to the items with the largest remainders
+    const adjustedPercentages = exactPercentages.map((item, index) => ({
+      key: item.key,
+      value: item.floored + (index < pointsToDistribute ? 1 : 0),
+    }));
+
+    // Convert back to an object
+    const finalBudgetData = adjustedPercentages.reduce((acc, item) => {
+      acc[item.key] = item.value;
+      return acc;
+    }, {});
+
+    setProcessedBudgetData(finalBudgetData); // ✅ Save finalized data
     goToSection(sectionIndices.jobSwitch);
   };
 
@@ -125,7 +159,6 @@ function App() {
         </section>
         
         {/* Job Selection */}
-
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
         </section>
@@ -134,11 +167,18 @@ function App() {
         <section className="section payslip-section">
           <div className="payslip-wrapper">
             <div className="payslip-content">
-              <SamplePayslip job={selectedJob} />
+              <SamplePayslip
+                job={selectedJob}
+                salary={selectedJobSalary}
+                onAnnualContributionsChange={setAnnualContributions} // Pass callback
+              />
             </div>
             {selectedJob && (
               <div className="payslip-button-wrapper">
-                <button onClick={handleGoToBudget} className="btn btn-primary">
+                <button
+                  onClick={() => handleGoToBudget(annualContributions)}
+                  className="btn btn-primary"
+                >
                   Go to Budgeting Game
                 </button>
               </div>
@@ -146,16 +186,10 @@ function App() {
           </div>
         </section>
 
-{/* Budget Section */}
-<section className="section budgeting-section">
+        {/* Budget Section */}
+        <section className="section budgeting-section">
           <div className="d-flex flex-column align-items-center">
             <Chart onComplete={handleBudgetComplete} /> {/* Pass callback */}
-            <button 
-              onClick={() => handleBudgetComplete({ exampleData: 123 })} 
-              className="btn btn-success mt-4"
-            >
-              Next
-            </button>
           </div>
         </section>
 
@@ -187,7 +221,7 @@ function App() {
         {/* ✅ Retirement Shop Section */}
         {showEndShop && (
           <section className="section end-shop-section">
-            <EndShop budgetData={budgetData} handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
+            <EndShop budgetData={processedBudgetData} handleGoToEndScreen={handleShowEndScreen} /> {/* Pass finalized data */}
           </section>
         )}
 

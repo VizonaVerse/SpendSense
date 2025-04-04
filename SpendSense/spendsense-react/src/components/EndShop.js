@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import gsap from "gsap";
 import "../App.css"; 
 import { initialJobs } from './JobSelect';
@@ -36,46 +36,10 @@ const items = {
   ]
 };
 
-function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept budgetData as a prop
+function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept finalized budgetData as a prop
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings); // Placeholder
   const itemRefs = useRef({});
-  const [processedBudgetData, setProcessedBudgetData] = useState(null);
-
-  // Process budget data to round values and ensure they add up to 100%
-  useEffect(() => {
-    if (budgetData) {
-      const exactPercentages = Object.entries(budgetData).map(([key, value]) => ({
-        key,
-        value: value,
-        floored: Math.floor(value),
-        remainder: value - Math.floor(value),
-      }));
-
-      // Calculate the total floored percentage
-      const totalFloored = exactPercentages.reduce((sum, item) => sum + item.floored, 0);
-
-      // Calculate how many percentage points need to be distributed
-      const pointsToDistribute = 100 - totalFloored;
-
-      // Sort by remainder in descending order
-      exactPercentages.sort((a, b) => b.remainder - a.remainder);
-
-      // Distribute remaining points to the items with the largest remainders
-      const adjustedPercentages = exactPercentages.map((item, index) => ({
-        key: item.key,
-        value: item.floored + (index < pointsToDistribute ? 1 : 0),
-      }));
-
-      // Convert back to an object
-      const finalBudgetData = adjustedPercentages.reduce((acc, item) => {
-        acc[item.key] = item.value;
-        return acc;
-      }, {});
-
-      setProcessedBudgetData(finalBudgetData);
-    }
-  }, [budgetData]);
 
   const handleCategoryClick = (category) => {
     // Retrieve element for category item
@@ -134,12 +98,12 @@ function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept budgetData
       <div className="text-center mt-4 mb-4">
         <h1 className="fw-bold">Retirement Store</h1>
         <p className="text-secondary">Spend your pension money</p>
-        {processedBudgetData && (
+        {budgetData && (
           <div className="mb-3">
             <p><strong>Budget Breakdown:</strong></p>
-            <p>Wants: {processedBudgetData.Wants}%</p>
-            <p>Needs: {processedBudgetData.Needs}%</p>
-            <p>Savings: {processedBudgetData.Savings}%</p>
+            <p>Wants: {budgetData.Wants}%</p>
+            <p>Needs: {budgetData.Needs}%</p>
+            <p>Savings: {budgetData.Savings}%</p>
           </div>
         )}
       </div>

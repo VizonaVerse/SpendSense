@@ -1,9 +1,44 @@
 // src/components/SamplePayslip.js
 import React, { useEffect } from "react";
 import { gsap } from "gsap";
-import "../App.css"; 
+import "../App.css";
 
-export default function SamplePayslip({ job }) {
+export default function SamplePayslip({ job, salary, onAnnualContributionsChange }) {
+  // Declare variables outside of conditional blocks
+  let monthlyGross = 0;
+  let pension = 0;
+  let monthlyTax = 0;
+  let monthlyNI = 0;
+  let studentLoan = 0;
+  let employerContribution = 0;
+  let annualContributions = 0;
+  let totalDeductions = 0;
+  let netPay = 0;
+
+  if (job) {
+    monthlyGross = Math.ceil(salary / 12);
+    pension = monthlyGross * 0.05;
+
+    if (monthlyGross > 960) {
+      monthlyNI = monthlyGross * 0.08;
+      studentLoan = monthlyGross * 0.03;
+      monthlyTax = (monthlyGross - (pension + studentLoan + monthlyNI)) * 0.2;
+    }
+
+    totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
+    netPay = monthlyGross - totalDeductions;
+    employerContribution = monthlyGross * 0.03;
+    annualContributions = (employerContribution + pension) * 12;
+  }
+
+  // Notify App.js about the annual contributions
+  useEffect(() => {
+    if (onAnnualContributionsChange) {
+      onAnnualContributionsChange(annualContributions);
+    }
+  }, [annualContributions, onAnnualContributionsChange]);
+
+  // Animation effect
   useEffect(() => {
     if (job) {
       gsap.fromTo(
@@ -22,29 +57,10 @@ export default function SamplePayslip({ job }) {
     );
   }
 
-  // Calculate monthly values based on the selected job's annual salary. Placeholder calculations
-  // Calculate monthly values based on the selected job's annual salary. Placeholder calculations
-let monthlyGross = Math.ceil(job.salary / 12);
-let pension = monthlyGross * 0.05; // 5% Pension Contribution
-let monthlyTax = 0; // 0% Income Tax
-let monthlyNI = 0; // 0% National Insurance
-let studentLoan = 0; // 0% Student Loan Repayment
-
-if (monthlyGross > 960) {
-    monthlyNI = monthlyGross * 0.08; // 8% National Insurance
-    studentLoan = monthlyGross * 0.03; // 3% Student Loan Repayment
-    monthlyTax = (monthlyGross - (pension + studentLoan + monthlyNI)) * 0.2; // 20% Income Tax
-}
-
-let totalDeductions = monthlyTax + monthlyNI + pension + studentLoan;
-let netPay = monthlyGross - totalDeductions;
-let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
-
   return (
     <div className="payslip-container">
       <div className="card payslip-card p-3 shadow-sm">
         <h2 className="mb-3">Monthly Payslip</h2>
-        {/* Company & Employee Details */}
         <div className="row mb-2">
           <div className="col-6 text-start">
             <div>ACME Corp Ltd.</div>
@@ -73,8 +89,6 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
             </div>
           </div>
         </div>
-
-        {/* Earnings & Deductions */}
         <div className="row">
           <div className="col-6">
             <div className="section-header mb-2">
@@ -116,7 +130,6 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
               </tbody>
             </table>
           </div>
-
           <div className="col-6">
             <div className="section-header mb-2">
               <h4>Deductions
@@ -188,8 +201,6 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
             </table>
           </div>
         </div>
-
-        {/* Summary */}
         <div className="row mt-2">
           <div className="col-12">
             <div className="section-header mb-2">
@@ -229,8 +240,6 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
             </table>
           </div>
         </div>
-
-        {/* Employer Contributions */}
         <div className="row mt-2">
           <div className="col-12">
             <div className="section-header mb-2">
@@ -242,7 +251,7 @@ let employerContribution = monthlyGross * 0.03; // 3% Employer Contribution
                 <tr>
                   <td>Annual Salary (before Tax)</td>
                   <td>
-                    {job.salary.toLocaleString("en-UK", {
+                    {salary.toLocaleString("en-UK", {
                       style: "currency",
                       currency: "GBP",
                     })}

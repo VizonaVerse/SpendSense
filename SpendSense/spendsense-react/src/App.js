@@ -12,9 +12,9 @@ import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
 import EndShop from "./components/EndShop.js"; // ✅ NEW
 import EndScreen from "./components/EndScreen.js";
-import CharacterSidebar from "./components/CharacterSideBar.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
+import Stats from "./components/Stats.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -139,14 +139,14 @@ function App() {
   return (
     <div id="main-wrapper">
       <Information />
-      
+      <Stats />
       <div id="scroll-container" ref={scrollContainerRef}>
         {/* Home Section */}
         <section className="section home-section">
           <Home onStart={handleStart} />
         </section>
 
-        <CharacterSidebar />
+      
 
         {/* User Data Form Section */}
         <section className="section form-section">

@@ -13,7 +13,6 @@ const categories = [
   "Leisure",
 ];
 
-// Placeholder objects
 const items = {
   Phone: [
     { name: "Iphone 16 pro", price: 1000 },
@@ -32,27 +31,27 @@ const items = {
   ], 
   Leisure: [
     { name: "Headphones", price: 200 },
-    { name: "New shoes", price: 100 },
+    { name: "Shoes", price: 100 },
     { name: "Skateboard", price: 50 }
   ]
 };
 
-function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept finalized budgetData as a prop
+function EndShop({ budgetData, handleGoToEndScreen }) { 
   const [activeCategories, setActiveCategories] = useState([]);
-  const [money, setMoney] = useState(salary_savings); // Placeholder
+  const [money, setMoney] = useState(salary_savings); 
   const itemRefs = useRef({});
 
   const handleCategoryClick = (category) => {
-    // Retrieve element for category item
+    
     const itemElement = itemRefs.current[category];
     
     if (!itemElement) return;
     
     if (activeCategories.includes(category)) {
-      // Animate up
       gsap.to(itemElement, {
         duration: 0.5,
         y: -8,
+        // ✅ Define the handleNext function
         opacity: 0,
         height: 0,
         ease: "power2.inOut",
@@ -61,10 +60,8 @@ function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept finalized 
         }
       });
     } else {
-      // Add category to active list 
       setActiveCategories(arr => [...arr, category]);
       
-      // Animate down
       gsap.fromTo(itemElement,
         { y: -8, opacity: 0, height: 0 },
         { 
@@ -82,7 +79,7 @@ function EndShop({ budgetData, handleGoToEndScreen }) { // ✅ Accept finalized 
     if (money >= price) {
       setMoney(m => m - price);
     } else {
-      setMoney(m => m); // No change if insufficient funds
+      setMoney(m => m);
     }
   };
 

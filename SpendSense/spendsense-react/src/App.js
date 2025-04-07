@@ -39,7 +39,7 @@ function App() {
     budget: 4,
     jobSwitch: 5,
     PensionWithdrawal: 6,
-    endShop: 7, // ✅ NEW
+    endShop: 7,
     end: 8,
   };
 
@@ -72,20 +72,24 @@ function App() {
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setInitialJob(job);
-    setSelectedJobSalary(job.salary); // ✅ Save the selected job's salary
+    setSelectedJobSalary(job.salary); 
     setSelectedPension(job.pension);
-    setTimeout(() => {
+    const goToPayslipSection = () => {
       goToSection(sectionIndices.payslip);
-    }, 200);
+    };    
   };
 
+  const goToPayslipSection = () =>{
+    goToSection(sectionIndices.payslip);
+  }
+  
   const handleGoToBudget = (annualContributions) => {
     setAnnualContributions(annualContributions); // Set the annual contributions
     goToSection(sectionIndices.budget); // Navigate to the budget section
   };
 
   const handleBudgetComplete = (data) => {
-    setBudgetData(data); // ✅ Save PieChart data
+    setBudgetData(data); 
     setBudgetCompleted(true);
 
     // Process and finalize the budget data
@@ -117,7 +121,7 @@ function App() {
       return acc;
     }, {});
 
-    setProcessedBudgetData(finalBudgetData); // ✅ Save finalized data
+    setProcessedBudgetData(finalBudgetData); 
     goToSection(sectionIndices.jobSwitch);
   };
 
@@ -160,7 +164,12 @@ function App() {
         
         {/* Job Selection */}
         <section className="section job-select-section">
-          <JobSelect onJobSelect={handleJobSelect} />
+        <JobSelect
+          onJobSelect={(job) => {
+            handleJobSelect(job);
+            goToPayslipSection(); 
+          }}
+        />
         </section>
 
         {/* Payslip Section */}
@@ -209,7 +218,7 @@ function App() {
           {selectedPension ? (
             <PensionWithdrawal
               selectedPension={selectedPension}
-              onContinue={handleGoToEndShop} // ✅ Go to EndShop now
+              onContinue={handleGoToEndShop} 
             />
           ) : (
             <div className="d-flex justify-content-center align-items-center h-100">
@@ -218,14 +227,14 @@ function App() {
           )}
         </section>
 
-        {/* ✅ Retirement Shop Section */}
+        {/* Retirement Shop Section */}
         {showEndShop && (
           <section className="section end-shop-section">
             <EndShop budgetData={processedBudgetData} handleGoToEndScreen={handleShowEndScreen} /> {/* Pass finalized data */}
           </section>
         )}
 
-        {/* ✅ End Screen Section */}
+        {/*  End Screen Section */}
         <section className="section end-screen-section">
           <EndScreen
             isVisible={showEndScreen}

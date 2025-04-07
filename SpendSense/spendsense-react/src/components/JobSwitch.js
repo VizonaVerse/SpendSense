@@ -29,7 +29,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
     onJobSelect(job);
   };
 
-  // 🔹 GSAP Hover Animations
+  // GSAP Hover Animations
   const handleHover = (element) => {
     gsap.to(element, {
       backgroundColor: "#cce5ff",

@@ -26,23 +26,51 @@ function JobSelect({ onJobSelect }) {
     });
   }, []);
 
-  // First Job Selection
   const handleFirstJobSelect = (job) => {
     setSelectedJob(job);
-    onJobSelect(job);
   };
 
-  return (
+  const handleContinue = () => {
+    if (selectedJob) {
+      onJobSelect(selectedJob);
+    }
+  }
+
+  const handleHover = (element) => {
+    gsap.to(element, {
+      backgroundColor: "#cce5ff",
+      y: -5,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const handleHoverOut = (element, job) => {
+    gsap.to(element, {
+      backgroundColor: selectedJob === job ? "#cce5ff" : "white",
+      y: 0,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+ return (
     <div className="section-content job-select-section text-center">
       <h2>Pick Your First Job</h2>
-      <div className="row mt-4">
+      <div className="row mt-4 justify-content-center">
         {initialJobs.map((job) => (
           <div key={job.id} className="col-md-4">
             <div
               ref={addToRefs}
               className="card p-3 shadow-sm job-card"
               onClick={() => handleFirstJobSelect(job)}
-              style={{ cursor: "pointer" }}
+              onMouseEnter={(e) => handleHover(e.currentTarget)}
+              onMouseLeave={(e) => handleHoverOut(e.currentTarget, job)}
+              style={{
+                cursor: "pointer",
+                backgroundColor: selectedJob === job ? "#cce5ff" : "white",
+                transition: "background-color 0.3s ease",
+              }}
             >
               <h4>{job.title}</h4>
               <p>
@@ -56,8 +84,23 @@ function JobSelect({ onJobSelect }) {
           </div>
         ))}
       </div>
+
+      {/* Continue Button */}
+      {selectedJob && (
+        <div className="mt-4">
+          <button
+            onClick={handleContinue}
+            onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
+            onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
+            className="btn btn-primary"
+          >
+            Continue to Payslip
+          </button>
+        </div>
+      )}
     </div>
   );
 }
-export {initialJobs};
+
+export { initialJobs };
 export default JobSelect;

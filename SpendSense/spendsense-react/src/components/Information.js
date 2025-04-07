@@ -121,7 +121,7 @@ function Information() {
 
   return (
     <>
-      <div >
+      <div>
         {/* Menu Button */}
         <button
           ref={menuButtonRef}
@@ -145,8 +145,8 @@ function Information() {
             src="images/menu.png"
             alt="Menu"
             style={{ 
-              width: '5vmin', 
-              height: '5vmin', 
+              width: '100%', 
+              height: '100%', 
               imageRendering: "pixelated",
               objectFit: 'contain'
             }}

@@ -1,10 +1,6 @@
 import { useState, useRef } from "react";
 import gsap from "gsap";
 import "../App.css"; 
-import { initialJobs } from './JobSelect';
-import PieChart from "./PieChart";
-
-const salary_savings = initialJobs[0].salary * 40; // This is how much you've saved over your career
 
 const categories = [
   "Phone",
@@ -36,7 +32,9 @@ const items = {
   ]
 };
 
-function EndShop({ budgetData, handleGoToEndScreen }) { 
+function EndShop({ salary, budgetData, handleGoToEndScreen }) { 
+  const salary_savings = salary * 40 * budgetData.Savings/100;
+
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings); 
   const itemRefs = useRef({});

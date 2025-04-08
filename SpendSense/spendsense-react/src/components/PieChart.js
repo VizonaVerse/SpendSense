@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const MIN_SLICE_VALUE = 1; // Minimum slice value in percentage
 
-const PieChart = ({ onComplete }) => { // ✅ Accept onComplete as a prop
+const PieChart = ({ onComplete }) => { 
   const chartRef = useRef(null);
   const previousAngleRef = useRef(null);
   const dragTimeout = useRef(null);
@@ -380,7 +380,6 @@ const PieChart = ({ onComplete }) => { // ✅ Accept onComplete as a prop
     // No need to return cleanup as we're not adding event listeners here
   }, [chartData]); // Re-run when chart data changes
 
-  // ✅ Define the handleNext function
   const handleNext = () => {
     // Call onComplete with the current chart data
     if (onComplete) {

@@ -128,17 +128,23 @@ function Information() {
           id="open-menu-button"
           onClick={handleButtonClick(openNav)}
           style={{ 
-            position: 'relative',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginLeft: 'auto',
-            zIndex: 1000,
+          position: "fixed", 
+          top: "1vmin", 
+          right: "1vmin", // Changed from left to right
+          zIndex: 1000,
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          width: '10vmin',
+          height: '10vmin',
+          minWidth: '64px',
+          minHeight: '64px',
+          maxWidth: '128px',
+          maxHeight: '128px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+
           }}
         >
           <img

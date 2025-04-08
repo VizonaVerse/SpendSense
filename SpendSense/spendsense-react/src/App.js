@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -29,6 +29,8 @@ function App() {
   const [annualContributions, setAnnualContributions] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
   const [processedBudgetData, setProcessedBudgetData] = useState(null); // Finalized data for EndShop
+  const [currentSection, setCurrentSection] = useState("home"); // Track the current section
+  const [showStats, setShowStats] = useState(false);
 
   // Define section indices
   const sectionIndices = {
@@ -46,11 +48,18 @@ function App() {
   // Animate scroll to a section
   const goToSection = (sectionIndex) => {
     const yValue = `-${sectionIndex * 100}vh`;
+    const sectionNames = Object.keys(sectionIndices); // Get section names
+    const sectionName = sectionNames.find(
+      (key) => sectionIndices[key] === sectionIndex
+    ); // Find the section name by index
+
+    setCurrentSection(sectionName); // Update the current section state
+
     gsap.to(scrollContainerRef.current, {
       duration: 1,
       y: yValue,
       ease: "power2.out",
-      onComplete: () => console.log(`Scrolled to section: ${sectionIndex}`),
+      onComplete: () => console.log(`Scrolled to section: ${sectionName}`),
     });
   };
 
@@ -61,11 +70,13 @@ function App() {
 
   const handleFormSubmit = () => {
     console.log("Navigating to jobSelect section after form submission");
+    setShowStats(true); // Show Stats after form submission
     goToSection(sectionIndices.jobSelect);
   };
 
   const handleSkipForm = () => {
     console.log("Form skipped, navigating to jobSelect section");
+    setShowStats(true); // Show Stats after form is skipped
     goToSection(sectionIndices.jobSelect); // Navigate to the jobSelect section
   };
 
@@ -136,6 +147,7 @@ function App() {
   };
 
   const handleShowEndScreen = () => {
+    setShowStats(false); // Hide Stats before showing EndScreen
     setShowEndScreen(true);
     goToSection(sectionIndices.end);
   };
@@ -143,14 +155,15 @@ function App() {
   return (
     <div id="main-wrapper">
       <Information />
-      <Stats />
-      <div id="scroll-container" ref={scrollContainerRef}>
-        {/* Home Section */}
-        <section className="section home-section">
-          <Home onStart={handleStart} />
-        </section>
+      {showStats && <Stats />}
+      {/* <CharacterSidebar characterData={selectedJob} currentSection={currentSection} /> */}
+        <div id="scroll-container" ref={scrollContainerRef}>
+          {/* Home Section */}
+          <section className="section home-section">
+            <Home onStart={handleStart} />
+          </section>
 
-      
+          
 
         {/* User Data Form Section */}
         <section className="section form-section">
@@ -172,46 +185,46 @@ function App() {
         />
         </section>
 
-        {/* Payslip Section */}
-        <section className="section payslip-section">
-          <div className="payslip-wrapper">
-            <div className="payslip-content">
-              <SamplePayslip
-                job={selectedJob}
-                salary={selectedJobSalary}
-                onAnnualContributionsChange={setAnnualContributions} // Pass callback
-              />
-            </div>
-            {selectedJob && (
-              <div className="payslip-button-wrapper">
-                <button
-                  onClick={() => handleGoToBudget(annualContributions)}
-                  className="btn btn-primary"
-                >
-                  Go to Budgeting Game
-                </button>
+          {/* Payslip Section */}
+          <section className="section payslip-section">
+            <div className="payslip-wrapper">
+              <div className="payslip-content">
+                <SamplePayslip
+                  job={selectedJob}
+                  salary={selectedJobSalary}
+                  onAnnualContributionsChange={setAnnualContributions} // Pass callback
+                />
               </div>
-            )}
-          </div>
-        </section>
-
-        {/* Budget Section */}
-        <section className="section budgeting-section">
-          <div className="d-flex flex-column align-items-center">
-            <Chart onComplete={handleBudgetComplete} /> {/* Pass callback */}
-          </div>
-        </section>
-
-        {/* Job Switch Section */}
-        {budgetCompleted && (
-          <section className="section job-switch-section">
-            <JobSwitch
-              onJobSelect={(job) => setSelectedJob(job)}
-              onPensionSelect={handlePensionSelection}
-              initialJob={initialJob}
-            />
+              {selectedJob && (
+                <div className="payslip-button-wrapper">
+                  <button
+                    onClick={() => handleGoToBudget(annualContributions)}
+                    className="btn btn-primary"
+                  >
+                    Go to Budgeting Game
+                  </button>
+                </div>
+              )}
+            </div>
           </section>
-        )}
+
+          {/* Budget Section */}
+          <section className="section budgeting-section">
+            <div className="d-flex flex-column align-items-center">
+              <Chart onComplete={handleBudgetComplete} /> {/* Pass callback */}
+            </div>
+          </section>
+
+          {/* Job Switch Section */}
+          {budgetCompleted && (
+            <section className="section job-switch-section">
+              <JobSwitch
+                onJobSelect={(job) => setSelectedJob(job)}
+                onPensionSelect={handlePensionSelection}
+                initialJob={initialJob}
+              />
+            </section>
+          )}
 
         {/* Pension Withdrawal Section */}
         <section className="section pension-withdrawal-section">

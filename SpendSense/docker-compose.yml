@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build: spendsense-react
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+  backend:
+    build: SpendSenseDjango

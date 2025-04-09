@@ -15,7 +15,7 @@ import EndScreen from "./components/EndScreen.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
 import Stats from "./components/Stats.js";
-import CharacterSidebar from "./components/CharacterSideBar.js";
+import CharacterInfo from "./components/CharacterInfo.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -116,7 +116,7 @@ function App() {
       {showStats && (
         <>
           <Stats />
-          <CharacterSidebar characterData={selectedJob} currentSection={currentSection} />
+          <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
         </>
       )}
         <div id="scroll-container" ref={scrollContainerRef}>

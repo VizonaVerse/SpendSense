@@ -118,7 +118,7 @@ function CharacterStatsDisplay({
           backgroundColor: 'rgba(70, 166, 66, 0.47)',
           padding: '5px 12px',
           borderRadius: '15px',
-          border: '3px solid black',
+          border: '3px solid green',
           width: 'fit-content'
         }}>
           <span style={{ 

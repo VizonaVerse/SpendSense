@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -10,7 +10,7 @@ import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
-import EndShop from "./components/EndShop.js"; // 
+import EndShop from "./components/EndShop.js"; 
 import EndScreen from "./components/EndScreen.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
@@ -19,7 +19,7 @@ import CharacterInfo from "./components/CharacterInfo.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
-  const [selectedJobSalary, setSelectedJobSalary] = useState(null); // 
+  const [selectedJobSalary, setSelectedJobSalary] = useState(null); 
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
@@ -28,9 +28,10 @@ function App() {
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
-  const [processedBudgetData, setProcessedBudgetData] = useState(null); // Finalized data for EndShop
-  const [currentSection, setCurrentSection] = useState("home"); // Track the current section
+  const [processedBudgetData, setProcessedBudgetData] = useState(null);
+  const [currentSection, setCurrentSection] = useState("home");
   const [showStats, setShowStats] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Define section indices
   const sectionIndices = {
@@ -40,37 +41,57 @@ function App() {
     payslip: 3,
     budget: 4,
     jobSwitch: 5,
-    PensionWithdrawal: 6,
+    pensionWithdrawal: 6,
     endShop: 7, 
     end: 8,
   };
 
-  // Animate scroll to a section
-  const goToSection = (sectionIndex) => {
+  // Update current section based on scroll position
+  useEffect(() => {
+    // Prevent manual scrolling by disabling scroll
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  // Animate scroll to a section with improved transition handling
+  const goToSection = (sectionName) => {
+    if (isTransitioning) return; // Prevent multiple transitions
+    
+    setIsTransitioning(true);
+    setCurrentSection(sectionName);
+    
+    const sectionIndex = sectionIndices[sectionName];
     const yValue = `-${sectionIndex * 100}vh`;
+    
     gsap.to(scrollContainerRef.current, {
       duration: 1,
       y: yValue,
       ease: "power2.out",
-      onComplete: () => console.log(`Scrolled to section: ${sectionIndex}`),
+      onComplete: () => {
+        console.log(`Scrolled to section: ${sectionName}`);
+        setIsTransitioning(false);
+      },
     });
   };
 
   // Section handlers
   const handleStart = () => {
-    goToSection(sectionIndices.form);
+    goToSection("form");
   };
 
   const handleFormSubmit = () => {
     console.log("Navigating to jobSelect section after form submission");
-    setShowStats(true); // Show Stats after form submission
-    goToSection(sectionIndices.jobSelect);
+    setShowStats(true);
+    goToSection("jobSelect");
   };
 
   const handleSkipForm = () => {
     console.log("Form skipped, navigating to jobSelect section");
-    setShowStats(true); // Show Stats after form is skipped
-    goToSection(sectionIndices.jobSelect); // Navigate to the jobSelect section
+    setShowStats(true);
+    goToSection("jobSelect");
   };
 
   const handleJobSelect = (job) => {
@@ -79,34 +100,34 @@ function App() {
     setSelectedJobSalary(job.salary); 
     setSelectedPension(job.pension);
     setTimeout(() => {
-      goToSection(sectionIndices.payslip);
+      goToSection("payslip");
     }, 200);
   };
 
   const handleGoToBudget = () => {
-    goToSection(sectionIndices.budget);
+    goToSection("budget");
   };
 
   const handleBudgetComplete = (data) => {
-    setBudgetData(data); // 
+    setBudgetData(data);
     setBudgetCompleted(true);
-    goToSection(sectionIndices.jobSwitch);
+    goToSection("jobSwitch");
   };
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
-    goToSection(sectionIndices.PensionWithdrawal);
+    goToSection("pensionWithdrawal");
   };
 
   const handleGoToEndShop = () => {
     setShowEndShop(true);
-    goToSection(sectionIndices.endShop);
+    goToSection("endShop");
   };
 
   const handleShowEndScreen = () => {
-    setShowStats(false); // Hide Stats before showing EndScreen
+    setShowStats(false);
     setShowEndScreen(true);
-    goToSection(sectionIndices.end);
+    goToSection("end");
   };
 
   return (
@@ -118,12 +139,11 @@ function App() {
           <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
         </>
       )}
-        <div id="scroll-container" ref={scrollContainerRef}>
-          {/* Home Section */}
-          <section className="section home-section">
-            <Home onStart={handleStart} />
-          </section>
-        
+      <div id="scroll-container" ref={scrollContainerRef}>
+        {/* Home Section */}
+        <section className="section home-section">
+          <Home onStart={handleStart} />
+        </section>
 
         {/* User Data Form Section */}
         <section className="section form-section">
@@ -136,7 +156,6 @@ function App() {
         </section>
         
         {/* Job Selection */}
-
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
         </section>
@@ -145,11 +164,11 @@ function App() {
         <section className="section payslip-section">
           <div className="payslip-wrapper">
             <div className="payslip-content">
-                <SamplePayslip
-                  job={selectedJob}
-                  salary={selectedJobSalary}
-                  onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                />
+              <SamplePayslip
+                job={selectedJob}
+                salary={selectedJobSalary}
+                onAnnualContributionsChange={setAnnualContributions}
+              />
             </div>
             {selectedJob && (
               <div className="payslip-button-wrapper">
@@ -161,10 +180,10 @@ function App() {
           </div>
         </section>
 
-{/* Budget Section */}
-<section className="section budgeting-section">
+        {/* Budget Section */}
+        <section className="section budgeting-section">
           <div className="d-flex flex-column align-items-center">
-            <Chart onComplete={handleBudgetComplete} /> {/* Pass callback */}
+            <Chart onComplete={handleBudgetComplete} />
             <button 
               onClick={() => handleBudgetComplete({ exampleData: 123 })} 
               className="btn btn-success mt-4"
@@ -175,15 +194,15 @@ function App() {
         </section>
 
         {/* Job Switch Section */}
-        {budgetCompleted && (
-          <section className="section job-switch-section">
+        <section className="section job-switch-section">
+          {budgetCompleted && (
             <JobSwitch
               onJobSelect={(job) => setSelectedJob(job)}
               onPensionSelect={handlePensionSelection}
               initialJob={initialJob}
             />
-          </section>
-        )}
+          )}
+        </section>
 
         {/* Pension Withdrawal Section */}
         <section className="section pension-withdrawal-section">
@@ -200,13 +219,14 @@ function App() {
         </section>
 
         {/* Retirement Shop Section */}
-        {showEndShop && (
-          <section className="section end-shop-section">
+        <section className="section end-shop-section">
+          {showEndShop && (
             <EndShop 
-            budgetData={budgetData} 
-            handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
-          </section>
-        )}
+              budgetData={budgetData} 
+              handleGoToEndScreen={handleShowEndScreen}
+            />
+          )}
+        </section>
 
         {/* End Screen Section */}
         <section className="section end-screen-section">

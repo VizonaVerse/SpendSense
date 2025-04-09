@@ -10,7 +10,7 @@ import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
-import EndShop from "./components/EndShop.js"; // ✅ NEW
+import EndShop from "./components/EndShop.js"; // 
 import EndScreen from "./components/EndScreen.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
@@ -19,7 +19,7 @@ import CharacterSidebar from "./components/CharacterSideBar.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
-  const [selectedJobSalary, setSelectedJobSalary] = useState(null); // ✅ Add state for job salary
+  const [selectedJobSalary, setSelectedJobSalary] = useState(null); // 
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
@@ -41,7 +41,7 @@ function App() {
     budget: 4,
     jobSwitch: 5,
     PensionWithdrawal: 6,
-    endShop: 7, // ✅ NEW
+    endShop: 7, 
     end: 8,
   };
 
@@ -88,7 +88,7 @@ function App() {
   };
 
   const handleBudgetComplete = (data) => {
-    setBudgetData(data); // ✅ Save PieChart data
+    setBudgetData(data); // 
     setBudgetCompleted(true);
     goToSection(sectionIndices.jobSwitch);
   };
@@ -190,7 +190,7 @@ function App() {
           {selectedPension ? (
             <PensionWithdrawal
               selectedPension={selectedPension}
-              onContinue={handleGoToEndShop} // ✅ Go to EndShop now
+              onContinue={handleGoToEndShop} 
             />
           ) : (
             <div className="d-flex justify-content-center align-items-center h-100">
@@ -199,7 +199,7 @@ function App() {
           )}
         </section>
 
-        {/* ✅ Retirement Shop Section */}
+        {/* Retirement Shop Section */}
         {showEndShop && (
           <section className="section end-shop-section">
             <EndShop 
@@ -208,7 +208,7 @@ function App() {
           </section>
         )}
 
-        {/* ✅ End Screen Section */}
+        {/* End Screen Section */}
         <section className="section end-screen-section">
           <EndScreen
             isVisible={showEndScreen}

@@ -26,6 +26,7 @@ function App() {
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
+  const [netPay, setNetPay] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
 
   // Define section indices
@@ -138,6 +139,7 @@ function App() {
                   job={selectedJob}
                   salary={selectedJobSalary}
                   onAnnualContributionsChange={setAnnualContributions} // Pass callback
+                  onNetPay={setNetPay} // Pass callback
                 />
             </div>
             {selectedJob && (
@@ -191,7 +193,8 @@ function App() {
         {/* ✅ Retirement Shop Section */}
         {showEndShop && (
           <section className="section end-shop-section">
-            <EndShop 
+            <EndShop
+            netPay={netPay*12} // Pass the annual salary 
             budgetData={budgetData} 
             handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
           </section>

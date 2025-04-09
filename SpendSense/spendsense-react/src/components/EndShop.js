@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import "../App.css";
-import { initialJobs } from './JobSelect';
-
-const salary_savings = initialJobs[0].salary * 40;
+import "../App.js";
 
 const categories = ["Phone", "Car", "House", "Leisure"];
 
@@ -85,8 +83,8 @@ async function fetchHousePrices() {
   ].filter(Boolean); 
 }
 
-function EndShop({ salary, budgetData, handleGoToEndScreen }) { 
-  const salary_savings = salary * 40 * budgetData.Savings/100;
+function EndShop({netPay, budgetData, handleGoToEndScreen }) { 
+  const salary_savings = netPay * 40 * budgetData.Savings/100;
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);
   const [dynamicItems, setDynamicItems] = useState(defaultItems);

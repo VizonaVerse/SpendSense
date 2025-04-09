@@ -29,14 +29,14 @@ function Information() {
           ease: 'power1.inOut'
         })
         .fromTo(navRef.current, 
-          { x: '100%', opacity: 0 }, // Changed from '-100%' to '100%'
+          { x: '100%', opacity: 0 },
           { 
             x: '0%', 
             opacity: 1,
             duration: 0.3,
             ease: 'power1.out'
           },
-          0 // start at the same time as overlay animation
+          0
         );
     }
   };
@@ -50,7 +50,7 @@ function Information() {
           ease: 'power1.inOut'
         })
         .to(navRef.current, {
-          x: '100%', // Changed from '-100%' to '100%'
+          x: '100%',
           opacity: 0,
           duration: 0.3,
           ease: 'power1.in',
@@ -80,7 +80,6 @@ function Information() {
     // Menu button hover animation
     const menuButton = menuButtonRef.current;
     if (menuButton) {
-      // Define timeline within the scope
       const buttonTimeline = gsap.timeline({ paused: true });
       buttonTimeline.to(menuButton, {
         scale: 1.1,
@@ -122,11 +121,13 @@ function Information() {
 
   return (
     <>
-      <button
-        ref={menuButtonRef}
-        id="open-menu-button"
-        onClick={handleButtonClick(openNav)}
-        style={{ 
+      <div>
+        {/* Menu Button */}
+        <button
+          ref={menuButtonRef}
+          id="open-menu-button"
+          onClick={handleButtonClick(openNav)}
+          style={{ 
           position: "fixed", 
           top: "1vmin", 
           right: "1vmin", // Changed from left to right
@@ -136,24 +137,28 @@ function Information() {
           cursor: 'pointer',
           width: '10vmin',
           height: '10vmin',
+          minWidth: '64px',
+          minHeight: '64px',
           maxWidth: '128px',
           maxHeight: '128px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
-        }}
-      >
-        <img
-          src="images/menu.png"
-          alt="Menu"
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            imageRendering: "pixelated",
-            objectFit: 'contain'
+
           }}
-        />
-      </button>
+        >
+          <img
+            src="images/menu.png"
+            alt="Menu"
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              imageRendering: "pixelated",
+              objectFit: 'contain'
+            }}
+          />
+        </button>
+      </div>
 
       <nav 
         id="navbar" 
@@ -172,16 +177,6 @@ function Information() {
           flexDirection: 'column'
         }}
       >
-        <div 
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start', 
-            padding: '15px'
-          }}
-        >
-          
-        </div>
-
         <ul 
           style={{ 
             listStyle: 'none', 
@@ -247,7 +242,6 @@ function Information() {
               API 2
             </button>
           </li>
-
         </ul>
       </nav>
 

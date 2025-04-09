@@ -27,6 +27,7 @@ function App() {
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
+  const [netPay, setNetPay] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
   const [processedBudgetData, setProcessedBudgetData] = useState(null);
   const [currentSection, setCurrentSection] = useState("home");
@@ -164,11 +165,12 @@ function App() {
         <section className="section payslip-section">
           <div className="payslip-wrapper">
             <div className="payslip-content">
-              <SamplePayslip
-                job={selectedJob}
-                salary={selectedJobSalary}
-                onAnnualContributionsChange={setAnnualContributions}
-              />
+                <SamplePayslip
+                  job={selectedJob}
+                  salary={selectedJobSalary}
+                  onAnnualContributionsChange={setAnnualContributions} // Pass callback
+                  onNetPayChange={setNetPay} // Pass callback
+                />
             </div>
             {selectedJob && (
               <div className="payslip-button-wrapper">
@@ -219,14 +221,14 @@ function App() {
         </section>
 
         {/* Retirement Shop Section */}
-        <section className="section end-shop-section">
-          {showEndShop && (
-            <EndShop 
-              budgetData={budgetData} 
-              handleGoToEndScreen={handleShowEndScreen}
-            />
-          )}
-        </section>
+        {showEndShop && (
+          <section className="section end-shop-section">
+            <EndShop
+            netPay={netPay*12} // Pass the annual salary 
+            budgetData={budgetData} 
+            handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
+          </section>
+        )}
 
         {/* End Screen Section */}
         <section className="section end-screen-section">

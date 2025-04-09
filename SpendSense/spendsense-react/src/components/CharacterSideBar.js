@@ -118,7 +118,7 @@ function CharacterSidebar() {
         />
 
         <div>
-          <h3>Wealth</h3>
+          <h3>Job Name</h3>
           <div style={{
             width: '100%',
             height: '20px',

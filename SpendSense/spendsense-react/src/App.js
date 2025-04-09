@@ -12,9 +12,10 @@ import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
 import EndShop from "./components/EndShop.js"; // ✅ NEW
 import EndScreen from "./components/EndScreen.js";
-import CharacterSidebar from "./components/CharacterSideBar.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
+import Stats from "./components/Stats.js";
+import CharacterSidebar from "./components/CharacterSideBar.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -27,6 +28,9 @@ function App() {
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
+  const [processedBudgetData, setProcessedBudgetData] = useState(null); // Finalized data for EndShop
+  const [currentSection, setCurrentSection] = useState("home"); // Track the current section
+  const [showStats, setShowStats] = useState(false);
 
   // Define section indices
   const sectionIndices = {
@@ -58,12 +62,14 @@ function App() {
   };
 
   const handleFormSubmit = () => {
-    console.log('Navigating to jobSelect section after form submission');
+    console.log("Navigating to jobSelect section after form submission");
+    setShowStats(true); // Show Stats after form submission
     goToSection(sectionIndices.jobSelect);
   };
 
   const handleSkipForm = () => {
-    console.log('Form skipped, navigating to jobSelect section');
+    console.log("Form skipped, navigating to jobSelect section");
+    setShowStats(true); // Show Stats after form is skipped
     goToSection(sectionIndices.jobSelect); // Navigate to the jobSelect section
   };
 
@@ -98,6 +104,7 @@ function App() {
   };
 
   const handleShowEndScreen = () => {
+    setShowStats(false); // Hide Stats before showing EndScreen
     setShowEndScreen(true);
     goToSection(sectionIndices.end);
   };
@@ -105,14 +112,18 @@ function App() {
   return (
     <div id="main-wrapper">
       <Information />
-      
-      <div id="scroll-container" ref={scrollContainerRef}>
-        {/* Home Section */}
-        <section className="section home-section">
-          <Home onStart={handleStart} />
-        </section>
-
-        <CharacterSidebar />
+      {showStats && (
+        <>
+          <Stats />
+          <CharacterSidebar characterData={selectedJob} currentSection={currentSection} />
+        </>
+      )}
+        <div id="scroll-container" ref={scrollContainerRef}>
+          {/* Home Section */}
+          <section className="section home-section">
+            <Home onStart={handleStart} />
+          </section>
+        
 
         {/* User Data Form Section */}
         <section className="section form-section">

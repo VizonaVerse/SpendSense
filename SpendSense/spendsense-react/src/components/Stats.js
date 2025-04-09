@@ -39,7 +39,6 @@ function CharacterStatsDisplay({
       alignItems: 'center',
       width: '100%',
       padding: '10px 20px',
-      backgroundColor: '#000',
       color: 'white',
       position: 'fixed',
       top: 0,
@@ -53,7 +52,6 @@ function CharacterStatsDisplay({
         height: '120px',
         borderRadius: '50%',
         overflow: 'hidden',
-        border: '2px solid gold',
         marginRight: '15px'
       }}>
         <img 
@@ -87,19 +85,24 @@ function CharacterStatsDisplay({
             marginBottom: '5px',
             fontSize: '14px'
           }}>
-            <span>Progress</span>
-            <span>{progress}%</span>
+            <span style={{ color: 'black'}}>
+                Progress
+            </span>
+            <span style={{ color: 'black'}}>
+                {progress}%
+            </span>
           </div>
           <div className="progress-bar-bg" style={{
             width: '100%',
             height: '12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            backgroundColor: 'rgba(15, 15, 15, 0.41)',
             borderRadius: '6px',
             overflow: 'hidden'
           }}>
             <div className="progress-bar-fill" style={{
               height: '100%',
               width: `${progress}%`,
+              color: 'black',
               backgroundColor: '#4CAF50',
               borderRadius: '6px',
               transition: 'width 0.3s ease'
@@ -112,16 +115,16 @@ function CharacterStatsDisplay({
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(70, 166, 66, 0.47)',
           padding: '5px 12px',
           borderRadius: '15px',
-          border: '1px solid gold',
+          border: '3px solid black',
           width: 'fit-content'
         }}>
           <span style={{ 
             fontSize: '16px', 
             fontWeight: 'bold', 
-            color: 'gold' 
+            color: 'black' 
           }}>
             £{money.toLocaleString()}
           </span>

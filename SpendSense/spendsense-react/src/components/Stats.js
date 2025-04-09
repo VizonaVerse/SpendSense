@@ -49,8 +49,8 @@ function CharacterStatsDisplay({
     }}>
       {/* Character Picture */}
       <div className="character-portrait" style={{
-        width: '50px',
-        height: '50px',
+        width: '120px',
+        height: '120px',
         borderRadius: '50%',
         overflow: 'hidden',
         border: '2px solid gold',
@@ -68,63 +68,72 @@ function CharacterStatsDisplay({
         />
       </div>
       
-      {/* Money Display */}
-      <div className="money-display" style={{
+      {/* Stats wrapper */}
+      <div className="stats-wrapper" style={{
         display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: '5px 12px',
-        borderRadius: '15px',
-        border: '1px solid gold',
-        marginRight: '20px'
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: '-10px',
+        width: '300px'
       }}>
-        <span style={{ 
-          fontSize: '16px', 
-          fontWeight: 'bold', 
-          color: 'gold' 
-        }}>
-          £{money.toLocaleString()}
-        </span>
-        <img
-          src="images/coin.png"
-          alt="Coins"
-          style={{
-            width: '18px',
-            height: '18px',
-            imageRendering: 'pixelated'
-          }}
-        />
-      </div>
-      
-      {/* Progress Bar */}
-      <div className="progress-container" style={{
-        flex: 1,
-        maxWidth: '300px'
-      }}>
-        <div className="progress-label" style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '5px',
-          fontSize: '14px'
-        }}>
-          <span>Progress</span>
-          <span>{progress}%</span>
-        </div>
-        <div className="progress-bar-bg" style={{
+        {/* Progress Bar */}
+        <div className="progress-container" style={{
           width: '100%',
-          height: '12px',
-          backgroundColor: 'rgba(255, 255, 255, 0.2)',
-          borderRadius: '6px',
-          overflow: 'hidden'
+          marginBottom: '10px'
         }}>
-          <div className="progress-bar-fill" style={{
-            height: '100%',
-            width: `${progress}%`,
-            backgroundColor: '#4CAF50',
+          <div className="progress-label" style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '5px',
+            fontSize: '14px'
+          }}>
+            <span>Progress</span>
+            <span>{progress}%</span>
+          </div>
+          <div className="progress-bar-bg" style={{
+            width: '100%',
+            height: '12px',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
             borderRadius: '6px',
-            transition: 'width 0.3s ease'
-          }} />
+            overflow: 'hidden'
+          }}>
+            <div className="progress-bar-fill" style={{
+              height: '100%',
+              width: `${progress}%`,
+              backgroundColor: '#4CAF50',
+              borderRadius: '6px',
+              transition: 'width 0.3s ease'
+            }} />
+          </div>
+        </div>
+        
+        {/* Money Display */}
+        <div className="money-display" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '2px',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          padding: '5px 12px',
+          borderRadius: '15px',
+          border: '1px solid gold',
+          width: 'fit-content'
+        }}>
+          <span style={{ 
+            fontSize: '16px', 
+            fontWeight: 'bold', 
+            color: 'gold' 
+          }}>
+            £{money.toLocaleString()}
+          </span>
+          <img
+            src="images/coin.png"
+            alt="Coins"
+            style={{
+              width: '30px',
+              height: '30px',
+              imageRendering: 'pixelated'
+            }}
+          />
         </div>
       </div>
     </div>

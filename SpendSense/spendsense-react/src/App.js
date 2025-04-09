@@ -150,7 +150,7 @@ function App() {
                   job={selectedJob}
                   salary={selectedJobSalary}
                   onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                  onNetPay={setNetPay} // Pass callback
+                  onNetPayChange={setNetPay} // Pass callback
                 />
             </div>
             {selectedJob && (

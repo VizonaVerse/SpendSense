@@ -22,7 +22,9 @@
     "react-draggable": "^4.4.6",
     "react-router-dom": "^7.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "cross-env": "^7.03"
+
   },
   "scripts": {
     "start": "cross-env PORT=5000 react-scripts start",

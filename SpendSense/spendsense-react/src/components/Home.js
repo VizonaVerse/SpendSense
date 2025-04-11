@@ -4,7 +4,7 @@ import "../App.css";
 
 function Home({ onStart }) {
   return (
-    <div className="section-content home-section text-center">
+    <div className="section-content text-center">
       <div>
       <img src="images/spendsense_logo.gif" alt="SpendSense Logo" style={{ width: "50vw", height: "25vh" }} />
 

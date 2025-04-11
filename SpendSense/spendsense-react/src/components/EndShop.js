@@ -142,25 +142,30 @@ function EndShop({netPay, budgetData, handleGoToEndScreen }) {
   const isCategoryActive = (category) => activeCategories.includes(category);
 
   return (
-
-    <div className="container-fluid d-flex flex-column align-items-center min-vh-100 p-3">
-    <div className="position-absolute start-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
+    <div className="store-section">
+      {/* Money Display */}
+      <div className="position-absolute start-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
         <span className="fw-bold">£{money.toLocaleString()}</span>
       </div>
-      <div className="text-center mt-4 mb-4">
-        <h1 className="fw-bold">Retirement Store</h1>
-        <p className="text-secondary">Spend your pension money</p>
-        {budgetData && (
-          <div className="mb-3">
-            <p><strong>Budget Breakdown:</strong></p>
-            <p>Wants: {budgetData.Wants}%</p>
-            <p>Needs: {budgetData.Needs}%</p>
-            <p>Savings: {budgetData.Savings}%</p>
-          </div>
-        )}
+  
+      {/* Store Header */}
+      <div className="text-center mt-4 mb-3">
+        <h1 className="store-title">Retirement Store</h1>
+        <p className="store-subtitle">Spend your pension money</p>
       </div>
-
-      <div className="w-100" style={{ maxWidth: "900px" }}>
+  
+      {/* Budget Breakdown */}
+      {budgetData && (
+        <div className="budget-breakdown">
+          <p><strong>Budget Breakdown:</strong></p>
+          <p>Wants: {budgetData.Wants}%</p>
+          <p>Needs: {budgetData.Needs}%</p>
+          <p>Savings: {budgetData.Savings}%</p>
+        </div>
+      )}
+  
+      {/* Category Tabs */}
+      <div className="w-100 mb-4" style={{ maxWidth: "900px" }}>
         <div className="row g-0">
           {categories.map((category, i) => (
             <div key={i} className="col text-center">
@@ -178,44 +183,38 @@ function EndShop({netPay, budgetData, handleGoToEndScreen }) {
             </div>
           ))}
         </div>
-
-        <div className="row g-0">
-          {categories.map((category, i) => (
-            <div key={i} className="col">
-              <div
-                ref={el => itemRefs.current[category] = el}
-                className="overflow-hidden"
-                style={{ height: isCategoryActive(category) ? 'auto' : 0 }}
-              >
-                <div className="d-flex flex-column gap-2 p-2">
-                  {dynamicItems[category]?.map((item, i) => (
-                    <div
-                      key={i}
-                      className="card rounded-0 text-center"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handlePurchase(item.price)}
-                    >
-                      <div className="card-body p-2">
-                        <h6 className="card-title mb-1">{item.name}</h6>
-                        <p className="card-text text-success mb-0">£{item.price.toLocaleString()}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+      </div>
+  
+      {/* Superstore Shelves */}
+      {categories.map((category, i) => (
+        <div
+          key={i}
+          ref={(el) => (itemRefs.current[category] = el)}
+          className="store-shelf"
+          style={{ height: isCategoryActive(category) ? "auto" : 0 }}
+        >
+          <div className="shelf-header">{category}</div>
+          {dynamicItems[category]?.map((item, index) => (
+            <div
+              key={index}
+              className="item-card"
+              onClick={() => handlePurchase(item.price)}
+            >
+              <h5>{item.name}</h5>
+              <p>£{item.price.toLocaleString()}</p>
             </div>
           ))}
         </div>
-      </div>
-
-      <button
-        onClick={handleGoToEndScreen}
-        className="btn btn-primary mt-auto mb-4"
-      >
+      ))}
+  
+      {/* End Button */}
+      <button onClick={handleGoToEndScreen} className="end-button">
         Go to End Screen
       </button>
     </div>
   );
+  
+  
 }
 
 export default EndShop;

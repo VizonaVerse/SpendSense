@@ -98,6 +98,7 @@ html, body {
   flex-direction: column;
   height: 100%;
   max-width: 80vw;
+  position: relative;
 }
 .payslip-content {
   flex: 1;
@@ -118,11 +119,17 @@ html, body {
   box-sizing: border-box;
   position: relative;
   overflow: visible; /* allow info boxes to appear outside the card bounds */
+  margin-top: -200px;
 }
 .payslip-button-wrapper {
   text-align: center;
   z-index: 100;
-  padding: 0;
+  padding: 20px 0;
+  position: absolute; 
+  bottom: 150px; 
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
 /* Hover Info for Payslip */

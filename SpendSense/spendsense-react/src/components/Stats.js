@@ -39,8 +39,8 @@ function CharacterStatsDisplay({
       alignItems: 'center',
       width: '100%',
       padding: '10px 20px',
-      color: 'white',
-      position: 'fixed',
+      color: 'rgba(255, 255, 255, 0)',
+      position: 'sticky',
       top: 0,
       left: 0,
       right: 0,
@@ -115,15 +115,14 @@ function CharacterStatsDisplay({
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          backgroundColor: 'rgba(70, 166, 66, 0.47)',
+          backgroundColor: 'rgba(239, 239, 239, 0.04)',
           padding: '5px 12px',
           borderRadius: '15px',
           border: '3px solid green',
           width: 'fit-content'
         }}>
           <span style={{ 
-            fontSize: '16px', 
-            fontWeight: 'bold', 
+            fontSize: '16px',  
             color: 'black' 
           }}>
             £{money.toLocaleString()}

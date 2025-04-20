@@ -206,6 +206,8 @@ function App() {
           <section className="section end-shop-section">
             <EndShop
             netPay={netPay*12} // Pass the annual salary 
+            netPay2 = {selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
+            annualContributions={annualContributions} // Pass the annual contributions
             budgetData={budgetData} 
             handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
           </section>

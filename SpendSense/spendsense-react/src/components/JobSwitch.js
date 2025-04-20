@@ -28,7 +28,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
     setSelectedJob(job);
     onJobSelect(job);
   };
-
+  
   // GSAP Hover Animations
   const handleHover = (element) => {
     gsap.to(element, {

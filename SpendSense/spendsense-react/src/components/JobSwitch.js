@@ -49,7 +49,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   };
 
   return (
-    <div className="section-content job-select-section text-center">
+    <div className="section-content job-select-section2 text-center">
       <h2>Time to Switch Things Up?</h2>
       <p>The government provides a basic £220 weekly pension</p>
       <p>Want to look for something better?:</p>

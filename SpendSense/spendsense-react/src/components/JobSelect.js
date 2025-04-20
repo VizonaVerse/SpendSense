@@ -55,7 +55,7 @@ function JobSelect({ onJobSelect }) {
   };
 
  return (
-    <div className="section-content job-select-section text-center">
+    <div className="section-content  text-center">
       <h2>Pick Your First Job</h2>
       <div className="row mt-4 justify-content-center">
         {initialJobs.map((job) => (

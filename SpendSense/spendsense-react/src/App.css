@@ -55,7 +55,7 @@ html, body {
 
 /* Home Section */
 .home-section {
-  background: var(--light-bg);
+  background-image: url("/public/images/background1.png");
 }
 .home-section h1 {
   font-size: 3rem;
@@ -66,26 +66,128 @@ html, body {
   padding: 10px 20px;
 }
 
+/*userdata form*/
+.form-section {
+  background-image: url("/public/images/background2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 0;
+}
+
+form {
+  background-color: var(--light-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+form div {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+form input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.2);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+form button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+form button[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+form .btn-secondary {
+  background-color: #ccc;
+  color: #333;
+}
+
+form button:hover {
+  opacity: 0.9;
+}
+
+
+
 /* Job Select Section */
 .job-select-section {
-  background: var(--bg-color);
+  background-image: url("/public/images/background3.png");
   text-align: center;
+  
 }
 .job-select-section h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
 }
 .job-card {
-  transition: transform 0.3s ease;
-  cursor: pointer;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+  border: 2px solid transparent;
+  height: 220px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:100%;
 }
 .job-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
 }
+
+.job-card h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.job-card p {
+  font-size: 1rem;
+  margin: 0;
+  color: #333;
+}
+
 
 /* Payslip Section */
 .payslip-section {
-  background: var(--payslip-bg);
+  background-image: url("/public/images/background4.png");
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,6 +200,7 @@ html, body {
   flex-direction: column;
   height: 100%;
   max-width: 80vw;
+  position: relative;
 }
 .payslip-content {
   flex: 1;
@@ -118,11 +221,17 @@ html, body {
   box-sizing: border-box;
   position: relative;
   overflow: visible; /* allow info boxes to appear outside the card bounds */
+  margin-top: -200px;
 }
 .payslip-button-wrapper {
   text-align: center;
   z-index: 100;
-  padding: 0;
+  padding: 20px 0;
+  position: absolute; 
+  bottom: 150px; 
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
 /* Hover Info for Payslip */
@@ -154,5 +263,11 @@ html, body {
 }
 .hover-info:hover .info-box {
   opacity: 1;
+}
+
+/* Job switch Section */
+.job-select-section2 {
+  text-align: center;
+  
 }
 

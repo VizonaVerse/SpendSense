@@ -38,13 +38,13 @@ function CharacterStatsDisplay({
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      // padding: '10px 20px',
+      padding: '10px 20px',
       color: 'rgba(255, 255, 255, 0)',
       position: 'absolute',
-      // top: 0,
-      // left: 0,
-      // right: 0,
-      // zIndex: 100,
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 100,
     }}>
       {/* Character Picture */}
       <div className="character-portrait" style={{

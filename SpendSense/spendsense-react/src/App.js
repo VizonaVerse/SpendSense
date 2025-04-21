@@ -63,9 +63,9 @@ function App() {
     
     setIsTransitioning(true);
     setCurrentSection(sectionName);
-    
+    let scrollMultiplier = 100; // Adjust this value to control scroll distance
     const sectionIndex = sectionIndices[sectionName];
-    const yValue = `-${sectionIndex * 100}vh`;
+    const yValue = `-${sectionIndex * scrollMultiplier}vh`;
     
     gsap.to(scrollContainerRef.current, {
       duration: 1,

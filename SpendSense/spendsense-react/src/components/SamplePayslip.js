@@ -64,8 +64,8 @@ export default function SamplePayslip({ job, salary, onAnnualContributionsChange
   }
 
   return (
-    <div className="payslip-container">
-      <div className="card payslip-card p-3 shadow-sm">
+    <div className="payslip-container" style={{outerHeight: "100vh", padding: "50px"}}>
+      <div className="card payslip-card p-4 shadow-sm" style={{ marginTop: "80px" }}>
         <h2 className="mb-3">Monthly Payslip</h2>
         <div className="row mb-2">
           <div className="col-6 text-start">
@@ -139,12 +139,12 @@ export default function SamplePayslip({ job, salary, onAnnualContributionsChange
           <div className="col-6">
             <div className="section-header mb-2">
               <h4>Deductions
-              <span className="hover-info">
-                (i)
-                <div className="info-box">
-                  You have a personal allowance of £12,570 which is tax free
-                </div>
-              </span>
+                <span className="hover-info">
+                  (i)
+                  <div className="info-box">
+                    You have a personal allowance of £12,570 which is tax free
+                  </div>
+                </span>
               </h4>
               <div className="info-box">This section lists all your deductions.</div>
             </div>

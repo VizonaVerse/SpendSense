@@ -10,7 +10,7 @@ import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
-import EndShop from "./components/EndShop.js"; 
+import EndShop from "./components/EndShop.js";
 import EndScreen from "./components/EndScreen.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
@@ -19,7 +19,7 @@ import CharacterInfo from "./components/CharacterInfo.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
-  const [selectedJobSalary, setSelectedJobSalary] = useState(null); 
+  const [selectedJobSalary, setSelectedJobSalary] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
@@ -43,7 +43,7 @@ function App() {
     budget: 4,
     jobSwitch: 5,
     pensionWithdrawal: 6,
-    endShop: 7, 
+    endShop: 7,
     end: 8,
   };
 
@@ -51,7 +51,7 @@ function App() {
   useEffect(() => {
     // Prevent manual scrolling by disabling scroll
     document.body.style.overflow = 'hidden';
-    
+
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -61,12 +61,12 @@ function App() {
   // Animate scroll to a section with improved transition handling
   const goToSection = (sectionName) => {
     if (isTransitioning) return; // Prevent multiple transitions
-    
+
     setIsTransitioning(true);
     setCurrentSection(sectionName);
     const sectionIndex = sectionIndices[sectionName];
     const yValue = `-${sectionIndex * scrollMultiplier}vh`;
-    
+
     gsap.to(scrollContainerRef.current, {
       duration: 1,
       y: yValue,
@@ -98,7 +98,7 @@ function App() {
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setInitialJob(job);
-    setSelectedJobSalary(job.salary); 
+    setSelectedJobSalary(job.salary);
     setSelectedPension(job.pension);
     setTimeout(() => {
       goToSection("payslip");
@@ -155,7 +155,7 @@ function App() {
             </div>
           </div>
         </section>
-        
+
         {/* Job Selection */}
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
@@ -165,15 +165,15 @@ function App() {
         <section className="section payslip-section">
           <div className="payslip-wrapper">
             <div className="payslip-content">
-                <SamplePayslip
-                  job={selectedJob}
-                  salary={selectedJobSalary}
-                  onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                  onNetPayChange={setNetPay} // Pass callback
-                />
+              <SamplePayslip
+                job={selectedJob}
+                salary={selectedJobSalary}
+                onAnnualContributionsChange={setAnnualContributions} // Pass callback
+                onNetPayChange={setNetPay} // Pass callback
+              />
             </div>
             {selectedJob && (
-              <div className="payslip-button-wrapper">
+              <div className="payslip-button-wrapper" position="absolute" style={{right: "0", bottom: "0"}}>
                 <button onClick={handleGoToBudget} className="btn btn-primary">
                   Go to Budgeting Game
                 </button>
@@ -186,8 +186,8 @@ function App() {
         <section className="section budgeting-section">
           <div className="d-flex flex-column align-items-center">
             <Chart onComplete={handleBudgetComplete} />
-            <button 
-              onClick={() => handleBudgetComplete({ exampleData: 123 })} 
+            <button
+              onClick={() => handleBudgetComplete({ exampleData: 123 })}
               className="btn btn-success mt-4"
             >
               Next
@@ -211,7 +211,7 @@ function App() {
           {selectedPension ? (
             <PensionWithdrawal
               selectedPension={selectedPension}
-              onContinue={handleGoToEndShop} 
+              onContinue={handleGoToEndShop}
             />
           ) : (
             <div className="d-flex justify-content-center align-items-center h-100">
@@ -221,16 +221,18 @@ function App() {
         </section>
 
         {/* Retirement Shop Section */}
-        {showEndShop && (
-          <section className="section end-shop-section">
-            <EndShop
-            netPay={netPay*12} // Pass the annual salary 
-            netPay2 = {selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
-            annualContributions={annualContributions} // Pass the annual contributions
-            budgetData={budgetData} 
-            handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
-          </section>
-        )}
+        {
+          showEndShop && (
+            <section className="section end-shop-section">
+              <EndShop
+                netPay={netPay * 12} // Pass the annual salary 
+                netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
+                annualContributions={annualContributions} // Pass the annual contributions
+                budgetData={budgetData}
+                handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
+            </section>
+          )
+        }
 
         {/* End Screen Section */}
         <section className="section end-screen-section">
@@ -241,8 +243,8 @@ function App() {
             }}
           />
         </section>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

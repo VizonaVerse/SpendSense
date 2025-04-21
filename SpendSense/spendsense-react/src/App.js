@@ -57,13 +57,13 @@ function App() {
     };
   }, []);
 
+  let scrollMultiplier = 100; // Adjust this value to control scroll distance
   // Animate scroll to a section with improved transition handling
   const goToSection = (sectionName) => {
     if (isTransitioning) return; // Prevent multiple transitions
     
     setIsTransitioning(true);
     setCurrentSection(sectionName);
-    let scrollMultiplier = 100; // Adjust this value to control scroll distance
     const sectionIndex = sectionIndices[sectionName];
     const yValue = `-${sectionIndex * scrollMultiplier}vh`;
     

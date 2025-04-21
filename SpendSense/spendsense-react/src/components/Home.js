@@ -6,7 +6,7 @@ function Home({ onStart }) {
   return (
     <div className="section-content text-center">
       <div>
-      <img src="images/spendsense_logo.gif" alt="SpendSense Logo" style={{ width: "80vmin", height: "25vmin" }} />
+      <img src="images/spendsense_logo.gif" alt="SpendSense Logo" style={{ height: "25vmin" }} />
 
       </div>
       <button onClick={onStart} className="nes-btn is-primary nes-pointer">

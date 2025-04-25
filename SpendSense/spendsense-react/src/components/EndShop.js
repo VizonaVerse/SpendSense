@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import "../App.css";
 import "../App.js";
+import Stats from "./Stats.js";
 
 const categories = ["Phone", "Car", "House", "Leisure"];
 
@@ -83,11 +84,12 @@ async function fetchHousePrices() {
   ].filter(Boolean); 
 }
 
-function EndShop({netPay, netPay2, budgetData, handleGoToEndScreen }) { 
+function EndShop({ netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChange }) { 
   const salary_savings = (netPay * 10 + netPay2 * 30 ) * budgetData.Savings/100;
   console.log("NetPay2", netPay2);
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);
+  onMoneyChange(money);
   const [dynamicItems, setDynamicItems] = useState(defaultItems);
   const itemRefs = useRef({});
 
@@ -102,7 +104,7 @@ function EndShop({netPay, netPay2, budgetData, handleGoToEndScreen }) {
   
     loadHouseData();
   }, []);
-        
+
   const handleCategoryClick = (category) => {
     const itemElement = itemRefs.current[category];
     if (!itemElement) return;
@@ -136,7 +138,11 @@ function EndShop({netPay, netPay2, budgetData, handleGoToEndScreen }) {
 
   const handlePurchase = (price) => {
     if (money >= price) {
-      setMoney(m => m - price);
+      setMoney((m) => {
+        const newMoney = m - price;
+        if (onMoneyChange) onMoneyChange(newMoney); // Notify parent of money change
+        return newMoney;
+      });
     }
   };
 
@@ -144,6 +150,7 @@ function EndShop({netPay, netPay2, budgetData, handleGoToEndScreen }) {
 
   return (
     <div className="container-fluid d-flex flex-column align-items-left min-vh-100 p-3">
+    {/* <Stats characterMoney={money.toLocaleString()}/> */}
     <div className=" position-absolute bottom-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
         <span className="fw-bold">£{money.toLocaleString()}</span>
       </div>

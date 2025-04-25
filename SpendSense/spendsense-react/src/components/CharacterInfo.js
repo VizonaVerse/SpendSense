@@ -447,7 +447,7 @@ function CharacterInfo({
           width: '300px'
         }}>
           {/* Progress Bar */}
-          <div className="progress-container" style={{
+          {/* <div className="progress-container" style={{
             width: '100%',
             marginBottom: '10px'
           }}>
@@ -480,10 +480,10 @@ function CharacterInfo({
                 transition: 'width 0.3s ease'
               }} />
             </div>
-          </div>
+          </div> */}
           
           {/* Money Display */}
-          <div className="money-display" style={{
+          {/* <div className="money-display" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '2px',
@@ -509,7 +509,7 @@ function CharacterInfo({
                 imageRendering: 'pixelated'
               }}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

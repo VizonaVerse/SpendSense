@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 
 function CharacterStatsDisplay({ 
   characterImage = "images/sprite_base.png", 
-  initialMoney = 1000,
-  initialProgress = 60,
+  characterMoney = 1000,
+  characterProgress = 60,
   onMoneyChange = null,
   onProgressChange = null
 }) {
-  const [money, setMoney] = useState(initialMoney);
-  const [progress, setProgress] = useState(initialProgress);
+  const [money, setMoney] = useState(characterMoney);
+  const [progress, setProgress] = useState(characterProgress);
   
   // Listen for external updates to money and progress
   useEffect(() => {
-    setMoney(initialMoney);
-  }, [initialMoney]);
+    setMoney(characterMoney);
+  }, [characterMoney]);
   
   useEffect(() => {
-    setProgress(initialProgress);
-  }, [initialProgress]);
+    setProgress(characterProgress);
+  }, [characterProgress]);
   
   // Undefined functions to update money and progress
   const addMoney = (amount) => {
@@ -115,7 +115,7 @@ function CharacterStatsDisplay({
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          backgroundColor: 'rgba(239, 239, 239, 0.04)',
+          backgroundColor: 'rgba(70, 166, 66, 0.47)',
           padding: '5px 12px',
           borderRadius: '15px',
           border: '3px solid green',
@@ -125,7 +125,7 @@ function CharacterStatsDisplay({
             fontSize: '16px',  
             color: 'black' 
           }}>
-            £{money.toLocaleString()}
+            £{(money || 1000).toLocaleString()} {/* Fallback to 1000 if money is null or undefined */}
           </span>
           <img
             src="images/coin.png"

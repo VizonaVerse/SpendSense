@@ -33,6 +33,8 @@ function App() {
   const [currentSection, setCurrentSection] = useState("home");
   const [showStats, setShowStats] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [money, setMoney] = useState(1000);
+  const [progress, setProgress] = useState(60);
 
   // Define section indices
   const sectionIndices = {
@@ -121,8 +123,16 @@ function App() {
   };
 
   const handleGoToEndShop = () => {
+    // setShowStats(false);
     setShowEndShop(true);
     goToSection("endShop");
+  };
+
+  const handleEndShopMoney = () => {
+    // const salary_savings = (netPay * 10 + selectedJobSalary * 30) * budgetData.Savings / 100;
+    // Stats.setMoney(salary_savings.toLocaleString());
+    // setMoney(salary_savings.toLocaleString());
+    // setProgress(90);
   };
 
   const handleShowEndScreen = () => {
@@ -131,12 +141,20 @@ function App() {
     goToSection("end");
   };
 
+  const handleMoneyChange = (newMoney) => {
+    setMoney(newMoney); // Update money state
+  };
+
   return (
     <div id="main-wrapper">
       <Information />
       {showStats && (
         <>
-          <Stats />
+          <Stats 
+            characterData={selectedJob} 
+            currentSection={currentSection} 
+            characterMoney={money} // Pass money to Stats
+          />
           <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
         </>
       )}
@@ -224,12 +242,15 @@ function App() {
         {
           showEndShop && (
             <section className="section end-shop-section">
-              <EndShop
+              <EndShop 
+                onStart={handleEndShopMoney}
                 netPay={netPay * 12} // Pass the annual salary 
                 netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
                 annualContributions={annualContributions} // Pass the annual contributions
                 budgetData={budgetData}
-                handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
+                handleGoToEndScreen={handleShowEndScreen} // Pass data
+                onMoneyChange={handleMoneyChange} // Pass callback to update money
+              />
             </section>
           )
         }

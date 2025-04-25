@@ -33,7 +33,7 @@ function App() {
   const [currentSection, setCurrentSection] = useState("home");
   const [showStats, setShowStats] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [money, setMoney] = useState(1000);
+  const [money, setMoney] = useState(0);
   const [progress, setProgress] = useState(60);
 
   // Define section indices

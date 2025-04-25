@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 function CharacterStatsDisplay({ 
   characterImage = "images/sprite_base.png", 
-  characterMoney = 1000,
+  characterMoney = 0,
   characterProgress = 60,
   onMoneyChange = null,
   onProgressChange = null

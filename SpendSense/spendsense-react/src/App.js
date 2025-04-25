@@ -102,6 +102,8 @@ function App() {
     setInitialJob(job);
     setSelectedJobSalary(job.salary);
     setSelectedPension(job.pension);
+    setMoney(netPay);
+
     setTimeout(() => {
       goToSection("payslip");
     }, 200);
@@ -128,13 +130,6 @@ function App() {
     goToSection("endShop");
   };
 
-  const handleEndShopMoney = () => {
-    // const salary_savings = (netPay * 10 + selectedJobSalary * 30) * budgetData.Savings / 100;
-    // Stats.setMoney(salary_savings.toLocaleString());
-    // setMoney(salary_savings.toLocaleString());
-    // setProgress(90);
-  };
-
   const handleShowEndScreen = () => {
     setShowStats(false);
     setShowEndScreen(true);
@@ -150,9 +145,9 @@ function App() {
       <Information />
       {showStats && (
         <>
-          <Stats 
-            characterData={selectedJob} 
-            currentSection={currentSection} 
+          <Stats
+            characterData={selectedJob}
+            currentSection={currentSection}
             characterMoney={money} // Pass money to Stats
           />
           <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
@@ -187,11 +182,16 @@ function App() {
                 job={selectedJob}
                 salary={selectedJobSalary}
                 onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                onNetPayChange={setNetPay} // Pass callback
+                onNetPayChange={(netPay) => {
+                  if (currentSection === "payslip") { // Only update if in the payslip section
+                    setNetPay(netPay * 12); // Convert to annual salary
+                    setMoney(netPay * 12);
+                  }
+                }} // Pass callback
               />
             </div>
             {selectedJob && (
-              <div className="payslip-button-wrapper" position="absolute" style={{right: "0", bottom: "0"}}>
+              <div className="payslip-button-wrapper" position="absolute" style={{ right: "0", bottom: "0" }}>
                 <button onClick={handleGoToBudget} className="btn btn-primary">
                   Go to Budgeting Game
                 </button>
@@ -242,8 +242,7 @@ function App() {
         {
           showEndShop && (
             <section className="section end-shop-section">
-              <EndShop 
-                onStart={handleEndShopMoney}
+              <EndShop
                 netPay={netPay * 12} // Pass the annual salary 
                 netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
                 annualContributions={annualContributions} // Pass the annual contributions

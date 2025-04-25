@@ -125,7 +125,7 @@ function CharacterStatsDisplay({
             fontSize: '16px',  
             color: 'black' 
           }}>
-            £{(money || 1000).toLocaleString()} {/* Fallback to 1000 if money is null or undefined */}
+            £{(money || 0).toLocaleString()} {/* Fallback to 0 if money is null or undefined */}
           </span>
           <img
             src="images/coin.png"

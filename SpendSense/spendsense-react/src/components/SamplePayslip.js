@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { gsap } from "gsap";
 import "../App.css";
 
-export default function SamplePayslip({ job, salary, onAnnualContributionsChange, onNetPayChange }) {
+export default function SamplePayslip({ job, salary, onAnnualContributionsChange, onNetPayChange, onPensionChange }) {
   // Declare variables outside of conditional blocks
   let monthlyGross = 0;
   let pension = 0;
@@ -30,6 +30,12 @@ export default function SamplePayslip({ job, salary, onAnnualContributionsChange
     employerContribution = monthlyGross * 0.03;
     annualContributions = (employerContribution + pension) * 12;
   }
+
+  useEffect(() => {
+    if (onPensionChange) {
+      onPensionChange(pension); // Send the pension value to App.js
+    }
+  }, [pension, onPensionChange]);
 
   // Notify App.js about the annual contributions
   useEffect(() => {

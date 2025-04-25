@@ -35,6 +35,7 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [money, setMoney] = useState(0);
   const [progress, setProgress] = useState(60);
+  const [pension1, setPension1] = useState(0);
 
   // Define section indices
   const sectionIndices = {
@@ -116,6 +117,8 @@ function App() {
   const handleBudgetComplete = (data) => {
     setBudgetData(data);
     setBudgetCompleted(true);
+    const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
+    setMoney(savings1); // Update money state
     goToSection("jobSwitch");
   };
 
@@ -188,6 +191,7 @@ function App() {
                     setMoney(netPay * 12);
                   }
                 }} // Pass callback
+                onPensionChange={(pension) => setPension1(pension)}
               />
             </div>
             {selectedJob && (

@@ -150,9 +150,9 @@ function EndShop({ netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChan
 
   return (
     <div className="container-fluid d-flex flex-column align-items-left min-vh-100 p-3">
-    <div className=" position-absolute bottom-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
-        {/* <span className="fw-bold">£{money.toLocaleString()}</span> */}
-      </div>
+    {/* <div className=" position-absolute bottom-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
+        <span className="fw-bold">£{money.toLocaleString()}</span>
+      </div> */}
     <div className="container-fluid d-flex flex-column align-items-center min-vh-100 p-3">
       <div className="text-center mt-4 mb-4">
         <h1 className="fw-bold">Retirement Store</h1>

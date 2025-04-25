@@ -152,7 +152,7 @@ function EndShop({ netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChan
     <div className="container-fluid d-flex flex-column align-items-left min-vh-100 p-3">
     {/* <Stats characterMoney={money.toLocaleString()}/> */}
     <div className=" position-absolute bottom-0 m-3 bg-success bg-opacity-25 p-2 rounded border border-success">
-        <span className="fw-bold">£{money.toLocaleString()}</span>
+        {/* <span className="fw-bold">£{money.toLocaleString()}</span> */}
       </div>
     <div className="container-fluid d-flex flex-column align-items-center min-vh-100 p-3">
       <div className="text-center mt-4 mb-4">

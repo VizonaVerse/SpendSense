@@ -125,7 +125,7 @@ function CharacterStatsDisplay({
             fontSize: '16px',  
             color: 'black' 
           }}>
-            £{(money || 0).toLocaleString()} {/* Fallback to 0 if money is null or undefined */}
+              £{Number.isInteger(money || 0) ? (money || 0).toLocaleString() : (money || 0).toFixed(2).toLocaleString()} {/* Fallback to 0 if money is null or undefined */}
           </span>
           <img
             src="images/coin.png"

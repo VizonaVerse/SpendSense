@@ -5,13 +5,15 @@ import { gsap } from "gsap";
 
 // Initial Job Choices
 const initialJobs = [
-  { id: "Part_Time_Tutor", title: "Part-time Tutor", salary: 10000, pension: "state" },
-  { id: "Family_Business_Waiter", title: "Family Business Waiter", salary: 11000, pension: "state" },
-  { id: "McDonalds_Employee", title: "McDonalds Employee", salary: 15000, pension: "state" },
+//added apiTitle because searching the whole displayed title doesnt give realistic values from api
+  { id: "Part_Time_Tutor", title: "Part-time Tutor", apiTitle: "Tutor", salary: 10000, pension: "state" },
+  { id: "Family_Business_Waiter", title: "Family Business Waiter", apiTitle: "Waiter", salary: 11000, pension: "state" },
+  { id: "McDonalds_Employee", title: "McDonalds Employee", apiTitle: "McDonalds", salary: 15000, pension: "state" },
 ];
 
 function JobSelect({ onJobSelect }) {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobs, setJobs] = useState(initialJobs); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
 
   const addToRefs = (el) => {
@@ -26,6 +28,43 @@ function JobSelect({ onJobSelect }) {
     });
   }, []);
 
+  //fetch salary data from Adzuna API for each job
+  //we can add a fetch location later too to get jobs from the user's location rather than london
+  useEffect(() => {
+    async function fetchSalaryData(job) {
+      const url = `http://api.adzuna.com/v1/api/jobs/gb/histogram?app_id=edcbb643&app_key=06103ad4ff1dcb50632c176aada6968b&location0=UK&location1=London&what=${encodeURIComponent(
+        job.apiTitle
+      )}&content-type=application%2Fjson`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Extract the salary with the highest frequency
+        const histogram = data.histogram;
+        const highestFrequencySalary = Object.keys(histogram).reduce((a, b) =>
+          histogram[a] > histogram[b] ? a : b
+        );
+
+        // Update the salary for the job only if the new salary is higher
+        setJobs((prevJobs) =>
+          prevJobs.map((j) =>
+            j.id === job.id && parseInt(highestFrequencySalary, 10) > j.salary
+              ? { ...j, salary: parseInt(highestFrequencySalary, 10) }
+              : j
+          )
+        );
+      } catch (error) {
+        console.error(`Failed to fetch salary data for ${job.title}:`, error);
+      }
+    }
+
+    // Fetch salary data for all jobs
+    initialJobs.forEach((job) => {
+      fetchSalaryData(job);
+    });
+  }, []);
+
   const handleFirstJobSelect = (job) => {
     setSelectedJob(job);
   };
@@ -34,7 +73,7 @@ function JobSelect({ onJobSelect }) {
     if (selectedJob) {
       onJobSelect(selectedJob);
     }
-  }
+  };
 
   const handleHover = (element) => {
     gsap.to(element, {
@@ -54,11 +93,11 @@ function JobSelect({ onJobSelect }) {
     });
   };
 
- return (
-    <div className="section-content  text-center">
+  return (
+    <div className="section-content text-center">
       <h2>Pick Your First Job</h2>
       <div className="row mt-4 justify-content-center">
-        {initialJobs.map((job) => (
+        {jobs.map((job) => (
           <div key={job.id} className="col-md-4">
             <div
               ref={addToRefs}

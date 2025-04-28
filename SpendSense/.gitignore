@@ -9,7 +9,6 @@ datawizard
 *.pyc
 __pycache__/
 local_settings.py
-db.sqlite3-journal
 /django-app/media/*
 !/django-app/media/no_cover.jpg
 

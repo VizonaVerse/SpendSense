@@ -69,27 +69,10 @@ const PieChart = ({ onComplete }) => {
 
     // Round the values
     let normalizedData = data.map((value, i) => {
-      if (i === index) return Math.round(newCurrentSlice);
-      if (i === nextSliceIndex) return Math.round(newNextSlice);
-      return Math.round(value);
+      if (i === index) return newCurrentSlice;
+      if (i === nextSliceIndex) return newNextSlice;
+      return value;
     });
-
-    // Normalize to ensure the total is exactly 100%
-    const roundedTotal = normalizedData.reduce((sum, value) => sum + value, 0);
-    const difference = 100 - roundedTotal;
-
-    if (difference !== 0) {
-      // Adjust the slice with the largest remainder
-      const adjustmentIndex = normalizedData.findIndex((value, i) => {
-        if (difference > 0) return value < data[i]; // Find a slice that can be increased
-        if (difference < 0) return value > MIN_SLICE_VALUE; // Find a slice that can be decreased
-        return false;
-      });
-
-      if (adjustmentIndex !== -1) {
-        normalizedData[adjustmentIndex] += difference;
-      }
-    }
 
     setChartData({
       ...chartData,
@@ -230,6 +213,45 @@ const PieChart = ({ onComplete }) => {
       chartRef.current.canvas.style.cursor = 'default';
     }
 
+
+  // Normalize the data to ensure the total is exactly 100%
+  const data = [...chartData.datasets[0].data];
+  const total = data.reduce((sum, value) => sum + value, 0);
+
+  // Calculate exact percentages
+  const exactPercentages = data.map(value => (value / total) * 100);
+
+  // Floor all percentages initially and track remainders
+  const floored = exactPercentages.map(p => Math.floor(p));
+  const remainders = exactPercentages.map((p, i) => ({
+    index: i,
+    remainder: p - floored[i],
+  }));
+
+  // Sort by remainder in descending order
+  remainders.sort((a, b) => b.remainder - a.remainder);
+
+  // Calculate how many percentage points we need to distribute
+  const totalFloored = floored.reduce((sum, p) => sum + p, 0);
+  const pointsToDistribute = 100 - totalFloored;
+
+  // Distribute remaining points to slices with the largest remainders
+  const normalizedData = [...floored];
+  for (let i = 0; i < pointsToDistribute; i++) {
+    normalizedData[remainders[i % remainders.length].index]++;
+  }
+
+  // Update the chart data with normalized values
+  setChartData({
+    ...chartData,
+    datasets: [
+      {
+        ...chartData.datasets[0],
+        data: normalizedData,
+      },
+    ],
+  });
+
     // Use a timeout to clear the angle reference after the current event cycle
     // This fixes the issue with handles not being draggable after first use
     if (dragTimeout.current) {
@@ -240,7 +262,7 @@ const PieChart = ({ onComplete }) => {
       previousAngleRef.current = null;
       dragTimeout.current = null;
     }, 10);
-  }, [dragging]); // Add 'dragging' as a dependency
+  }, [dragging, chartData]); // Add 'dragging' as a dependency
 
 
   const borderPlugin = {

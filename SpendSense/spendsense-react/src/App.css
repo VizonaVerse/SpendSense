@@ -20,7 +20,7 @@ html, body {
 
 /* Typography */
 .pixelated-text {
-  font-family: "Press Start 2P", cursive; /* Use a pixelated font */
+  font-family: "Press Start 2P", cursive; 
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
@@ -34,9 +34,13 @@ html, body {
 }
 
 #scroll-container {
-  height: 400vh; /* 4 sections x 100vh each */
-  transition: transform 1s ease;
+  width: 100vw;
+  height: 800vh; /* 9 sections x 100vh each, adjust as needed */
+
+  background: url('/public/images/tallbg.png') no-repeat center top;
+  background-size: 100% 100%;
 }
+
 
 .section {
   height: 100vh;
@@ -55,11 +59,6 @@ html, body {
 
 /* Home Section */
 .home-section {
-  background-image: url("/public/images/background1.png");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 /* .home-section h1 {
   font-size: 3rem;
@@ -72,11 +71,6 @@ html, body {
 
 /*userdata form*/
 .form-section {
-  background-image: url("/public/images/background2.png");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 
 form {
@@ -146,11 +140,6 @@ form button:hover {
 
 /* Job Select Section */
 .job-select-section {
-  background-image: url("/public/images/background3.png");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   text-align: center;
   
 }
@@ -194,11 +183,6 @@ form button:hover {
 
 /* Payslip Section */
 .payslip-section {
-  background-image: url("/public/images/background4.png");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;

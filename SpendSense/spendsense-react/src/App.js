@@ -179,30 +179,32 @@ function App() {
 
         {/* Payslip Section */}
         <section className="section payslip-section">
-          <div className="payslip-wrapper">
-            <div className="payslip-content">
-              <SamplePayslip
-                job={selectedJob}
-                salary={selectedJobSalary}
-                onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                onNetPayChange={(netPay) => {
-                  if (currentSection === "payslip") { // Only update if in the payslip section
-                    setNetPay(netPay * 12); // Convert to annual salary
-                    setMoney(netPay * 12);
-                  }
-                }} // Pass callback
-                onPensionChange={(pension) => setPension1(pension)}
-              />
-            </div>
-            {selectedJob && (
-              <div className="payslip-button-wrapper" position="absolute" style={{ right: "0", bottom: "0" }}>
-                <button onClick={handleGoToBudget} className="btn btn-primary">
-                  Go to Budgeting Game
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
+  <div className="payslip-wrapper">
+    <div className="payslip-content">
+      <div className="payslip-card">
+        <SamplePayslip
+          job={selectedJob}
+          salary={selectedJobSalary}
+          onAnnualContributionsChange={setAnnualContributions}
+          onNetPayChange={(netPay) => {
+            if (currentSection === "payslip") {
+              setNetPay(netPay * 12);
+              setMoney(netPay * 12);
+            }
+          }}
+          onPensionChange={(pension) => setPension1(pension)}
+        />
+      </div>
+    </div>
+    {selectedJob && (
+      <div className="payslip-button-wrapper">
+        <button onClick={handleGoToBudget} className="btn btn-primary">
+          Go to Budgeting Game
+        </button>
+      </div>
+    )}
+  </div>
+</section>
 
         {/* Budget Section */}
         <section className="section budgeting-section">

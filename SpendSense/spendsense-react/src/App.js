@@ -34,7 +34,7 @@ function App() {
   const [showStats, setShowStats] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [money, setMoney] = useState(0);
-  const [progress, setProgress] = useState(60);
+  const [progress, setProgress] = useState(0);
   const [pension1, setPension1] = useState(0);
 
   // Define section indices
@@ -104,14 +104,16 @@ function App() {
     setSelectedJobSalary(job.salary);
     setSelectedPension(job.pension);
     setMoney(netPay);
-
     setTimeout(() => {
       goToSection("payslip");
     }, 200);
+
+    addProgress(17);
   };
 
   const handleGoToBudget = () => {
     goToSection("budget");
+    addProgress(17);
   };
 
   const handleBudgetComplete = (data) => {
@@ -119,18 +121,21 @@ function App() {
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
     setMoney(savings1); // Update money state
+    addProgress(17);
     goToSection("jobSwitch");
   };
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
     goToSection("pensionWithdrawal");
+    addProgress(17);
   };
 
   const handleGoToEndShop = () => {
     // setShowStats(false);
     setShowEndShop(true);
     goToSection("endShop");
+    addProgress(17);
   };
 
   const handleShowEndScreen = () => {
@@ -143,6 +148,11 @@ function App() {
     setMoney(newMoney); // Update money state
   };
 
+  const addProgress = (amount) => {
+    // Make sure progress stays between 0-100
+    setProgress(prevProgress => Math.min(100, Math.max(0, prevProgress + amount)));
+  };
+
   return (
     <div id="main-wrapper">
       <Information />
@@ -152,6 +162,8 @@ function App() {
             characterData={selectedJob}
             currentSection={currentSection}
             characterMoney={money} // Pass money to Stats
+            characterProgress={progress}
+            onProgressChange={(newProgress) => setProgress(newProgress)}
           />
           <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
         </>

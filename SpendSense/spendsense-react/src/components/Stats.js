@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 
 function CharacterStatsDisplay({ 
   characterImage = "images/sprite_base.png", 
-  initialMoney = 1000,
-  initialProgress = 60,
+  characterMoney = 0,
+  characterProgress = 60,
   onMoneyChange = null,
   onProgressChange = null
 }) {
-  const [money, setMoney] = useState(initialMoney);
-  const [progress, setProgress] = useState(initialProgress);
+  const [money, setMoney] = useState(characterMoney);
+  const [progress, setProgress] = useState(characterProgress);
   
   // Listen for external updates to money and progress
   useEffect(() => {
-    setMoney(initialMoney);
-  }, [initialMoney]);
+    setMoney(characterMoney);
+  }, [characterMoney]);
   
   useEffect(() => {
-    setProgress(initialProgress);
-  }, [initialProgress]);
+    setProgress(characterProgress);
+  }, [characterProgress]);
   
   // Undefined functions to update money and progress
   const addMoney = (amount) => {
@@ -40,7 +40,7 @@ function CharacterStatsDisplay({
       width: '100%',
       padding: '10px 20px',
       color: 'rgba(255, 255, 255, 0)',
-      position: 'sticky',
+      position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
@@ -95,7 +95,7 @@ function CharacterStatsDisplay({
           <div className="progress-bar-bg" style={{
             width: '100%',
             height: '12px',
-            backgroundColor: 'rgba(15, 15, 15, 0.41)',
+            backgroundColor: 'rgba(15, 15, 15, 0.21)',
             borderRadius: '6px',
             overflow: 'hidden'
           }}>
@@ -115,7 +115,7 @@ function CharacterStatsDisplay({
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          backgroundColor: 'rgba(239, 239, 239, 0.04)',
+          backgroundColor: 'rgba(70, 166, 66, 0.47)',
           padding: '5px 12px',
           borderRadius: '15px',
           border: '3px solid green',
@@ -125,7 +125,7 @@ function CharacterStatsDisplay({
             fontSize: '16px',  
             color: 'black' 
           }}>
-            £{money.toLocaleString()}
+              £{Number.isInteger(money || 0) ? (money || 0).toLocaleString() : (money || 0).toFixed(2).toLocaleString()} {/* Fallback to 0 if money is null or undefined */}
           </span>
           <img
             src="images/coin.png"

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import JobSelect from './JobSelect';
 
 function CharacterInfo({ 
   characterImage = "images/sprite_base.png", 
@@ -447,7 +448,7 @@ function CharacterInfo({
           width: '300px'
         }}>
           {/* Progress Bar */}
-          <div className="progress-container" style={{
+          {/* <div className="progress-container" style={{
             width: '100%',
             marginBottom: '10px'
           }}>
@@ -480,10 +481,10 @@ function CharacterInfo({
                 transition: 'width 0.3s ease'
               }} />
             </div>
-          </div>
+          </div> */}
           
           {/* Money Display */}
-          <div className="money-display" style={{
+          {/* <div className="money-display" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '2px',
@@ -509,7 +510,7 @@ function CharacterInfo({
                 imageRendering: 'pixelated'
               }}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -540,20 +541,7 @@ function CharacterInfo({
         />
 
         <div>
-          <h3>Job Progress</h3>
-          <div style={{
-            width: '100%',
-            height: '20px',
-            backgroundColor: '#FFF',
-            borderRadius: '10px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${progress}%`,
-              height: '100%',
-              backgroundColor: 'green'
-            }} />
-          </div>
+          <h3>{JobSelect}*display current job</h3>
         </div>
         
         <div style={{ marginTop: '20px', overflow: 'hidden' }}>

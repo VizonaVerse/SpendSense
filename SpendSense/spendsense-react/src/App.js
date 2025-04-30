@@ -10,7 +10,7 @@ import SamplePayslip from "./components/SamplePayslip";
 import Chart from "./components/PieChart.js";
 import JobSwitch from "./components/JobSwitch.js";
 import PensionWithdrawal from "./components/PensionWithdrawal.js";
-import EndShop from "./components/EndShop.js"; 
+import EndShop from "./components/EndShop.js";
 import EndScreen from "./components/EndScreen.js";
 import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
@@ -19,7 +19,7 @@ import CharacterInfo from "./components/CharacterInfo.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
-  const [selectedJobSalary, setSelectedJobSalary] = useState(null); 
+  const [selectedJobSalary, setSelectedJobSalary] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [initialJob, setInitialJob] = useState(null);
   const [budgetCompleted, setBudgetCompleted] = useState(false);
@@ -33,6 +33,9 @@ function App() {
   const [currentSection, setCurrentSection] = useState("home");
   const [showStats, setShowStats] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [money, setMoney] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [pension1, setPension1] = useState(0);
 
   // Define section indices
   const sectionIndices = {
@@ -43,7 +46,7 @@ function App() {
     budget: 4,
     jobSwitch: 5,
     pensionWithdrawal: 6,
-    endShop: 7, 
+    endShop: 7,
     end: 8,
   };
 
@@ -51,22 +54,22 @@ function App() {
   useEffect(() => {
     // Prevent manual scrolling by disabling scroll
     document.body.style.overflow = 'hidden';
-    
+
     return () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
 
+  let scrollMultiplier = 100; // Adjust this value to control scroll distance
   // Animate scroll to a section with improved transition handling
   const goToSection = (sectionName) => {
     if (isTransitioning) return; // Prevent multiple transitions
-    
+
     setIsTransitioning(true);
     setCurrentSection(sectionName);
-    
     const sectionIndex = sectionIndices[sectionName];
-    const yValue = `-${sectionIndex * 100}vh`;
-    
+    const yValue = `-${sectionIndex * scrollMultiplier}vh`;
+
     gsap.to(scrollContainerRef.current, {
       duration: 1,
       y: yValue,
@@ -98,31 +101,41 @@ function App() {
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setInitialJob(job);
-    setSelectedJobSalary(job.salary); 
+    setSelectedJobSalary(job.salary);
     setSelectedPension(job.pension);
+    setMoney(netPay);
     setTimeout(() => {
       goToSection("payslip");
     }, 200);
+
+    addProgress(17);
   };
 
   const handleGoToBudget = () => {
     goToSection("budget");
+    addProgress(17);
   };
 
   const handleBudgetComplete = (data) => {
     setBudgetData(data);
     setBudgetCompleted(true);
+    const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
+    setMoney(savings1); // Update money state
+    addProgress(17);
     goToSection("jobSwitch");
   };
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
     goToSection("pensionWithdrawal");
+    addProgress(17);
   };
 
   const handleGoToEndShop = () => {
+    // setShowStats(false);
     setShowEndShop(true);
     goToSection("endShop");
+    addProgress(17);
   };
 
   const handleShowEndScreen = () => {
@@ -131,12 +144,27 @@ function App() {
     goToSection("end");
   };
 
+  const handleMoneyChange = (newMoney) => {
+    setMoney(newMoney); // Update money state
+  };
+
+  const addProgress = (amount) => {
+    // Make sure progress stays between 0-100
+    setProgress(prevProgress => Math.min(100, Math.max(0, prevProgress + amount)));
+  };
+
   return (
     <div id="main-wrapper">
       <Information />
       {showStats && (
         <>
-          <Stats />
+          <Stats
+            characterData={selectedJob}
+            currentSection={currentSection}
+            characterMoney={money} // Pass money to Stats
+            characterProgress={progress}
+            onProgressChange={(newProgress) => setProgress(newProgress)}
+          />
           <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
         </>
       )}
@@ -155,7 +183,7 @@ function App() {
             </div>
           </div>
         </section>
-        
+
         {/* Job Selection */}
         <section className="section job-select-section">
           <JobSelect onJobSelect={handleJobSelect} />
@@ -163,32 +191,39 @@ function App() {
 
         {/* Payslip Section */}
         <section className="section payslip-section">
-          <div className="payslip-wrapper">
-            <div className="payslip-content">
-                <SamplePayslip
-                  job={selectedJob}
-                  salary={selectedJobSalary}
-                  onAnnualContributionsChange={setAnnualContributions} // Pass callback
-                  onNetPayChange={setNetPay} // Pass callback
-                  netPay={netPay*12}
-                />
-            </div>
-            {selectedJob && (
-              <div className="payslip-button-wrapper">
-                <button onClick={handleGoToBudget} className="btn btn-primary">
-                  Go to Budgeting Game
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
+  <div className="payslip-wrapper">
+    <div className="payslip-content">
+      <div className="payslip-card">
+        <SamplePayslip
+          job={selectedJob}
+          salary={selectedJobSalary}
+          onAnnualContributionsChange={setAnnualContributions}
+          onNetPayChange={(netPay) => {
+            if (currentSection === "payslip") {
+              setNetPay(netPay * 12);
+              setMoney(netPay * 12);
+            }
+          }}
+          onPensionChange={(pension) => setPension1(pension)}
+        />
+      </div>
+    </div>
+    {selectedJob && (
+      <div className="payslip-button-wrapper">
+        <button onClick={handleGoToBudget} className="btn btn-primary">
+          Go to Budgeting Game
+        </button>
+      </div>
+    )}
+  </div>
+</section>
 
         {/* Budget Section */}
         <section className="section budgeting-section">
           <div className="d-flex flex-column align-items-center">
             <Chart onComplete={handleBudgetComplete} />
-            <button 
-              onClick={() => handleBudgetComplete({ exampleData: 123 })} 
+            <button
+              onClick={() => handleBudgetComplete({ exampleData: 123 })}
               className="btn btn-success mt-4"
             >
               Next
@@ -215,7 +250,7 @@ function App() {
           {selectedPension ? (
             <PensionWithdrawal
               selectedPension={selectedPension}
-              onContinue={handleGoToEndShop} 
+              onContinue={handleGoToEndShop}
             />
           ) : (
             <div className="d-flex justify-content-center align-items-center h-100">
@@ -225,16 +260,20 @@ function App() {
         </section>
 
         {/* Retirement Shop Section */}
-        {showEndShop && (
-          <section className="section end-shop-section">
-            <EndShop
-            netPay={netPay} // Pass the annual salary 
-            netPay2 = {(12570 + (selectedJobSalary - 12570) * 0.8)}
-            annualContributions={annualContributions} // Pass the annual contributions
-            budgetData={budgetData} 
-            handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}
-          </section>
-        )}
+        {
+          showEndShop && (
+            <section className="section end-shop-section">
+              <EndShop
+                netPay={netPay * 12} // Pass the annual salary 
+                netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
+                annualContributions={annualContributions} // Pass the annual contributions
+                budgetData={budgetData}
+                handleGoToEndScreen={handleShowEndScreen} // Pass data
+                onMoneyChange={handleMoneyChange} // Pass callback to update money
+              />
+            </section>
+          )
+        }
 
         {/* End Screen Section */}
         <section className="section end-screen-section">
@@ -245,8 +284,8 @@ function App() {
             }}
           />
         </section>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

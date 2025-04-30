@@ -6,13 +6,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const MIN_SLICE_VALUE = 1; // Minimum slice value in percentage
 
-const PieChart = ({ onComplete }) => { 
+const PieChart = ({ onComplete }) => {
   const chartRef = useRef(null);
   const previousAngleRef = useRef(null);
   const dragTimeout = useRef(null);
 
   const [chartData, setChartData] = useState({
-    labels: ['Wants', 'Needs', 'Savings' ],
+    labels: ['Wants', 'Needs', 'Savings'],
     datasets: [
       {
         label: 'Spending',
@@ -43,30 +43,31 @@ const PieChart = ({ onComplete }) => {
   const adjustSlices = (index, angleDiff) => {
     const data = [...chartData.datasets[0].data];
     const total = data.reduce((sum, value) => sum + value, 0);
-    
+
     // Convert the angle difference to percentage difference
     // The full circle is 2π radians = 100% of the total
     const percentageDiff = (angleDiff / (2 * Math.PI)) * total;
-    
+
     const currentSlice = data[index];
     const nextSliceIndex = (index + 1) % data.length;
     const nextSlice = data[nextSliceIndex];
-    
+
     // Calculate new slice values based on the difference
     let newCurrentSlice = currentSlice + percentageDiff;
     let newNextSlice = nextSlice - percentageDiff;
-    
+
     // Apply minimum constraints
     if (newCurrentSlice < MIN_SLICE_VALUE) {
       newCurrentSlice = MIN_SLICE_VALUE;
       newNextSlice = currentSlice + nextSlice - MIN_SLICE_VALUE;
     }
-    
+
     if (newNextSlice < MIN_SLICE_VALUE) {
       newNextSlice = MIN_SLICE_VALUE;
       newCurrentSlice = currentSlice + nextSlice - MIN_SLICE_VALUE;
     }
-    
+
+    // Round the values
     let normalizedData = data.map((value, i) => {
       if (i === index) return newCurrentSlice;
       if (i === nextSliceIndex) return newNextSlice;
@@ -87,32 +88,32 @@ const PieChart = ({ onComplete }) => {
   const handleMouseMove = (event) => {
     const chart = chartRef.current;
     if (!chart) return;
-  
+
     const { offsetX, offsetY } = event.nativeEvent;
     const { chartArea } = chart;
     const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
     const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-  
+
     const x = offsetX - centerX;
     const y = offsetY - centerY;
-  
+
     // Calculate current angle
     let angle = Math.atan2(y, x);
     if (angle < 0) {
       angle += 2 * Math.PI;
     }
-  
+
     const data = chart.data.datasets[0].data;
     const total = data.reduce((sum, value) => sum + value, 0);
     let startAngle = -Math.PI / 2;
     const borderWidth = 0.05; // Adjust for sensitivity
-  
+
     let isHovering = false;
-  
+
     for (let i = 0; i < data.length - 1; i++) { // Exclude the final border
       const sliceAngle = (data[i] / total) * 2 * Math.PI;
       const endAngle = startAngle + sliceAngle;
-  
+
       // Check if mouse is near the handle
       const angleDiff = Math.abs(((angle - endAngle) + 2 * Math.PI) % (2 * Math.PI));
       if (angleDiff <= borderWidth || 2 * Math.PI - angleDiff <= borderWidth) {
@@ -121,33 +122,33 @@ const PieChart = ({ onComplete }) => {
       }
       startAngle = endAngle;
     }
-  
+
     // Change cursor to pointer if hovering over a draggable border
     if (chart.canvas) {
       chart.canvas.style.cursor = isHovering ? 'pointer' : dragging ? 'grabbing' : 'default';
     }
-  
+
     if (!dragging || dragIndex === null) return;
-  
+
     // Handle dragging logic
     let currentAngle = Math.atan2(y, x);
     if (currentAngle < 0) {
       currentAngle += 2 * Math.PI;
     }
-  
+
     if (previousAngleRef.current === null) {
       previousAngleRef.current = currentAngle;
       return;
     }
-  
+
     let angleDiff = currentAngle - previousAngleRef.current;
-  
+
     if (Math.abs(angleDiff) > Math.PI) {
-      angleDiff = angleDiff > 0 
-        ? angleDiff - 2 * Math.PI 
+      angleDiff = angleDiff > 0
+        ? angleDiff - 2 * Math.PI
         : angleDiff + 2 * Math.PI;
     }
-  
+
     if (Math.abs(angleDiff) > 0.0001) {
       adjustSlices(dragIndex, angleDiff);
       previousAngleRef.current = currentAngle;
@@ -160,28 +161,28 @@ const PieChart = ({ onComplete }) => {
       clearTimeout(dragTimeout.current);
       dragTimeout.current = null;
     }
-    
+
     const chart = chartRef.current;
     if (!chart) return;
-    
+
     const { offsetX, offsetY } = event.nativeEvent;
     const { chartArea } = chart;
     const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
     const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-  
+
     const x = offsetX - centerX;
     const y = offsetY - centerY;
-  
+
     let angle = Math.atan2(y, x);
     if (angle < 0) {
       angle += 2 * Math.PI;
     }
-  
+
     const data = chart.data.datasets[0].data;
     const total = data.reduce((sum, value) => sum + value, 0);
     let startAngle = -Math.PI / 2;
     const borderWidth = 0.05; // Adjust for sensitivity
-  
+
     for (let i = 0; i < data.length; i++) {
       const sliceAngle = (data[i] / total) * 2 * Math.PI;
       const endAngle = startAngle + sliceAngle;
@@ -204,25 +205,64 @@ const PieChart = ({ onComplete }) => {
 
   const handleMouseUp = useCallback(() => {
     if (!dragging) return;
-    
+
     setDragging(false);
     setDragIndex(null);
-    
+
     if (chartRef.current) {
       chartRef.current.canvas.style.cursor = 'default';
     }
-    
+
+
+  // Normalize the data to ensure the total is exactly 100%
+  const data = [...chartData.datasets[0].data];
+  const total = data.reduce((sum, value) => sum + value, 0);
+
+  // Calculate exact percentages
+  const exactPercentages = data.map(value => (value / total) * 100);
+
+  // Floor all percentages initially and track remainders
+  const floored = exactPercentages.map(p => Math.floor(p));
+  const remainders = exactPercentages.map((p, i) => ({
+    index: i,
+    remainder: p - floored[i],
+  }));
+
+  // Sort by remainder in descending order
+  remainders.sort((a, b) => b.remainder - a.remainder);
+
+  // Calculate how many percentage points we need to distribute
+  const totalFloored = floored.reduce((sum, p) => sum + p, 0);
+  const pointsToDistribute = 100 - totalFloored;
+
+  // Distribute remaining points to slices with the largest remainders
+  const normalizedData = [...floored];
+  for (let i = 0; i < pointsToDistribute; i++) {
+    normalizedData[remainders[i % remainders.length].index]++;
+  }
+
+  // Update the chart data with normalized values
+  setChartData({
+    ...chartData,
+    datasets: [
+      {
+        ...chartData.datasets[0],
+        data: normalizedData,
+      },
+    ],
+  });
+
     // Use a timeout to clear the angle reference after the current event cycle
     // This fixes the issue with handles not being draggable after first use
     if (dragTimeout.current) {
       clearTimeout(dragTimeout.current);
     }
-    
+
     dragTimeout.current = setTimeout(() => {
       previousAngleRef.current = null;
       dragTimeout.current = null;
     }, 10);
-  }, [dragging]); // Add 'dragging' as a dependency
+  }, [dragging, chartData]); // Add 'dragging' as a dependency
 
 
   const borderPlugin = {
@@ -280,21 +320,21 @@ const PieChart = ({ onComplete }) => {
 
       // Calculate exact percentages first
       const exactPercentages = data.map(value => (value / total) * 100);
-      
+
       // Floor all percentages initially and track remainders
       const floored = exactPercentages.map(p => Math.floor(p));
       const remainders = exactPercentages.map((p, i) => ({
         index: i,
         remainder: p - floored[i]
       }));
-      
+
       // Sort by remainder in descending order
       remainders.sort((a, b) => b.remainder - a.remainder);
-      
+
       // Calculate how many percentage points we need to distribute
       const totalFloored = floored.reduce((sum, p) => sum + p, 0);
       const pointsToDistribute = 100 - totalFloored;
-      
+
       // Distribute remaining points to slices with largest remainders
       const adjustedPercentages = [...floored];
       for (let i = 0; i < pointsToDistribute; i++) {
@@ -332,7 +372,7 @@ const PieChart = ({ onComplete }) => {
           label: (context) => {
             const label = context.label || '';
             const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-            
+
             // Use the same calculation as in the percentagePlugin
             const exactPercentages = context.dataset.data.map(v => (v / total) * 100);
             const floored = exactPercentages.map(p => Math.floor(p));
@@ -340,15 +380,15 @@ const PieChart = ({ onComplete }) => {
               index: i,
               remainder: p - floored[i]
             })).sort((a, b) => b.remainder - a.remainder);
-            
+
             const totalFloored = floored.reduce((sum, p) => sum + p, 0);
             const pointsToDistribute = 100 - totalFloored;
-            
+
             const adjustedPercentages = [...floored];
             for (let i = 0; i < pointsToDistribute; i++) {
               adjustedPercentages[remainders[i % remainders.length].index]++;
             }
-            
+
             return `${label}: ${adjustedPercentages[context.dataIndex]}%`;
           },
         },
@@ -364,9 +404,9 @@ const PieChart = ({ onComplete }) => {
     const handleGlobalMouseUp = () => {
       handleMouseUp();
     };
-    
+
     window.addEventListener('mouseup', handleGlobalMouseUp);
-    
+
     return () => {
       window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
@@ -376,7 +416,7 @@ const PieChart = ({ onComplete }) => {
   useEffect(() => {
     // Force reset angle reference when dependencies change
     previousAngleRef.current = null;
-    
+
     // No need to return cleanup as we're not adding event listeners here
   }, [chartData]); // Re-run when chart data changes
 
@@ -395,13 +435,13 @@ const PieChart = ({ onComplete }) => {
 
   // Return your existing JSX
   return (
-<div
-  style={{
-    position: 'relative',
-    width: '600px',
-    height: '600px',
-    margin: '0 auto',
-  }}
+    <div
+      style={{
+        position: 'relative',
+        width: '600px',
+        height: '600px',
+        margin: '0 auto',
+      }}
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}

@@ -3,7 +3,7 @@ import gsap from "gsap";
 
 function EndScreen({ onEndScreen, isVisible }) {
     const [showCounter, setShowCounter] = useState(true);
-    const [counterValue, setCounterValue] = useState(66);
+    const [counterValue, setCounterValue] = useState(75);
     const counterRef = useRef(null);
     const timelineRef = useRef(null);
     const [ending, setEnding] = useState("Good");
@@ -36,7 +36,7 @@ function EndScreen({ onEndScreen, isVisible }) {
 
         const finalAge = generateFinalAge();
         
-        const midpoint = Math.round(66 + (finalAge - 66) * 0.7);
+        const midpoint = Math.round(75 + (finalAge - 75) * 0.7);
 
         // Clear any existing animations
         if (timelineRef.current) {

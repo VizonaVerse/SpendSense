@@ -3,13 +3,13 @@ import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
 const newJobs = [
-  { id: "entrepreneur", title: "Entrepreneur", salary: 50000, pension: "definedContribution" },
-  { id: "doctor", title: "Doctor", salary: 70000, pension: "fixedPension" },
-  
+  { id: "entrepreneur", title: "Entrepreneur", apiTitle: "Entrepreneur", salary: 50000, pension: "definedContribution" },
+  { id: "dataScientist", title: "Data Scientist", apiTitle: "Data Scientist", salary: 70000, pension: "fixedPension" },
 ];
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
-  let [selectedJob, setSelectedJob] = useState(initialJob);
+  const [selectedJob, setSelectedJob] = useState(initialJob);
+  const [jobs, setJobs] = useState(newJobs); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
 
   const addToRefs = (el) => {
@@ -24,11 +24,46 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
     });
   }, []);
 
+  useEffect(() => {
+    async function fetchSalaryData(job) {
+      const url = `http://api.adzuna.com/v1/api/jobs/gb/histogram?app_id=edcbb643&app_key=06103ad4ff1dcb50632c176aada6968b&location0=UK&location1=London&what=${encodeURIComponent(
+        job.apiTitle
+      )}&content-type=application%2Fjson`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Extract the salary with the highest frequency
+        const histogram = data.histogram;
+        const highestFrequencySalary = Object.keys(histogram).reduce((a, b) =>
+          histogram[a] > histogram[b] ? a : b
+        );
+
+        // Update the salary for the job only if the new salary is higher
+        setJobs((prevJobs) =>
+          prevJobs.map((j) =>
+            j.id === job.id && parseInt(highestFrequencySalary, 10) > j.salary
+              ? { ...j, salary: parseInt(highestFrequencySalary, 10) }
+              : j
+          )
+        );
+      } catch (error) {
+        console.error(`Failed to fetch salary data for ${job.title}:`, error);
+      }
+    }
+
+    // Fetch salary data for all jobs
+    newJobs.forEach((job) => {
+      fetchSalaryData(job);
+    });
+  }, []);
+
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     onJobSelect(job);
   };
-  
+
   // GSAP Hover Animations
   const handleHover = (element) => {
     gsap.to(element, {
@@ -70,13 +105,20 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
               }}
             >
               <h4>Stay as {initialJob.title}</h4>
+              <p>
+                Salary:{" "}
+                {initialJob.salary.toLocaleString("en-UK", {
+                  style: "currency",
+                  currency: "GBP",
+                })}
+              </p>
               <p>Basic Pension</p>
             </div>
           </div>
         )}
 
         {/* New job options */}
-        {newJobs.map((job) => (
+        {jobs.map((job) => (
           <div key={job.id} className="col-md-4">
             <div
               ref={addToRefs}
@@ -91,6 +133,13 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
               }}
             >
               <h4>{job.title}</h4>
+              <p>
+                Salary:{" "}
+                {job.salary.toLocaleString("en-UK", {
+                  style: "currency",
+                  currency: "GBP",
+                })}
+              </p>
               <p>{job.pension === "fixedPension" ? "Fixed Pension" : "Defined Contribution Pension"}</p>
             </div>
           </div>

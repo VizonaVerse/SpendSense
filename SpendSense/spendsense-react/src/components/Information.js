@@ -219,29 +219,6 @@ function Information() {
               About Us
             </button>
           </li>
-          <li>
-            <button
-              className="nes-btn is-primary"
-              onClick={handleButtonClick(() => {
-                console.log("About Us clicked");
-              })}
-              style={{ width: '200px' }}
-            >
-              API 1
-            </button>
-          </li>
-
-          <li>
-            <button
-              className="nes-btn is-primary"
-              onClick={handleButtonClick(() => {
-                console.log("About Us clicked");
-              })}
-              style={{ width: '200px' }}
-            >
-              API 2
-            </button>
-          </li>
         </ul>
       </nav>
 

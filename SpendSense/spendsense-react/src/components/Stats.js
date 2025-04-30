@@ -95,7 +95,7 @@ function CharacterStatsDisplay({
           <div className="progress-bar-bg" style={{
             width: '100%',
             height: '12px',
-            backgroundColor: 'rgba(15, 15, 15, 0.41)',
+            backgroundColor: 'rgba(15, 15, 15, 0.21)',
             borderRadius: '6px',
             overflow: 'hidden'
           }}>

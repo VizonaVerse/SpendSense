@@ -27,9 +27,7 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
         withdrawalOptions = ["Weekly Taxed Payments", "Lump Sum Withdrawal"];
     } else if (selectedPension === "definedContribution") {
         withdrawalOptions = ["Withdraw via Insurance Company", "Deposit into a Bank"];
-    } else if (selectedPension === "state") {
-        withdrawalOptions = ["Govt pay into bank/Building society", "Paid in weekly multiples"];
-    }
+    } 
 
     // GSAP Hover Animations
     const handleHover = (element) => {
@@ -55,9 +53,7 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
         "Lump Sum Withdrawal": "Take your entire pension pot at once — may result in a large tax bill.",
         "Withdraw via Insurance Company": "They manage your pension withdrawals over time.",
         "Deposit into a Bank": "You manage the money yourself once deposited.",
-        "Govt pay into bank/Building society": "Standard state pension paid directly into your account.",
-        "Paid in weekly multiples": "Receive pension in multiple smaller weekly payments.",
-    }
+    };
 
     
 

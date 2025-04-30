@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import JobSelect from './JobSelect';
 
 function CharacterInfo({ 
   characterImage = "images/sprite_base.png", 
@@ -540,20 +541,7 @@ function CharacterInfo({
         />
 
         <div>
-          <h3>Job Progress</h3>
-          <div style={{
-            width: '100%',
-            height: '20px',
-            backgroundColor: '#FFF',
-            borderRadius: '10px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${progress}%`,
-              height: '100%',
-              backgroundColor: 'green'
-            }} />
-          </div>
+          <h3>{JobSelect}*display current job</h3>
         </div>
         
         <div style={{ marginTop: '20px', overflow: 'hidden' }}>

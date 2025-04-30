@@ -4,7 +4,7 @@ import Pensions from "./Pensions";
 
 const newJobs = [
   { id: "entrepreneur", title: "Entrepreneur", salary: 50000, pension: "definedContribution" },
-  { id: "dataScientist", title: "Data Scientist", salary: 70000, pension: "fixedPension" },
+  { id: "doctor", title: "Doctor", salary: 70000, pension: "fixedPension" },
   
 ];
 

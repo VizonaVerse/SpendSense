@@ -84,7 +84,7 @@ async function fetchHousePrices() {
 }
 
 function EndShop({netPay, netPay2, budgetData, handleGoToEndScreen }) { 
-  const salary_savings = (netPay * 10 + netPay2 * 30 ) * budgetData.Savings/100;
+  const salary_savings = Math.ceil((netPay * 10 + netPay2 * 30 ) * budgetData.Savings/100, 2);
   console.log("NetPay2", netPay2);
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);

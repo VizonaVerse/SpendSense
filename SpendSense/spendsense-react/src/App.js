@@ -170,6 +170,7 @@ function App() {
                   salary={selectedJobSalary}
                   onAnnualContributionsChange={setAnnualContributions} // Pass callback
                   onNetPayChange={setNetPay} // Pass callback
+                  netPay={netPay*12}
                 />
             </div>
             {selectedJob && (
@@ -199,7 +200,10 @@ function App() {
         <section className="section job-switch-section">
           {budgetCompleted && (
             <JobSwitch
-              onJobSelect={(job) => setSelectedJob(job)}
+              onJobSelect={(job) => { 
+                setSelectedJob(job); // Save the selected job
+                setSelectedJobSalary(job.salary); // Update the current job salary
+                }}
               onPensionSelect={handlePensionSelection}
               initialJob={initialJob}
             />
@@ -224,8 +228,8 @@ function App() {
         {showEndShop && (
           <section className="section end-shop-section">
             <EndShop
-            netPay={netPay*12} // Pass the annual salary 
-            netPay2 = {selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
+            netPay={netPay} // Pass the annual salary 
+            netPay2 = {(12570 + (selectedJobSalary - 12570) * 0.8)}
             annualContributions={annualContributions} // Pass the annual contributions
             budgetData={budgetData} 
             handleGoToEndScreen={handleShowEndScreen} /> {/* Pass data */}

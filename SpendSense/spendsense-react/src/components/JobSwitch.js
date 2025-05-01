@@ -11,6 +11,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   const [selectedJob, setSelectedJob] = useState(initialJob);
   const [jobs, setJobs] = useState(newJobs); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
+  const [hasExplicitlySelected, setHasExplicitlySelected] = useState(false);
 
   const addToRefs = (el) => {
     if (el && !cardRefs.current.includes(el)) {
@@ -61,6 +62,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
+    setHasExplicitlySelected(true);
     onJobSelect(job);
   };
 
@@ -82,6 +84,13 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
       ease: "power2.out",
     });
   };
+
+  const handleContinue = () => {
+    if (selectedJob) {
+      onPensionSelect(selectedJob);
+    }
+  };
+
 
   return (
     <div className="section-content job-select-section2 text-center">
@@ -147,14 +156,17 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
       </div>
 
       {/* Pension Info - Show after selecting a job */}
-      {selectedJob && (
+      {hasExplicitlySelected && (
         <div className="mt-4">
           <Pensions selectedJob={selectedJob} />
           <div className="d-flex justify-content-center mt-4">
             <button
+              onClick={() => {
+                handleContinue();
+                onPensionSelect(selectedJob.pension);
+              }}
               onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
               onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
-              onClick={() => onPensionSelect(selectedJob.pension)}
               className="btn btn-primary mt-3"
             >
               Continue to Pension Withdrawal

@@ -12,3 +12,5 @@ print(key.decode())
 
 #current fernet key:
 # owjYqZHGuOkkgh4msnV9xD3aij9zs6YmKbGU7bYXO7k=
+
+# change the key in .env in react section too since it retrieves data

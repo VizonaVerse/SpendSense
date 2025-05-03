@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,9 @@ ALLOWED_HOSTS = ['*'] #hosts allowed set to any
 CORS_ORIGIN_ALLOW_ALL = DEBUG #allows requests from all origins though i dont know if this is a big deal for coursework 
 CORS_ALLOW_ALL_ORIGINS = True #allows all origins to access resources of the application - should be restricted in production enviroment to enhance security
 SECRET_KEY = 'django-insecure-e$-579#f=%lfjbs)t55hro-45&ov+^i@8&kxyyzls__7^j5s1i'
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'token',  # Add the custom token header
+]
 # for react we'll allow unauthenticated users to access the api (maybe?)
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny']}

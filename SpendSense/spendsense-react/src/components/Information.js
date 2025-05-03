@@ -6,6 +6,8 @@ function Information() {
   const navRef = useRef(null);
   const overlayRef = useRef(null);
   const menuButtonRef = useRef(null);
+  const key = "owjYqZHGuOkkgh4msnV9xD3aij9zs6YmKbGU7bYXO7k=";
+  const [users, setUsers] = useState([]);
 
   const createButtonSqueeze = (buttonElement) => {
     gsap.to(buttonElement, {
@@ -58,6 +60,33 @@ function Information() {
         }, 0);
     }
   };
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/userdata/?key=${key}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': process.env.REACT_APP_API_TOKEN,
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Fetched data:', data);
+
+        // Ensure `data` is an array before setting it
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else {
+          console.error('Expected an array but got:', data);
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
   // Handle clicks outside the navbar to close it
   useEffect(() => {
@@ -218,6 +247,18 @@ function Information() {
             >
               About Us
             </button>
+          </li>
+          <li>
+                <div style={{ marginTop: '20px', padding: '10px' }}>
+              <h2>User Data</h2>
+              <ul>
+                {users.map((user, index) => (
+                  <li key={index}>
+                    <strong>Username:</strong> {user.username} | <strong>Money:</strong> £{user.final_money}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>

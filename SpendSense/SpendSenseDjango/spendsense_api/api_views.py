@@ -79,7 +79,7 @@ class UserMoneyUpdateView(generics.UpdateAPIView):
 class UserDataListView(generics.ListAPIView):
     queryset = UserData.objects.all()
     serializer_class = UserDataSerializer
-    permission_classes = [IsAdminUser]  # Only admin users can access
+    permission_classes = [IsAdminOrReactWebsite]
 
     def get(self, request, *args, **kwargs):
         decryption_key = request.query_params.get('key')  # Example: /api/userdata/?key=your_key_here

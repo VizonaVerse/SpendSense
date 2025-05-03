@@ -175,4 +175,13 @@ html {
     opacity: 1;
   }
   
+  .title-coin {
+    width: 36px;
+    height: auto;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+    align-self: flex-start;
+    margin-top: 1px; 
+  }
+  
   

@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import './knowYourMoney.css';
 import '../App.css';
-import coin1 from './coin1.png';
-import coin2 from './coin2.png';
 
 const KnowYourMoney = () => {
 
@@ -23,11 +21,12 @@ const KnowYourMoney = () => {
   className="floating-logo"
 />
 
-      <div className="learn-title-container">
-        <img src={coin1} alt="coin left" className="title-coin left" />
-        <h1 className="learn-title">Know Your Money</h1>
-        <img src={coin2} alt="coin right" className="title-coin right" />
-      </div>
+<div className="learn-title-container">
+  <img src="/images/coinSpin1.gif" alt="spinning coin left" className="title-coin left" />
+  <h1 className="learn-title">Know Your Money</h1>
+  <img src="/images/coinSpin2.gif" alt="spinning coin right" className="title-coin right" />
+</div>
+
 
       <p className="learn-intro">Welcome to your guide for understanding your finances.</p>
 

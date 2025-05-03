@@ -254,8 +254,9 @@ function Information() {
               <h5>Leaderboard</h5>
               <ul>
                 {users.map((user, index) => (
-                  <li key={index}>
-                    <strong>Username:</strong> {user.username} | <strong>Money:</strong> £{user.final_money}
+                  <li key={index} style={{ marginBottom: '10px' }} className="leaderboard-item">
+                    <div><strong>Username:</strong> {user.username}</div>
+                    <div><strong>Money:</strong> £{user.final_money}</div>
                   </li>
                 ))}
               </ul>

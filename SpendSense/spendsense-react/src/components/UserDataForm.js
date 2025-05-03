@@ -4,6 +4,7 @@ import axios from 'axios';
 function UserDataForm({ onSubmit, onSkip }) {
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     age: '',
     location: '',
     full_time_education: false,
@@ -24,6 +25,7 @@ function UserDataForm({ onSubmit, onSkip }) {
   const validate = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.username.trim()) newErrors.username = 'Username is required';
     if (!formData.age.trim()) newErrors.age = 'Age is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
     return newErrors;
@@ -35,11 +37,7 @@ function UserDataForm({ onSubmit, onSkip }) {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      return; 
-    }
-
-    if (onSubmit) {
-      onSubmit(); 
+      return; // Stop execution if there are validation errors
     }
 
     try {
@@ -53,8 +51,22 @@ function UserDataForm({ onSubmit, onSkip }) {
         }
       );
       console.log('Form submitted successfully:', response.data);
+
+      // Call the onSubmit callback only if the form submission is successful
+      if (onSubmit) {
+        onSubmit(formData.username);
+      }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      if (error.response && error.response.status === 400) {
+        // Handle validation errors from the backend
+        const backendErrors = error.response.data;
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          username: backendErrors.username ? backendErrors.username[0] : null,
+        }));
+      } else {
+        console.error('Error submitting form:', error);
+      }
     }
   };
 
@@ -64,6 +76,11 @@ function UserDataForm({ onSubmit, onSkip }) {
         <label>Name:</label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} />
         {errors.name && <small className="text-danger">{errors.name}</small>}
+      </div>
+      <div>
+        <label>Username:</label>
+        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        {errors.username && <small className="text-danger">{errors.username}</small>}
       </div>
       <div>
         <label>Age:</label>

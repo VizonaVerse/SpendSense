@@ -20,7 +20,7 @@ const defaultItems = {
   ],
 };
 
-function EndShop({ netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChange }) {
+function EndShop({ username, netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChange }) {
   const salary_savings = (netPay * 10 + netPay2 * 30) * (budgetData.Savings / 100);
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);
@@ -28,6 +28,31 @@ function EndShop({ netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChan
   const [loadingLeisure, setLoadingLeisure] = useState(true);
   const [loadingPhone, setLoadingPhone] = useState(true);
   const itemRefs = useRef({});
+
+  useEffect(() => {
+    if (username) {
+      fetch(`http://localhost:8000/api/userdataupdate/${username}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "token": process.env.REACT_APP_API_TOKEN, //passes token to backend
+        },
+        body: JSON.stringify({ final_money: salary_savings }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to update money");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Money updated successfully:", data);
+        })
+        .catch((error) => {
+          console.error("Error updating money:", error);
+        });
+    }
+  }, [money, username]);
 
   useEffect(() => {
     if (onMoneyChange) onMoneyChange(money);

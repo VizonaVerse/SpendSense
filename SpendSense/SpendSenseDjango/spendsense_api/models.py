@@ -21,10 +21,11 @@ class Ending(models.Model):
 class UserData(models.Model):
     user_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
+    username = models.CharField(max_length=255, null=False, blank=False, unique=True)
     age = models.IntegerField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     full_time_education = models.BooleanField(null=True, blank=True)
-
+    final_money = models.IntegerField(null=True, blank=True)
     def encrypt_location(self, key):
         cipher = Fernet(key)
         self.location = cipher.encrypt(self.location.encode()).decode()

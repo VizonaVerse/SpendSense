@@ -36,6 +36,7 @@ function App() {
   const [money, setMoney] = useState(0);
   const [progress, setProgress] = useState(0);
   const [pension1, setPension1] = useState(0);
+  const [username, setUsername] = useState(null);
 
   // Define section indices
   const sectionIndices = {
@@ -86,7 +87,8 @@ function App() {
     goToSection("form");
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (username) => {
+    setUsername(username);
     console.log("Navigating to jobSelect section after form submission");
     setShowStats(true);
     goToSection("jobSelect");
@@ -264,6 +266,7 @@ function App() {
           showEndShop && (
             <section className="section end-shop-section">
               <EndShop
+                username={username}
                 netPay={netPay * 12} // Pass the annual salary 
                 netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
                 annualContributions={annualContributions} // Pass the annual contributions

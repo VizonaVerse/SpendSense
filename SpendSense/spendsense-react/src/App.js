@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
+import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -16,6 +17,7 @@ import Information from "./components/Information.js";
 import UserDataForm from "./components/UserDataForm.js";
 import Stats from "./components/Stats.js";
 import CharacterInfo from "./components/CharacterInfo.js";
+import KnowYourMoney from "./components/KnowYourMoney.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -55,6 +57,7 @@ function App() {
     pensionWithdrawal: 6,
     endShop: 7,
     end: 8,
+    knowYourMoney: 9,
   };
 
   // Update current section based on scroll position
@@ -162,141 +165,151 @@ function App() {
   };
 
   return (
-    <div id="main-wrapper">
-      <Information />
-      {showStats && (
+    <Routes>
+      {/* Route for the learning page */}
+      <Route path="/learn" element={<KnowYourMoney />} />
+  
+      {/* Route for the main scrolling game */}
+      <Route path="/" element={
         <>
-          <Stats
-            characterData={selectedJob}
-            currentSection={currentSection}
-            characterMoney={money} // Pass money to Stats
-            characterProgress={progress}
-            onProgressChange={(newProgress) => setProgress(newProgress)}
-          />
-          <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
+          <div id="main-wrapper">
+            <Information goToSection={goToSection} />
+  
+            {showStats && (
+              <>
+                <Stats
+                  characterData={selectedJob}
+                  currentSection={currentSection}
+                  characterMoney={money}
+                  characterProgress={progress}
+                  onProgressChange={(newProgress) => setProgress(newProgress)}
+                />
+                <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
+              </>
+            )}
+  
+            <div id="scroll-container" ref={scrollContainerRef}>
+              {/* Home Section */}
+              <section className="section home-section">
+                <Home onStart={handleStart} />
+              </section>
+  
+              {/* User Data Form Section */}
+              <section className="section form-section">
+                <div className="form-wrapper">
+                  <h2 className="text-center">User Data Form</h2>
+                  <div className="form-content">
+                    <UserDataForm onSubmit={handleFormSubmit} onSkip={handleSkipForm} />
+                  </div>
+                </div>
+              </section>
+  
+              {/* Job Selection Section */}
+              <section className="section job-select-section">
+                <JobSelect onJobSelect={handleJobSelect} />
+              </section>
+  
+              {/* Payslip Section */}
+              <section className="section payslip-section">
+                <div className="payslip-wrapper">
+                  <div className="payslip-content">
+                    <div className="payslip-card">
+                      <SamplePayslip
+                        job={selectedJob}
+                        salary={selectedJobSalary}
+                        onAnnualContributionsChange={setAnnualContributions}
+                        onNetPayChange={(netPay) => {
+                          if (currentSection === "payslip") {
+                            setNetPay(netPay * 12);
+                            setMoney(netPay * 12);
+                          }
+                        }}
+                        onPensionChange={(pension) => setPension1(pension)}
+                      />
+                    </div>
+                  </div>
+                  {selectedJob && (
+                    <div className="payslip-button-wrapper">
+                      <button onClick={handleGoToBudget} className="btn btn-primary">
+                        Go to Budgeting Game
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </section>
+  
+              {/* Budget Section */}
+              <section className="section budgeting-section">
+                <div className="d-flex flex-column align-items-center">
+                  <Chart onComplete={handleBudgetComplete} />
+                  <button
+                    onClick={() => handleBudgetComplete({ exampleData: 123 })}
+                    className="btn btn-success mt-4"
+                  >
+                    Next
+                  </button>
+                </div>
+              </section>
+  
+              {/* Job Switch Section */}
+              <section className="section job-switch-section">
+                {budgetCompleted && (
+                  <JobSwitch
+                    onJobSelect={(job) => {
+                      setSelectedJob(job);
+                      setSelectedJobSalary(job.salary);
+                    }}
+                    onPensionSelect={handlePensionSelection}
+                    initialJob={initialJob}
+                  />
+                )}
+              </section>
+  
+              {/* Pension Withdrawal Section */}
+              <section className="section pension-withdrawal-section">
+                {selectedPension ? (
+                  <PensionWithdrawal
+                    selectedPension={selectedPension}
+                    onContinue={handleGoToEndShop}
+                  />
+                ) : (
+                  <div className="d-flex justify-content-center align-items-center h-100">
+                    <p>Please select a pension option to continue.</p>
+                  </div>
+                )}
+              </section>
+  
+              {/* End Shop Section */}
+              {showEndShop && (
+                <section className="section end-shop-section">
+                  <EndShop
+                    username={formData.username}
+                    formData={formData}
+                    netPay={netPay * 12}
+                    netPay2={selectedJobSalary}
+                    annualContributions={annualContributions}
+                    budgetData={budgetData}
+                    handleGoToEndScreen={handleShowEndScreen}
+                    onMoneyChange={handleMoneyChange}
+                  />
+                </section>
+              )}
+  
+              {/* End Screen Section */}
+              <section className="section end-screen-section">
+                <EndScreen
+                  isVisible={showEndScreen}
+                  onEndScreen={(endingType) => {
+                    console.log("Ending selected:", endingType);
+                  }}
+                />
+              </section>
+            </div>
+          </div>
         </>
-      )}
-      <div id="scroll-container" ref={scrollContainerRef}>
-        {/* Home Section */}
-        <section className="section home-section">
-          <Home onStart={handleStart} />
-        </section>
-
-        {/* User Data Form Section */}
-        <section className="section form-section">
-          <div className="form-wrapper">
-            <h2 className="text-center">User Data Form</h2>
-            <div className="form-content">
-              <UserDataForm onSubmit={handleFormSubmit} onSkip={handleSkipForm} />
-            </div>
-          </div>
-        </section>
-
-        {/* Job Selection */}
-        <section className="section job-select-section">
-          <JobSelect onJobSelect={handleJobSelect} />
-        </section>
-
-        {/* Payslip Section */}
-        <section className="section payslip-section">
-  <div className="payslip-wrapper">
-    <div className="payslip-content">
-      <div className="payslip-card">
-        <SamplePayslip
-          job={selectedJob}
-          salary={selectedJobSalary}
-          onAnnualContributionsChange={setAnnualContributions}
-          onNetPayChange={(netPay) => {
-            if (currentSection === "payslip") {
-              setNetPay(netPay * 12);
-              setMoney(netPay * 12);
-            }
-          }}
-          onPensionChange={(pension) => setPension1(pension)}
-        />
-      </div>
-    </div>
-    {selectedJob && (
-      <div className="payslip-button-wrapper">
-        <button onClick={handleGoToBudget} className="btn btn-primary">
-          Go to Budgeting Game
-        </button>
-      </div>
-    )}
-  </div>
-</section>
-
-        {/* Budget Section */}
-        <section className="section budgeting-section">
-          <div className="d-flex flex-column align-items-center">
-            <Chart onComplete={handleBudgetComplete} />
-            <button
-              onClick={() => handleBudgetComplete({ exampleData: 123 })}
-              className="btn btn-success mt-4"
-            >
-              Next
-            </button>
-          </div>
-        </section>
-
-        {/* Job Switch Section */}
-        <section className="section job-switch-section">
-          {budgetCompleted && (
-            <JobSwitch
-              onJobSelect={(job) => { 
-                setSelectedJob(job); // Save the selected job
-                setSelectedJobSalary(job.salary); // Update the current job salary
-                }}
-              onPensionSelect={handlePensionSelection}
-              initialJob={initialJob}
-            />
-          )}
-        </section>
-
-        {/* Pension Withdrawal Section */}
-        <section className="section pension-withdrawal-section">
-          {selectedPension ? (
-            <PensionWithdrawal
-              selectedPension={selectedPension}
-              onContinue={handleGoToEndShop}
-            />
-          ) : (
-            <div className="d-flex justify-content-center align-items-center h-100">
-              <p>Please select a pension option to continue.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Retirement Shop Section */}
-        {
-          showEndShop && (
-            <section className="section end-shop-section">
-              <EndShop
-                username={formData.username}
-                formData={formData} // Pass formData to EndShop
-                netPay={netPay * 12} // Pass the annual salary 
-                netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
-                annualContributions={annualContributions} // Pass the annual contributions
-                budgetData={budgetData}
-                handleGoToEndScreen={handleShowEndScreen} // Pass data
-                onMoneyChange={handleMoneyChange} // Pass callback to update money
-              />
-            </section>
-          )
-        }
-
-        {/* End Screen Section */}
-        <section className="section end-screen-section">
-          <EndScreen
-            isVisible={showEndScreen}
-            onEndScreen={(endingType) => {
-              console.log("Ending selected:", endingType);
-            }}
-          />
-        </section>
-      </div >
-    </div >
-  );
+      } />
+    </Routes>
+  );  
 }
 
 export default App;

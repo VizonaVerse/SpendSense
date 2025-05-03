@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
 const newJobs = [
-  { id: "entrepreneur", title: "Entrepreneur", apiTitle: "Entrepreneur", salary: 50000, pension: "definedContribution" },
+  { id: "accountant", title: "Accountant", apiTitle: "Accountant", salary: 50000, pension: "definedContribution" },
   { id: "dataScientist", title: "Data Scientist", apiTitle: "Data Scientist", salary: 70000, pension: "fixedPension" },
 ];
 

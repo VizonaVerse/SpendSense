@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { gsap } from 'gsap';
 
-function Information() {
+function Information({ goToSection }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navRef = useRef(null);
   const overlayRef = useRef(null);
@@ -248,6 +249,16 @@ function Information() {
               About Us
             </button>
           </li>
+          <li>
+          <Link to="/learn" style={{ textDecoration: 'none' }}>
+            <button
+              className="nes-btn is-warning"
+              style={{ width: '200px' }}
+            >
+              Know Your Money
+            </button>
+          </Link>
+        </li>
           <li>
                 <div style={{ marginTop: '20px', padding: '10px' }}>
               <h2>User Data</h2>

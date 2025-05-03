@@ -250,10 +250,19 @@ function Information() {
             </button>
           </li>
           <li>
-                <div style={{ marginTop: '20px', padding: '10px', color: 'white' }}>
+                <div style={{
+                  marginTop: '20px',
+                  padding: '10px',
+                  color: 'white',
+                  maxHeight: '300px', // Set a fixed height for the leaderboard
+                  overflowY: 'auto', // Enable vertical scrolling
+                  borderRadius: '5px',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'white transparent',
+                  }}>
               <h5>Leaderboard</h5>
               <ul>
-                {users.map((user, index) => (
+                {users.slice(0,10).map((user, index) => (
                   <li key={index} style={{ marginBottom: '10px' }} className="leaderboard-item">
                     <div><strong>Username:</strong> {user.username}</div>
                     <div><strong>Money:</strong> £{user.final_money}</div>

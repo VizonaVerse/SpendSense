@@ -5,7 +5,8 @@
     background-position: center;
     min-height: 100vh;
     height: auto;
-    overflow-y: auto;
+    overflow-y: visible;
+    overflow-x: hidden;
     padding: 2rem;
     box-sizing: border-box;
   }
@@ -114,4 +115,23 @@ html {
   .title-coin.right {
     margin-left: -0.5rem;
   }
+
+  .learn-chart-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .budget-chart {
+    max-width: 300px;
+    width: 100%;
+    border: 2px dashed #888;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  
+  
   

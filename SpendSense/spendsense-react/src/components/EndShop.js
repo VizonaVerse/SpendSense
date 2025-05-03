@@ -20,7 +20,7 @@ const defaultItems = {
   ],
 };
 
-function EndShop({ username, netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChange }) {
+function EndShop({ username, formData, netPay, netPay2, budgetData, handleGoToEndScreen, onMoneyChange }) {
   const salary_savings = (netPay * 10 + netPay2 * 30) * (budgetData.Savings / 100);
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);
@@ -28,6 +28,35 @@ function EndShop({ username, netPay, netPay2, budgetData, handleGoToEndScreen, o
   const [loadingLeisure, setLoadingLeisure] = useState(true);
   const [loadingPhone, setLoadingPhone] = useState(true);
   const itemRefs = useRef({});
+
+  useEffect(() => {
+    let isSubmitted = false;
+
+    const submitFormData = async () => {
+      if (isSubmitted) return; // Prevent duplicate submissions
+      isSubmitted = true;
+
+      try {
+        const response = await fetch('http://localhost:8000/api/userform/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to submit form data');
+        }
+        console.log('Form data submitted successfully');
+      } catch (error) {
+        console.error('Error submitting form data:', error);
+      }
+    };
+
+    if (formData.username) {
+      submitFormData();
+    }
+  }, [formData]);
 
   useEffect(() => {
     if (username) {

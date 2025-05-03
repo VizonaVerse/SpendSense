@@ -31,42 +31,18 @@ function UserDataForm({ onSubmit, onSkip }) {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      return; // Stop execution if there are validation errors
+      return;
     }
 
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/userform/',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Form submitted successfully:', response.data);
-
-      // Call the onSubmit callback only if the form submission is successful
-      if (onSubmit) {
-        onSubmit(formData.username);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        // Handle validation errors from the backend
-        const backendErrors = error.response.data;
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          username: backendErrors.username ? backendErrors.username[0] : null,
-        }));
-      } else {
-        console.error('Error submitting form:', error);
-      }
+    // Pass formData to App.js
+    if (onSubmit) {
+      onSubmit(formData);
     }
   };
 

@@ -36,7 +36,13 @@ function App() {
   const [money, setMoney] = useState(0);
   const [progress, setProgress] = useState(0);
   const [pension1, setPension1] = useState(0);
-  const [username, setUsername] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    age: '',
+    location: '',
+    full_time_education: false,
+  });
 
   // Define section indices
   const sectionIndices = {
@@ -87,9 +93,9 @@ function App() {
     goToSection("form");
   };
 
-  const handleFormSubmit = (username) => {
-    setUsername(username);
-    console.log("Navigating to jobSelect section after form submission");
+  const handleFormSubmit = (data) => {
+    setFormData(data);
+    console.log("Form data saved:", data);
     setShowStats(true);
     goToSection("jobSelect");
   };
@@ -266,7 +272,8 @@ function App() {
           showEndShop && (
             <section className="section end-shop-section">
               <EndShop
-                username={username}
+                username={formData.username}
+                formData={formData} // Pass formData to EndShop
                 netPay={netPay * 12} // Pass the annual salary 
                 netPay2={selectedJobSalary}//{(0.8 * selectedJobSalary) + (12570 * 0.2)}
                 annualContributions={annualContributions} // Pass the annual contributions

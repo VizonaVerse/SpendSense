@@ -80,7 +80,8 @@ function Information() {
 
         // Ensure `data` is an array before setting it
         if (Array.isArray(data)) {
-          setUsers(data);
+          const sortedUsers = data.sort((a, b) => b.final_money - a.final_money);
+          setUsers(sortedUsers);
         } else {
           console.error('Expected an array but got:', data);
         }
@@ -249,8 +250,8 @@ function Information() {
             </button>
           </li>
           <li>
-                <div style={{ marginTop: '20px', padding: '10px' }}>
-              <h2>User Data</h2>
+                <div style={{ marginTop: '20px', padding: '10px', color: 'white' }}>
+              <h5>Leaderboard</h5>
               <ul>
                 {users.map((user, index) => (
                   <li key={index}>

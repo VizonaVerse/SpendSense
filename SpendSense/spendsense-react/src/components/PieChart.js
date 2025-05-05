@@ -3,6 +3,31 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+const percentageLabelPlugin = {
+  id: 'percentageLabelPlugin',
+  afterDraw(chart) {
+    const { ctx } = chart;
+    const dataset = chart.data.datasets[0];
+    const meta = chart.getDatasetMeta(0);
+    const total = dataset.data.reduce((a, b) => a + b, 0);
+
+    ctx.save();
+    meta.data.forEach((element, index) => {
+      const value = dataset.data[index];
+      const percentage = Math.round((value / total) * 100);
+      const { x, y } = element.tooltipPosition();
+      ctx.fillStyle = 'black';
+      ctx.font = 'bold 14px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${percentage}%`, x, y);
+    });
+    ctx.restore();
+  }
+};
+
+ChartJS.register(percentageLabelPlugin);
+
 
 const MIN_SLICE_VALUE = 1;
 

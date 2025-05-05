@@ -7,12 +7,12 @@ const pensionDetails = {
     description: "A Company-provided pension upon reaching retirement age.",
     amount: "5% from you (Tax Free) and 3% from your Employer",
   },
-  fixedPension: {
+  benefit: {
     title: "Defined Benefits Pension",
     description: "A fixed pension amount based on salary and years of service.",
     amount: "This is based off your average salary and years of service",
   },
-  definedContribution: {
+  contribution: {
     title: "Defined Contribution Pension",
     description: "A Company-provided pension upon reaching retirement age.",
     amount: "5% from you (Tax Free) and 5% from your Employer",

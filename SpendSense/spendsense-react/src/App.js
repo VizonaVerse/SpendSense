@@ -243,12 +243,6 @@ function App() {
               <section className="section budgeting-section">
                 <div className="d-flex flex-column align-items-center">
                   <Chart onComplete={handleBudgetComplete} />
-                  <button
-                    onClick={() => handleBudgetComplete({ exampleData: 123 })}
-                    className="btn btn-success mt-4"
-                  >
-                    Next
-                  </button>
                 </div>
               </section>
   

@@ -25,10 +25,9 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
 
     if (selectedPension === "fixedPension") {
         withdrawalOptions = ["Weekly Taxed Payments", "Lump Sum Withdrawal"];
-    } else if (selectedPension === "definedContribution") {
+    } else if (selectedPension === "definedContribution" || selectedPension === "state") {
         withdrawalOptions = ["Withdraw via Insurance Company", "Deposit into a Bank"];
-    } 
-
+    }
     // GSAP Hover Animations
     const handleHover = (element) => {
         gsap.to(element, {

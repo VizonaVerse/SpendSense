@@ -267,7 +267,7 @@ const PieChart = ({ onComplete }) => {
       });
     },
   };
-  
+
   ChartJS.register(percentagePlugin);
   
   const options = {
@@ -305,6 +305,7 @@ const PieChart = ({ onComplete }) => {
 };
 
   return (
+    
     <div style={{ padding: '1rem' }}>
       <h1 style={{
         fontFamily: "'Press Start 2P', cursive",

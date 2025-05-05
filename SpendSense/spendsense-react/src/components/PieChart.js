@@ -303,7 +303,22 @@ const PieChart = ({ onComplete }) => {
     },
   },
 };
+return (
+  <div className="piechart-section">
+    <h1 className="piechart-title">🎯 Budget Blaster!</h1>
+    <div className="piechart-container">
+      <div className="piechart-instructions">
+        <h3>💡 Instructions</h3>
+        <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
+        <p>Click 'Next' when you're happy!</p>
+        <hr />
+        <h4>💰 Tips:</h4>
+        <p><strong>Needs:</strong> Rent, food, bills</p>
+        <p><strong>Wants:</strong> Clothes, takeaways, games</p>
+        <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
+      </div>
 
+<<<<<<< HEAD
   return (
     
     <div style={{ padding: '1rem' }}>
@@ -358,9 +373,22 @@ const PieChart = ({ onComplete }) => {
             Next
           </button>
         </div>
+=======
+      <div
+        className="piechart-chart-wrapper"
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        <Pie ref={chartRef} data={chartData} options={options} />
+        <button className="piechart-button" onClick={handleNext}>Next</button>
+>>>>>>> c0437fad0d0edc6df1f1d5fe0de4e4ea85cbe6f8
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default PieChart;

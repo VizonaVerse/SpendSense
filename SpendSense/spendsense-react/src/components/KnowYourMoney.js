@@ -60,7 +60,7 @@ const KnowYourMoney = () => {
 
           <br /><br />
 
-          📌 Tip: If you're unsure how to split your income, start with the 50/30/20 rule — then adjust based on your job, lifestyle, and goals.
+          📌 <em> Pro Tip:</em> If you're unsure how to split your income, start with the 50/30/20 rule — then adjust based on your job, lifestyle, and goals.
         </p>
 
         <div className="learn-chart-wrapper">
@@ -145,7 +145,7 @@ const KnowYourMoney = () => {
 
           <br /><br />
 
-          📌 <em>Tip:</em> In the game and in real life, pensions are like slow power-ups — you won’t feel the benefit immediately, but they matter a lot in the long run. The better your pension plan, the more relaxed your retirement will be.
+          📌 <em>Pro Tip:</em> In the game and in real life, pensions are like slow power-ups — you won’t feel the benefit immediately, but they matter a lot in the long run. The better your pension plan, the more relaxed your retirement will be.
         </p>
 
         <div className="learn-chart-wrapper">

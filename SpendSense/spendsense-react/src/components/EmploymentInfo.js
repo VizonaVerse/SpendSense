@@ -1,75 +1,97 @@
 import React, { useEffect, useState } from 'react';
 
-function EmploymentInfo({ onClick}) {
-  const [EmploymentInfo, setEmploymentInfo] = useState("Loading...");
+function EmploymentInfo({ onClick }) {
+  const [infoText, setInfoText] = useState("Loading...");
 
   useEffect(() => {
-      const fetchEmploymentInfo = async () => {
-        try {
-          const response = await fetch("https://www.gov.uk/api/content/child-employment");
-          const data = await response.json();
-  
-          // Extract the body content from part 0 of the details.parts array
-          const bodyContent = data.details.parts[0]?.body || "";
-  
-          // Parse the HTML content
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(bodyContent, "text/html");
-  
-          // Find the <h2> tag with the text "Full-time work"
-          const fullTimeWorkHeading = Array.from(doc.querySelectorAll("h2")).find(
-            (heading) => heading.textContent.trim().toLowerCase() === "full-time work"
-          );
-  
-          if (fullTimeWorkHeading) {
-            const paragraphs = [];
-            let sibling = fullTimeWorkHeading.nextElementSibling;
-  
-            // Collect all <p> tags after the <h2> tag
-            while (sibling) {
-              if (sibling.tagName === "P") {
-                paragraphs.push(sibling.textContent);
-              }
-              sibling = sibling.nextElementSibling;
-            }
-  
-            if (paragraphs.length > 0) {
-              setEmploymentInfo(paragraphs.join(" "));
-            } else {
-              setEmploymentInfo("No relevant information found");
-            }
-          } else {
-            setEmploymentInfo("No Full-time work section found.");
+    const fetchEmploymentInfo = async () => {
+      try {
+        const response = await fetch("https://www.gov.uk/api/content/child-employment");
+        const data = await response.json();
+
+        const bodyContent = data.details.parts[0]?.body || "";
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(bodyContent, "text/html");
+
+        const fullTimeWorkHeading = Array.from(doc.querySelectorAll("h2")).find(
+          (heading) => heading.textContent.trim().toLowerCase() === "full-time work"
+        );
+
+        if (fullTimeWorkHeading) {
+          const paragraphs = [];
+          let sibling = fullTimeWorkHeading.nextElementSibling;
+
+          while (sibling && sibling.tagName === "P") {
+            paragraphs.push(sibling.textContent);
+            sibling = sibling.nextElementSibling;
           }
-        } catch (error) {
-          console.error("Error fetching employment info:", error);
-          setEmploymentInfo("Failed to load information.");
+
+          setInfoText(paragraphs.length ? paragraphs.join(" ") : "No relevant information found.");
+        } else {
+          setInfoText("No Full-time work section found.");
         }
-      };
-  
-      fetchEmploymentInfo();
-    }, []);
+      } catch (error) {
+        console.error("Error fetching employment info:", error);
+        setInfoText("Failed to load information.");
+      }
+    };
+
+    fetchEmploymentInfo();
+  }, []);
+
   return (
-    <>
-        <div>
-        <div style={{ marginTop: '20px', overflow: 'hidden' }}>
-          <h5 style={{ textAlign: 'center', marginBottom: '10px', color: '#209cee' }}>
-            Employment Information
-          </h5>
-          <p style={{ textAlign: 'center', color: 'white' }}>
-          {EmploymentInfo}
-          </p>
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button 
-              onClick={onClick} 
-              style={{ padding: '10px 20px', backgroundColor: '#209cee', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-            >
-              Continue to Payslip
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    <div style={{
+      maxWidth: '800px',
+      margin: '40px auto',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      backdropFilter: 'blur(8px)',
+      border: '2px solid rgba(255, 255, 255, 0.3)',
+      padding: '2rem',
+      borderRadius: '12px',
+      textAlign: 'center',
+      fontFamily: "'Press Start 2P', cursive",
+      color: '#000',
+      boxShadow: '0 0 20px rgba(0,0,0,0.3)'
+    }}>
+
+      <h2 style={{
+        color: '#2c4a7a', 
+        marginBottom: '1.5rem',
+        fontSize: '1.5rem'
+      }}>
+        Employment Information
+      </h2>
+
+
+      <p style={{
+        fontSize: '0.85rem',
+        lineHeight: '1.8',
+        color: '#2c4a7a',  
+        textAlign: 'justify',
+        whiteSpace: 'pre-wrap'
+      }}>
+        {infoText}
+      </p>
+
+
+      <button
+        onClick={onClick}
+        style={{
+          marginTop: '2rem',
+          padding: '10px 24px',
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          border: '2px solid #2c4a7a',
+          color: '#2c4a7a',
+          fontWeight: 'bold',
+          fontFamily: "'Press Start 2P', cursive",
+          borderRadius: '6px',
+          cursor: 'pointer'
+        }}
+      >
+        Continue to Payslip
+      </button>
+
+    </div>
   );
 }
 

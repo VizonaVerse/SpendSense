@@ -1,11 +1,6 @@
 from rest_framework import serializers
-from spendsense_api.models import Pension, Job, Ending, UserData
+from spendsense_api.models import Job, Ending, UserData
 from rest_framework.validators import UniqueValidator
-
-class PensionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pension
-        fields = '__all__'
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:

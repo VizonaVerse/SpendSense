@@ -2,21 +2,14 @@
 # we'll need to import generics and response from rest_framework and also serializers and models
 from rest_framework import generics
 from rest_framework.response import Response
-from spendsense_api.models import Pension, Job, Ending, UserData
+from spendsense_api.models import Job, Ending, UserData
 from spendsense_api.access import IsAdminOrReactWebsite
-from spendsense_api.serializers import PensionSerializer, JobSerializer, EndingSerializer, UserDataSerializer, MoneyUpdateSerializer
+from spendsense_api.serializers import JobSerializer, EndingSerializer, UserDataSerializer, MoneyUpdateSerializer
 from django.urls import reverse_lazy
 from rest_framework.permissions import IsAdminUser
 from rest_framework.exceptions import ValidationError
 from cryptography.fernet import Fernet
 
-class PensionList(generics.ListCreateAPIView):
-    queryset = Pension.objects.all()
-    serializer_class = PensionSerializer
-
-class PensionDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Pension.objects.all()
-    serializer_class = PensionSerializer
 
 class JobList(generics.ListCreateAPIView):
     queryset = Job.objects.all()
@@ -37,7 +30,6 @@ class EndingDetail(generics.RetrieveUpdateDestroyAPIView):
 class ApiView(generics.GenericAPIView):
     def get(self, request):
         endpoints = {
-            'pension': request.build_absolute_uri(reverse_lazy('pension-list')),
             'job': request.build_absolute_uri(reverse_lazy('job-list')),
             'ending': request.build_absolute_uri(reverse_lazy('ending-list'))
         }

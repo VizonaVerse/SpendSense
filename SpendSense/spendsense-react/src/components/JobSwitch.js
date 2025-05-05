@@ -2,14 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
-const newJobs = [
-  { id: "accountant", title: "Accountant", apiTitle: "Accountant", minSalary: 45000, maxSalary: 55000, salary: 0, pension: "definedContribution" },
-  { id: "dataScientist", title: "Data Scientist", apiTitle: "Data Scientist", minSalary: 65000, maxSalary: 75000, salary: 0, pension: "fixedPension" },
-];
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
-  const [selectedJob, setSelectedJob] = useState(initialJob);
-  const [jobs, setJobs] = useState(newJobs); // Use state to update jobs dynamically
+  const [selectedJob, setSelectedJob] = useState();
+  const [jobs, setJobs] = useState([]); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
   const [hasExplicitlySelected, setHasExplicitlySelected] = useState(false);
 
@@ -24,6 +20,61 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
       gsap.fromTo(card, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 });
     });
   }, []);
+
+  // Fetch jobs from backend API
+    useEffect(() => {
+        fetch(`http://localhost:8000/api/job`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': process.env.REACT_APP_API_TOKEN,
+          },
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Fetched data:', data);
+    
+            // Ensure `data` is an array before setting it
+            if (Array.isArray(data)) {
+  
+              data = data.map((job) => ({
+                ...job,
+                salary: 0,
+              }));
+              // Filter jobs to meet the criteria
+              const benefitJobs = data.filter(
+                (job) => job.pension === "benefit" && job.min_salary > 20000
+              );
+              const contributionJobs = data.filter(
+                (job) => job.pension === "contribution" && job.min_salary > 20000
+              );
+      
+              // Randomly select 2 jobs with "state" pension
+              const randomBenefitJobs = benefitJobs
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 1);
+      
+              // Randomly select 1 job with "contribution" pension
+              const randomContributionJob = contributionJobs
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 1);
+      
+              // Combine the selected jobs
+              setJobs([...randomBenefitJobs, ...randomContributionJob]);
+              console.log(randomBenefitJobs);
+              console.log(randomContributionJob);
+      
+            } else {
+              console.error('Expected an array but got:', data);
+            }
+            })
+          .catch(error => console.error('Error fetching data:', error));
+      }, []);
 
   useEffect(() => {
     async function fetchSalaryData(job) {
@@ -44,13 +95,13 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
         // Update the salary for the job
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
-            j.id === job.id
+            j.title === job.title
               ? {
                   ...j,
                   salary:
-                    highestFrequencySalary > j.minSalary && highestFrequencySalary < j.maxSalary
+                    highestFrequencySalary > j.min_salary && highestFrequencySalary < j.max_salary
                       ? highestFrequencySalary
-                      : (j.minSalary + j.maxSalary) / 2, // Set to midpoint if out of range
+                      : (j.min_salary + j.max_salary) / 2, // Set to midpoint if out of range
                 }
               : j
           )
@@ -61,10 +112,10 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
         // If API fails, set salary to midpoint
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
-            j.id === job.id
+            j.title === job.title
               ? {
                   ...j,
-                  salary: (j.minSalary + j.maxSalary) / 2,
+                  salary: (j.min_salary + j.max_salary) / 2,
                 }
               : j
           )
@@ -73,10 +124,10 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
     }
 
     // Fetch salary data for all jobs
-    newJobs.forEach((job) => {
+    jobs.forEach((job) => {
       fetchSalaryData(job);
     });
-  }, []);
+  }, [jobs]);
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
@@ -143,33 +194,40 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
           </div>
         )}
 
-        {/* New job options */}
-        {jobs.map((job) => (
-          <div key={job.id} className="col-md-4">
-            <div
-              ref={addToRefs}
-              className="card p-3 shadow-sm job-card"
-              onMouseEnter={(e) => handleHover(e.currentTarget)}
-              onMouseLeave={(e) => handleHoverOut(e.currentTarget, selectedJob === job)}
-              onClick={() => handleJobSelect(job)}
-              style={{
-                cursor: "pointer",
-                backgroundColor: selectedJob === job ? "#cce5ff" : "white",
-                transition: "background-color 0.3s ease",
-              }}
-            >
-              <h4>{job.title}</h4>
-              <p>
-                Salary:{" "}
-                {job.salary.toLocaleString("en-UK", {
-                  style: "currency",
-                  currency: "GBP",
-                })}
-              </p>
-              <p>{job.pension === "fixedPension" ? "Fixed Pension" : "Defined Contribution Pension"}</p>
+        {/* New job options sorted by salary */}
+        {jobs
+          .slice()
+          .sort((a, b) => a.salary - b.salary) // Sort jobs by salary in ascending order
+          .map((job) => (
+            <div key={job.id} className="col-md-4">
+              <div
+                ref={addToRefs}
+                className="card p-3 shadow-sm job-card"
+                onMouseEnter={(e) => handleHover(e.currentTarget)}
+                onMouseLeave={(e) => handleHoverOut(e.currentTarget, selectedJob === job)}
+                onClick={() => handleJobSelect(job)}
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: selectedJob === job ? "#cce5ff" : "white",
+                  transition: "background-color 0.3s ease",
+                }}
+              >
+                <h4>{job.title}</h4>
+                <p>
+                  Salary:{" "}
+                  {job.salary.toLocaleString("en-UK", {
+                    style: "currency",
+                    currency: "GBP",
+                  })}
+                </p>
+                <p>
+                  {job.pension === "benefit"
+                    ? "Fixed Pension"
+                    : "Defined Contribution Pension"}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       {/* Pension Info - Show after selecting a job */}

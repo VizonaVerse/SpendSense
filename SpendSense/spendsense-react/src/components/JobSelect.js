@@ -133,7 +133,7 @@ function JobSelect({ onJobSelect }) {
             onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
             className="btn btn-primary"
           >
-            Continue to Payslip
+            Continue
           </button>
         </div>
       )}

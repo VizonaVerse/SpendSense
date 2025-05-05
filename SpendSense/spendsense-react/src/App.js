@@ -18,6 +18,10 @@ import UserDataForm from "./components/UserDataForm.js";
 import Stats from "./components/Stats.js";
 import CharacterInfo from "./components/CharacterInfo.js";
 import KnowYourMoney from "./components/KnowYourMoney.js";
+import BudgetPlanner from "./components/BudgetPlanner.js";
+import EmploymentInfo from "./components/EmploymentInfo.js";
+import IncomeTaxInfo from "./components/IncomeTaxInfo.js";
+import PensionInfo from "./components/PensionInfo.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -51,13 +55,17 @@ function App() {
     home: 0,
     form: 1,
     jobSelect: 2,
-    payslip: 3,
-    budget: 4,
-    jobSwitch: 5,
-    pensionWithdrawal: 6,
-    endShop: 7,
-    end: 8,
-    knowYourMoney: 9,
+    employmentInfo: 3,
+    payslip: 4,
+    incomeInfo: 5,
+    budget: 6,
+    budgetPlanner: 7,
+    jobSwitch: 8,
+    pensionWithdrawal: 9,
+    pensionInfo: 10,
+    endShop: 11,
+    end: 12,
+    knowYourMoney: 13,
   };
 
   // Update current section based on scroll position
@@ -116,15 +124,25 @@ function App() {
     setSelectedPension(job.pension);
     setMoney(netPay);
     setTimeout(() => {
-      goToSection("payslip");
+      goToSection("employmentInfo");
     }, 200);
 
-    addProgress(17);
+    addProgress(10);
+  };
+
+  const handleGoToPayslip = () => {
+    goToSection("payslip");
+    addProgress(10);
+  };
+
+  const handleGoToIncomeInfo = () => {
+    goToSection("incomeInfo");
+    addProgress(10);
   };
 
   const handleGoToBudget = () => {
     goToSection("budget");
-    addProgress(17);
+    addProgress(10);
   };
 
   const handleBudgetComplete = (data) => {
@@ -132,21 +150,31 @@ function App() {
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
     setMoney(savings1); // Update money state
-    addProgress(17);
+    addProgress(10);
+    goToSection("budgetPlanner");
+  };
+
+  const handleGoToJobSwitch = () => {
     goToSection("jobSwitch");
+    addProgress(10);
   };
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
     goToSection("pensionWithdrawal");
-    addProgress(17);
+    addProgress(10);
+  };
+
+  const handleGoToPensionInfo = () => {
+    goToSection("pensionInfo");
+    addProgress(10);
   };
 
   const handleGoToEndShop = () => {
     // setShowStats(false);
     setShowEndShop(true);
     goToSection("endShop");
-    addProgress(17);
+    addProgress(10);
   };
 
   const handleShowEndScreen = () => {
@@ -208,7 +236,12 @@ function App() {
               <section className="section job-select-section">
                 <JobSelect onJobSelect={handleJobSelect} />
               </section>
-  
+
+              {/* Employment Info Section */}
+              <section className="section employment-info-section">
+                <EmploymentInfo onClick={handleGoToPayslip} />
+              </section>
+
               {/* Payslip Section */}
               <section className="section payslip-section">
                 <div className="payslip-wrapper">
@@ -231,12 +264,17 @@ function App() {
                   </div>
                   {selectedJob && (
                     <div className="payslip-button-wrapper">
-                      <button onClick={handleGoToBudget} className="btn btn-primary">
-                        Go to Budgeting Game
+                      <button onClick={handleGoToIncomeInfo} className="btn btn-primary">
+                        Go to Income Info
                       </button>
                     </div>
                   )}
                 </div>
+              </section>
+
+              {/* Income Tax Info Section */}
+              <section className="section income-tax-info-section">
+                <IncomeTaxInfo onClick={handleGoToBudget} />
               </section>
   
               {/* Budget Section */}
@@ -244,6 +282,11 @@ function App() {
                 <div className="d-flex flex-column align-items-center">
                   <Chart onComplete={handleBudgetComplete} />
                 </div>
+              </section>
+
+              {/* Budget Planner Section */}
+              <section className="section budget-planner-section">
+                <BudgetPlanner onClick={handleGoToJobSwitch} />
               </section>
   
               {/* Job Switch Section */}
@@ -265,13 +308,18 @@ function App() {
                 {selectedPension ? (
                   <PensionWithdrawal
                     selectedPension={selectedPension}
-                    onContinue={handleGoToEndShop}
+                    onContinue={handleGoToPensionInfo}
                   />
                 ) : (
                   <div className="d-flex justify-content-center align-items-center h-100">
                     <p>Please select a pension option to continue.</p>
                   </div>
                 )}
+              </section>
+
+              {/* Pension Info Section */}
+              <section className="section pension-info-section">
+                <PensionInfo onClick={handleGoToEndShop} />
               </section>
   
               {/* End Shop Section */}

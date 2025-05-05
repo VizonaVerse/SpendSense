@@ -4,12 +4,13 @@ function CharacterStatsDisplay({
   characterImage = "images/sprite_base.png",
   characterMoney = 0,
   characterProgress = 0,
+  characterLifeExpectancy = 55,
   onMoneyChange = null,
   onProgressChange = null
 }) {
   const [money, setMoney] = useState(characterMoney);
   const [progress, setProgress] = useState(characterProgress);
-  const age = 55;
+  const [lifeExpectancy, setLifeExpectancy] = useState(characterLifeExpectancy);
 
   // Listen for external updates to money and progress
   useEffect(() => {
@@ -103,9 +104,10 @@ function CharacterStatsDisplay({
             </div>
             <div className="progress-bar-bg" style={{
               width: '100%',
-              height: '12px',
+              height: '20px',
               backgroundColor: 'rgba(15, 15, 15, 0.21)',
-              borderRadius: '6px',
+              // border: '3px solid black',
+              borderRadius: '0px',
               overflow: 'hidden'
             }}>
               <div className="progress-bar-fill" style={{
@@ -113,7 +115,7 @@ function CharacterStatsDisplay({
                 width: `${progress}%`,
                 color: 'black',
                 backgroundColor: '#4CAF50',
-                borderRadius: '6px',
+                borderRadius: '0px',
                 transition: 'width 0.3s ease'
               }} />
             </div>
@@ -134,24 +136,25 @@ function CharacterStatsDisplay({
                 Life Expectancy
               </span>
               <span style={{ color: 'black' }}>
-                {age}
+                {lifeExpectancy}
               </span>
             </div>
             <div className="life-expectancy-bar-bg" style={{
               width: '100%',
               height: '4px',
               backgroundColor: 'rgba(15, 15, 15, 0.21)',
-              borderRadius: '6px',
+              // border: '3px solid black',
+              borderRadius: '0px',
               overflow: 'hidden',
               position: 'relative', // Ensure the bar background is positioned relative
               zIndex: 1 // Set the bar background behind the heart icon
             }}>
               <div className="life-expectancy-bar-fill" style={{
                 height: '100%',
-                width: `${age}%`, // Dynamically set the width based on age
+                width: `${lifeExpectancy}%`, // Dynamically set the width based on lifeExpectancy
                 color: 'black',
-                backgroundColor: age <= 55 ? 'red' : '#4CAF50', // Red if age < 55, green otherwise
-                borderRadius: '6px',
+                backgroundColor: lifeExpectancy <= 55 ? 'red' : '#4CAF50', // Red if lifeExpectancy < 55, green otherwise
+                borderRadius: '0px',
                 transition: 'width 0.3s ease',
                 zIndex: 1 // Ensure the bar fill stays behind the heart icon
               }} />
@@ -159,7 +162,7 @@ function CharacterStatsDisplay({
             <i className="nes-icon is-small heart" style={{
               position: 'absolute',
               top: '20px', // Adjust the vertical position of the heart icon
-              left: `calc(${age}% - 10px)`, // Dynamically position the heart icon based on age
+              left: `calc(${lifeExpectancy}% - 10px)`, // Dynamically position the heart icon based on lifeExpectancy
               transition: 'left 0.3s ease', // Smooth transition for the heart icon
               zIndex: 2 // Bring the heart icon in front of the bar
             }}></i>
@@ -196,4 +199,6 @@ function CharacterStatsDisplay({
       </div>
     </div>
   );
-} export default CharacterStatsDisplay;
+}
+
+export default CharacterStatsDisplay;

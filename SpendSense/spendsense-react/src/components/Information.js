@@ -81,7 +81,8 @@ function Information({ goToSection }) {
 
         // Ensure `data` is an array before setting it
         if (Array.isArray(data)) {
-          setUsers(data);
+          const sortedUsers = data.sort((a, b) => b.final_money - a.final_money);
+          setUsers(sortedUsers);
         } else {
           console.error('Expected an array but got:', data);
         }
@@ -260,12 +261,22 @@ function Information({ goToSection }) {
           </Link>
         </li>
           <li>
-                <div style={{ marginTop: '20px', padding: '10px' }}>
-              <h2>User Data</h2>
+                <div style={{
+                  marginTop: '20px',
+                  padding: '10px',
+                  color: 'white',
+                  maxHeight: '300px', // Set a fixed height for the leaderboard
+                  overflowY: 'auto', // Enable vertical scrolling
+                  borderRadius: '5px',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'white transparent',
+                  }}>
+              <h5>Leaderboard</h5>
               <ul>
-                {users.map((user, index) => (
-                  <li key={index}>
-                    <strong>Username:</strong> {user.username} | <strong>Money:</strong> £{user.final_money}
+                {users.slice(0,10).map((user, index) => (
+                  <li key={index} style={{ marginBottom: '10px' }} className="leaderboard-item">
+                    <div><strong>Username:</strong> {user.username}</div>
+                    <div><strong>Money:</strong> £{user.final_money}</div>
                   </li>
                 ))}
               </ul>

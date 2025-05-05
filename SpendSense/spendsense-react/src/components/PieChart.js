@@ -303,63 +303,35 @@ const PieChart = ({ onComplete }) => {
     },
   },
 };
+return (
+  <div className="piechart-section">
+    <h1 className="piechart-title">🎯 Budget Blaster!</h1>
+    <div className="piechart-container">
+      <div className="piechart-instructions">
+        <h3>💡 Instructions</h3>
+        <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
+        <p>Click 'Next' when you're happy!</p>
+        <hr />
+        <h4>💰 Tips:</h4>
+        <p><strong>Needs:</strong> Rent, food, bills</p>
+        <p><strong>Wants:</strong> Clothes, takeaways, games</p>
+        <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
+      </div>
 
-  return (
-    <div style={{ padding: '1rem' }}>
-      <h1 style={{
-        fontFamily: "'Press Start 2P', cursive",
-        fontSize: '2rem',
-        color: '#fff',
-        textAlign: 'center',
-        marginBottom: '1.5rem'
-      }}>🎯 Budget Blaster!</h1>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: '40px',
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '10px',
-        padding: '2rem'
-      }}>
-        <div style={{ maxWidth: '300px', color: '#fff', fontFamily: "'Press Start 2P', cursive" }}>
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-  <span role="img" aria-label="lightbulb">💡</span> Instructions
-</h3>
-
-          <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
-          <p>Click 'Next' when you're happy!</p>
-          <hr style={{ borderColor: '#fff' }} />
-          <h4>💰 Tips:</h4>
-          <p><strong>Needs:</strong> Rent, food, bills</p>
-          <p><strong>Wants:</strong> Clothes, takeaways, games</p>
-          <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
-        </div>
-
-        <div
-          style={{
-            position: 'relative',
-            width: '600px',
-            height: '600px',
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-        >
-          <Pie ref={chartRef} data={chartData} options={options} />
-          <button
-            onClick={handleNext}
-            className="btn btn-primary mt-4"
-            style={{ display: 'block', margin: '20px auto' }}
-          >
-            Next
-          </button>
-        </div>
+      <div
+        className="piechart-chart-wrapper"
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        <Pie ref={chartRef} data={chartData} options={options} />
+        <button className="piechart-button" onClick={handleNext}>Next</button>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default PieChart;

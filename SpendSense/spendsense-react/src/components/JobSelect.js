@@ -2,13 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-
 // Initial Job Choices
 const initialJobs = [
-//added apiTitle because searching the whole displayed title doesnt give realistic values from api
-  { id: "Part_Time_Tutor", title: "Part-time Tutor", apiTitle: "Tutor", salary: 10000, pension: "state" },
-  { id: "Family_Business_Waiter", title: "Family Business Waiter", apiTitle: "Waiter", salary: 11000, pension: "state" },
-  { id: "McDonalds_Employee", title: "McDonalds Employee", apiTitle: "McDonalds", salary: 15000, pension: "state" },
+  // Added minSalary and maxSalary attributes
+  { id: "Part_Time_Tutor", title: "Part-time Tutor", apiTitle: "Tutor", minSalary: 8000, maxSalary: 12000, salary: 1, pension: "state" },
+  { id: "Family_Business_Waiter", title: "Family Business Waiter", apiTitle: "Waiter", minSalary: 9000, maxSalary: 14000, salary: 1, pension: "state" },
+  { id: "McDonalds_Employee", title: "McDonalds Employee", apiTitle: "McDonalds", minSalary: 12000, maxSalary: 18000, salary: 1, pension: "state" },
 ];
 
 function JobSelect({ onJobSelect }) {
@@ -28,8 +27,7 @@ function JobSelect({ onJobSelect }) {
     });
   }, []);
 
-  //fetch salary data from Adzuna API for each job
-  //we can add a fetch location later too to get jobs from the user's location rather than london
+  // Fetch salary data from Adzuna API for each job
   useEffect(() => {
     async function fetchSalaryData(job) {
       const url = `http://api.adzuna.com/v1/api/jobs/gb/histogram?app_id=edcbb643&app_key=06103ad4ff1dcb50632c176aada6968b&location0=UK&location1=London&what=${encodeURIComponent(
@@ -43,19 +41,37 @@ function JobSelect({ onJobSelect }) {
         // Extract the salary with the highest frequency
         const histogram = data.histogram;
         const highestFrequencySalary = Object.keys(histogram).reduce((a, b) =>
-          histogram[a] > histogram[b] ? a : b
+histogram[a] > histogram[b] ? a : b
         );
 
-        // Update the salary for the job only if the new salary is higher
+        // Update the salary for the job
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
-            j.id === job.id && parseInt(highestFrequencySalary, 10) > j.salary
-              ? { ...j, salary: parseInt(highestFrequencySalary, 10) }
+            j.id === job.id
+              ? {
+                  ...j,
+                  salary:
+                    highestFrequencySalary > j.minSalary && highestFrequencySalary < j.maxSalary
+                      ? highestFrequencySalary
+                      : (j.minSalary + j.maxSalary) / 2, // Set to midpoint if out of range
+                }
               : j
           )
         );
       } catch (error) {
         console.error(`Failed to fetch salary data for ${job.title}:`, error);
+
+        // If API fails, set salary to midpoint
+        setJobs((prevJobs) =>
+          prevJobs.map((j) =>
+            j.id === job.id
+              ? {
+                  ...j,
+                  salary: (j.minSalary + j.maxSalary) / 2,
+                }
+              : j
+          )
+        );
       }
     }
 

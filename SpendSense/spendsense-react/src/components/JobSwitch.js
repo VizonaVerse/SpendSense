@@ -3,8 +3,8 @@ import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
 const newJobs = [
-  { id: "accountant", title: "Accountant", apiTitle: "Accountant", salary: 50000, pension: "definedContribution" },
-  { id: "dataScientist", title: "Data Scientist", apiTitle: "Data Scientist", salary: 70000, pension: "fixedPension" },
+  { id: "accountant", title: "Accountant", apiTitle: "Accountant", minSalary: 45000, maxSalary: 55000, salary: 0, pension: "definedContribution" },
+  { id: "dataScientist", title: "Data Scientist", apiTitle: "Data Scientist", minSalary: 65000, maxSalary: 75000, salary: 0, pension: "fixedPension" },
 ];
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
@@ -41,16 +41,34 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
           histogram[a] > histogram[b] ? a : b
         );
 
-        // Update the salary for the job only if the new salary is higher
+        // Update the salary for the job
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
-            j.id === job.id && parseInt(highestFrequencySalary, 10) > j.salary
-              ? { ...j, salary: parseInt(highestFrequencySalary, 10) }
+            j.id === job.id
+              ? {
+                  ...j,
+                  salary:
+                    highestFrequencySalary > j.minSalary && highestFrequencySalary < j.maxSalary
+                      ? highestFrequencySalary
+                      : (j.minSalary + j.maxSalary) / 2, // Set to midpoint if out of range
+                }
               : j
           )
         );
       } catch (error) {
         console.error(`Failed to fetch salary data for ${job.title}:`, error);
+
+        // If API fails, set salary to midpoint
+        setJobs((prevJobs) =>
+          prevJobs.map((j) =>
+            j.id === job.id
+              ? {
+                  ...j,
+                  salary: (j.minSalary + j.maxSalary) / 2,
+                }
+              : j
+          )
+        );
       }
     }
 
@@ -90,7 +108,6 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
       onPensionSelect(selectedJob);
     }
   };
-
 
   return (
     <div className="section-content job-select-section2 text-center">

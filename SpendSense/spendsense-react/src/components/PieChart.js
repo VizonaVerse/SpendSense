@@ -4,7 +4,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
 const MIN_SLICE_VALUE = 1;
 
 const PieChart = ({ onComplete }) => {
@@ -30,12 +29,6 @@ const PieChart = ({ onComplete }) => {
 
   const [dragging, setDragging] = useState(false);
   const [dragIndex, setDragIndex] = useState(null);
-
-  useEffect(() => {
-    return () => {
-      if (dragTimeout.current) clearTimeout(dragTimeout.current);
-    };
-  }, []);
 
   const adjustSlices = (index, angleDiff) => {
     const data = [...chartData.datasets[0].data];
@@ -128,11 +121,6 @@ const PieChart = ({ onComplete }) => {
   };
 
   const handleMouseDown = (event) => {
-    if (dragTimeout.current) {
-      clearTimeout(dragTimeout.current);
-      dragTimeout.current = null;
-    }
-
     const chart = chartRef.current;
     if (!chart) return;
 
@@ -176,8 +164,8 @@ const PieChart = ({ onComplete }) => {
     const total = data.reduce((sum, value) => sum + value, 0);
     const exactPercentages = data.map(value => (value / total) * 100);
     const floored = exactPercentages.map(p => Math.floor(p));
-    const remainders = exactPercentages.map((p, i) => ({ index: i, remainder: p - floored[i] }));
-    remainders.sort((a, b) => b.remainder - a.remainder);
+    const remainders = exactPercentages.map((p, i) => ({ index: i, remainder: p - floored[i] }))
+      .sort((a, b) => b.remainder - a.remainder);
 
     const totalFloored = floored.reduce((sum, p) => sum + p, 0);
     const pointsToDistribute = 100 - totalFloored;
@@ -205,10 +193,6 @@ const PieChart = ({ onComplete }) => {
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, [dragging, handleMouseUp]);
 
-  useEffect(() => {
-    previousAngleRef.current = null;
-  }, [chartData]);
-
   const handleNext = () => {
     if (onComplete) {
       const data = chartData.datasets[0].data;
@@ -221,132 +205,35 @@ const PieChart = ({ onComplete }) => {
     }
   };
 
-  const percentagePlugin = {
-    id: 'percentagePlugin',
-    afterDraw: (chart) => {
-      const { ctx, chartArea } = chart;
-      const data = chart.data.datasets[0].data;
-      const total = data.reduce((sum, value) => sum + value, 0);
-  
-      const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
-      const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-      const radius = (chartArea.right - chartArea.left) / 2;
-  
-      let startAngle = -Math.PI / 2;
-  
-      const exactPercentages = data.map(value => (value / total) * 100);
-      const floored = exactPercentages.map(p => Math.floor(p));
-      const remainders = exactPercentages.map((p, i) => ({
-        index: i,
-        remainder: p - floored[i]
-      }));
-      remainders.sort((a, b) => b.remainder - a.remainder);
-  
-      const totalFloored = floored.reduce((sum, p) => sum + p, 0);
-      const pointsToDistribute = 100 - totalFloored;
-  
-      const adjustedPercentages = [...floored];
-      for (let i = 0; i < pointsToDistribute; i++) {
-        adjustedPercentages[remainders[i % remainders.length].index]++;
-      }
-  
-      data.forEach((value, index) => {
-        const angle = (value / total) * 2 * Math.PI;
-        const midAngle = startAngle + angle / 2;
-  
-        const textX = centerX + (radius / 1.5) * Math.cos(midAngle);
-        const textY = centerY + (radius / 1.5) * Math.sin(midAngle);
-  
-        ctx.fillStyle = 'black';
-        ctx.font = '14px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(adjustedPercentages[index] + '%', textX, textY);
-  
-        startAngle += angle;
-      });
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.label || '';
+            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+            const percentage = Math.round((context.raw / total) * 100);
+            return `${label}: ${percentage}%`;
+          },
+        },
+      },
+      legend: {
+        onClick: null,
+      },
     },
   };
 
-  ChartJS.register(percentagePlugin);
-  
-  const options = {
-  responsive: true,
-  maintainAspectRatio: true,
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (context) => {
-          const label = context.label || '';
-          const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-          const exactPercentages = context.dataset.data.map(v => (v / total) * 100);
-          const floored = exactPercentages.map(p => Math.floor(p));
-          const remainders = exactPercentages.map((p, i) => ({
-            index: i,
-            remainder: p - floored[i]
-          })).sort((a, b) => b.remainder - a.remainder);
-
-          const totalFloored = floored.reduce((sum, p) => sum + p, 0);
-          const pointsToDistribute = 100 - totalFloored;
-
-          const adjustedPercentages = [...floored];
-          for (let i = 0; i < pointsToDistribute; i++) {
-            adjustedPercentages[remainders[i % remainders.length].index]++;
-          }
-
-          return `${label}: ${adjustedPercentages[context.dataIndex]}%`;
-        },
-      },
-    },
-    legend: {
-      onClick: null,
-    },
-  },
-};
-return (
-  <div className="piechart-section">
-    <h1 className="piechart-title">🎯 Budget Blaster!</h1>
-    <div className="piechart-container">
-      <div className="piechart-instructions">
-        <h3>💡 Instructions</h3>
-        <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
-        <p>Click 'Next' when you're happy!</p>
-        <hr />
-        <h4>💰 Tips:</h4>
-        <p><strong>Needs:</strong> Rent, food, bills</p>
-        <p><strong>Wants:</strong> Clothes, takeaways, games</p>
-        <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
-      </div>
-
-<<<<<<< HEAD
   return (
-    
-    <div style={{ padding: '1rem' }}>
-      <h1 style={{
-        fontFamily: "'Press Start 2P', cursive",
-        fontSize: '2rem',
-        color: '#fff',
-        textAlign: 'center',
-        marginBottom: '1.5rem'
-      }}>🎯 Budget Blaster!</h1>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: '40px',
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '10px',
-        padding: '2rem'
-      }}>
-        <div style={{ maxWidth: '300px', color: '#fff', fontFamily: "'Press Start 2P', cursive" }}>
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-  <span role="img" aria-label="lightbulb">💡</span> Instructions
-</h3>
-
+    <div className="piechart-section">
+      <h1 className="piechart-title">🎯 Budget Blaster!</h1>
+      <div className="piechart-container">
+        <div className="piechart-instructions">
+          <h3>💡 Instructions</h3>
           <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
           <p>Click 'Next' when you're happy!</p>
-          <hr style={{ borderColor: '#fff' }} />
+          <hr />
           <h4>💰 Tips:</h4>
           <p><strong>Needs:</strong> Rent, food, bills</p>
           <p><strong>Wants:</strong> Clothes, takeaways, games</p>
@@ -354,41 +241,18 @@ return (
         </div>
 
         <div
-          style={{
-            position: 'relative',
-            width: '600px',
-            height: '600px',
-          }}
+          className="piechart-chart-wrapper"
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
           <Pie ref={chartRef} data={chartData} options={options} />
-          <button
-            onClick={handleNext}
-            className="btn btn-primary mt-4"
-            style={{ display: 'block', margin: '20px auto' }}
-          >
-            Next
-          </button>
+          <button className="piechart-button" onClick={handleNext}>Next</button>
         </div>
-=======
-      <div
-        className="piechart-chart-wrapper"
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        <Pie ref={chartRef} data={chartData} options={options} />
-        <button className="piechart-button" onClick={handleNext}>Next</button>
->>>>>>> c0437fad0d0edc6df1f1d5fe0de4e4ea85cbe6f8
       </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default PieChart;

@@ -9,8 +9,33 @@ export default function SamplePayslip({
   onAnnualContributionsChange,
   onNetPayChange,
   onPensionChange,
+  name,
 }) {
-  // Declare variables outside of conditional blocks
+  const displayName = name && name.trim() !== "" ? name : "Jane Doe";
+
+  const today = new Date();
+  const payMonth = today.toLocaleString("default", { month: "long" });
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const payDate = `${String(lastDay.getDate()).padStart(2, "0")}/${String(
+    lastDay.getMonth() + 1
+  ).padStart(2, "0")}/${lastDay.getFullYear()}`;
+
+  const payrollNumber = Math.floor(100000 + Math.random() * 900000);
+
+  const generateNINumber = () => {
+    const letters = "ABCEGHJKLMNPRSTWXYZ";
+    const prefix =
+      letters.charAt(Math.floor(Math.random() * letters.length)) +
+      letters.charAt(Math.floor(Math.random() * letters.length));
+    const digits = Math.floor(100000 + Math.random() * 900000)
+      .toString()
+      .replace(/(\d{2})(\d{2})(\d{2})/, "$1 $2 $3");
+    const suffix = "ABCD".charAt(Math.floor(Math.random() * 4));
+    return `${prefix} ${digits} ${suffix}`;
+  };
+
+  const niNumber = generateNINumber();
+
   let monthlyGross = 0;
   let pension = 0;
   let monthlyTax = 0;
@@ -49,7 +74,6 @@ export default function SamplePayslip({
     if (onNetPayChange) onNetPayChange(netPay);
   }, [netPay, onNetPayChange]);
 
-  // Animation effect
   useEffect(() => {
     if (job) {
       gsap.fromTo(
@@ -74,9 +98,9 @@ export default function SamplePayslip({
       <div className="row mb-2">
         <div className="col-6 text-start">
           <div>ACME Corp Ltd.</div>
-          <div>Jane Doe</div>
+          <div>{displayName}</div>
           <div>
-            Payroll No: 789012{" "}
+            Payroll No: {payrollNumber}{" "}
             <span className="hover-info">
               (i)
               <div className="info-box">
@@ -86,19 +110,18 @@ export default function SamplePayslip({
           </div>
         </div>
         <div className="col-6 text-end">
-          <div>Pay Month: May</div>
-          <div>Pay Day: 31/05/2023</div>
+          <div>Pay Month: {payMonth}</div>
+          <div>Pay Day: {payDate}</div>
           <div>
             Tax Code: 1257L{" "}
             <span className="hover-info">
               (i)
-              <div className="info-box">
-                Tax code indicates your tax bracket
-              </div>
+              <div className="info-box">Tax code indicates your tax bracket</div>
             </span>
           </div>
         </div>
       </div>
+
       <div className="row">
         <div className="col-6">
           <div className="section-header mb-2">
@@ -140,6 +163,7 @@ export default function SamplePayslip({
             </tbody>
           </table>
         </div>
+
         <div className="col-6">
           <div className="section-header mb-2">
             <h4>
@@ -212,6 +236,7 @@ export default function SamplePayslip({
           </table>
         </div>
       </div>
+
       <div className="row mt-2">
         <div className="col-12">
           <div className="section-header mb-2">
@@ -251,6 +276,7 @@ export default function SamplePayslip({
           </table>
         </div>
       </div>
+
       <div className="row mt-2">
         <div className="col-12">
           <div className="section-header mb-2">
@@ -278,7 +304,7 @@ export default function SamplePayslip({
                     </div>
                   </span>
                 </td>
-                <td>AB 12 345 C</td>
+                <td>{niNumber}</td>
               </tr>
               <tr>
                 <td>Amount Paid (Employer)</td>

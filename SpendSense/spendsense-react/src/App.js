@@ -225,6 +225,7 @@ function App() {
                           }
                         }}
                         onPensionChange={(pension) => setPension1(pension)}
+                        name={formData.name}
                       />
                     </div>
                   </div>

@@ -153,7 +153,10 @@ function CharacterStatsDisplay({
                 height: '100%',
                 width: `${lifeExpectancy}%`, // Dynamically set the width based on lifeExpectancy
                 color: 'black',
-                backgroundColor: lifeExpectancy <= 55 ? 'red' : '#4CAF50', // Red if lifeExpectancy < 55, green otherwise
+                backgroundColor:
+                lifeExpectancy <= 60 ? 'red'
+                : lifeExpectancy < 75 ? 'orange' 
+                : '#4CAF50', // Red if lifeExpectancy < 55, green otherwise
                 borderRadius: '0px',
                 transition: 'width 0.3s ease',
                 zIndex: 1 // Ensure the bar fill stays behind the heart icon

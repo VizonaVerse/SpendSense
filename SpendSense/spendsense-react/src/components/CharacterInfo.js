@@ -13,6 +13,7 @@ function CharacterInfo({
   const [progress, setProgress] = useState(initialProgress);
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [selectedJob, setSelectedJob] = useState(null);
   
   // Listen for external updates to money and progress
   useEffect(() => {
@@ -46,20 +47,6 @@ function CharacterInfo({
     }
   }, [isOpen]);
   
-  // Functions to update money and progress
-  const addMoney = (amount) => {
-    const newMoney = money + amount;
-    setMoney(newMoney);
-    if (onMoneyChange) onMoneyChange(newMoney);
-  };
-  
-  const updateProgress = (value) => {
-    // Ensure progress stays between 0-100
-    const newProgress = Math.max(0, Math.min(100, value));
-    setProgress(newProgress);
-    if (onProgressChange) onProgressChange(newProgress);
-  };
-
   // Toggle sidebar
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -130,70 +117,6 @@ function CharacterInfo({
           marginTop: '-10px',
           width: '300px'
         }}>
-          {/* Progress Bar */}
-          {/* <div className="progress-container" style={{
-            width: '100%',
-            marginBottom: '10px'
-          }}>
-            <div className="progress-label" style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '5px',
-              fontSize: '14px'
-            }}>
-              <span style={{ color: 'black'}}>
-                  Progress
-              </span>
-              <span style={{ color: 'black'}}>
-                  {progress}%
-              </span>
-            </div>
-            <div className="progress-bar-bg" style={{
-              width: '100%',
-              height: '12px',
-              backgroundColor: 'rgba(15, 15, 15, 0.41)',
-              borderRadius: '6px',
-              overflow: 'hidden'
-            }}>
-              <div className="progress-bar-fill" style={{
-                height: '100%',
-                width: `${progress}%`,
-                color: 'black',
-                backgroundColor: '#4CAF50',
-                borderRadius: '6px',
-                transition: 'width 0.3s ease'
-              }} />
-            </div>
-          </div> */}
-          
-          {/* Money Display */}
-          {/* <div className="money-display" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2px',
-            backgroundColor: 'rgba(70, 166, 66, 0.47)',
-            padding: '5px 12px',
-            borderRadius: '15px',
-            border: '3px solid green',
-            width: 'fit-content'
-          }}>
-            <span style={{ 
-              fontSize: '16px', 
-              fontWeight: 'bold', 
-              color: 'black' 
-            }}>
-              £{money.toLocaleString()}
-            </span>
-            <img
-              src="images/coin.png"
-              alt="Coins"
-              style={{
-                width: '30px',
-                height: '30px',
-                imageRendering: 'pixelated'
-              }}
-            />
-          </div> */}
         </div>
       </div>
 
@@ -224,7 +147,7 @@ function CharacterInfo({
         />
 
         <div>
-          <h3>{JobSelect}*display current job</h3>
+          <h3>{selectedJob}</h3>
         </div>
       </div>
     </>

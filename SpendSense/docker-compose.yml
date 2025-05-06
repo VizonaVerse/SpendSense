@@ -6,4 +6,10 @@ services:
     depends_on:
       - backend
   backend:
-    build: SpendSenseDjango
+    build:
+      context: ./SpendSenseDjango
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: adminpassword

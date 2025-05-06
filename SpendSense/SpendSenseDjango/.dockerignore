@@ -2,8 +2,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.env
-db.sqlite3
 node_modules
 npm-debug.log
 Dockerfile

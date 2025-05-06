@@ -31,7 +31,7 @@ const KnowYourMoney = () => {
 
       <div className="learn-title-container">
         <img src="/images/coinSpin1.gif" alt="spinning coin left" className="title-coin left" />
-        <h1 className="learn-title">Know Your Money</h1>
+        <h1 className="learn-title"> Know Your Money</h1>
         <img src="/images/coinSpin2.gif" alt="spinning coin right" className="title-coin right" />
       </div>
 
@@ -56,7 +56,7 @@ const KnowYourMoney = () => {
 
           <br /><br />
 
-          In <strong>Spend Sense</strong>, your budget decisions directly affect your character's savings and health over time. Choosing to spend more on wants may boost happiness short term, but could leave you in trouble later. Try experimenting with different budget setups to see how they impact your long-term success in the game!
+          In <strong>SpendSense</strong>, your budget decisions directly affect your character's savings and health over time. Choosing to spend more on wants may boost happiness short term, but could leave you in trouble later. Try experimenting with different budget setups to see how they impact your long-term success in the game!
 
           <br /><br />
 
@@ -123,7 +123,7 @@ const KnowYourMoney = () => {
 
           <br /><br />
 
-          In <strong>Spend Sense</strong>, your pension choices affect your future financial security — it’s a long-term reward for how well you manage your money over time. There are three types of pensions in the game, based on real systems:
+          In <strong>SpendSense</strong>, your pension choices affect your future financial security — it’s a long-term reward for how well you manage your money over time. There are three types of pensions in the game, based on real systems:
 
           <ul>
             <li>

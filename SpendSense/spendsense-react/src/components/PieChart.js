@@ -232,7 +232,7 @@ const PieChart = ({ onComplete }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       tooltip: {
         callbacks: {
@@ -254,19 +254,17 @@ const PieChart = ({ onComplete }) => {
     <div className="piechart-section">
       <h1 className="piechart-title">🎯 Budget Blaster!</h1>
       <div className="piechart-container">
-        <div className="piechart-instructions">
+        
+        {/* Left Column: Instructions */}
+        <div className="piechart-column piechart-instructions">
           <h3>💡 Instructions</h3>
           <p>Drag the borders to adjust how much of your salary you'd like to save, spend on needs, and spend on wants.</p>
           <p>Click 'Next' when you're happy!</p>
-          <hr />
-          <h4>💰 Tips:</h4>
-          <p><strong>Needs:</strong> Rent, food, bills</p>
-          <p><strong>Wants:</strong> Clothes, takeaways, games</p>
-          <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
         </div>
-
+  
+        {/* Center Column: Chart + Button */}
         <div
-          className="piechart-chart-wrapper"
+          className="piechart-column piechart-chart-wrapper"
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
@@ -275,9 +273,18 @@ const PieChart = ({ onComplete }) => {
           <Pie ref={chartRef} data={chartData} options={options} />
           <button className="piechart-button" onClick={handleNext}>Next</button>
         </div>
+  
+        {/* Right Column: Tips */}
+        <div className="piechart-column piechart-tips">
+          <h4>💰 Tips</h4>
+          <p><strong>Needs:</strong> Rent, food, bills</p>
+          <p><strong>Wants:</strong> Clothes, takeaways, games</p>
+          <p><strong>Savings:</strong> Set aside for future goals or emergencies</p>
+        </div>
+  
       </div>
     </div>
-  );
+  );  
 };
 
-export default PieChart;
+export default PieChart; /* Global Variables */

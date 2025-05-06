@@ -4,7 +4,7 @@ function CharacterStatsDisplay({
   characterImage = "images/sprite_base.png",
   characterMoney = 0,
   characterProgress = 0,
-  characterLifeExpectancy = 55,
+  characterLifeExpectancy = 75,
   onMoneyChange = null,
   onProgressChange = null
 }) {
@@ -156,7 +156,7 @@ function CharacterStatsDisplay({
                 backgroundColor:
                 lifeExpectancy <= 60 ? 'red'
                 : lifeExpectancy < 75 ? 'orange' 
-                : '#4CAF50', // Red if lifeExpectancy < 55, green otherwise
+                : '#4CAF50', // Red if lifeExpectancy <=60, green otherwise
                 borderRadius: '0px',
                 transition: 'width 0.3s ease',
                 zIndex: 1 // Ensure the bar fill stays behind the heart icon

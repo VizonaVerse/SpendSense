@@ -287,4 +287,4 @@ const PieChart = ({ onComplete }) => {
   );  
 };
 
-export default PieChart; /* Global Variables */
+export default PieChart;

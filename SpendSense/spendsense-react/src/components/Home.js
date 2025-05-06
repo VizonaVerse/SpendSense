@@ -6,12 +6,28 @@ function Home({ onStart }) {
   return (
     <div className="section-content text-center">
       <div>
-      <img src="images/spendsense_logo.gif" alt="SpendSense Logo" style={{ height: "25vmin" }} />
-
+        <img
+          src="images/spendsense_logo.gif"
+          alt="SpendSense Logo"
+          style={{ height: "25vmin", animation: "pulse 2s infinite" }}
+        />
       </div>
-      <button onClick={onStart} className="nes-btn is-primary nes-pointer">
-        Start Game
-      </button>
+      <div>
+        <button
+          onClick={onStart}
+          className="nes-btn is-primary nes-pointer"
+          style={{ display: "block", margin: "10px auto", animation: "pulse 2s infinite" }}
+        >
+          Start Game
+        </button>
+        <button
+          onClick={onStart}
+          className="nes-btn is-primary nes-pointer"
+          style={{ display: "block", margin: "10px auto", animation: "pulse 2s infinite" }}
+        >
+          Tutorial
+        </button>
+      </div>
     </div>
   );
 }

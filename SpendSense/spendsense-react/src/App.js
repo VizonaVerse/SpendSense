@@ -22,6 +22,7 @@ import BudgetPlanner from "./components/BudgetPlanner.js";
 import EmploymentInfo from "./components/EmploymentInfo.js";
 import IncomeTaxInfo from "./components/IncomeTaxInfo.js";
 import PensionInfo from "./components/PensionInfo.js";
+import AboutUs from "./components/AboutUs.js";
 
 function App() {
   const scrollContainerRef = useRef(null);
@@ -196,7 +197,10 @@ function App() {
     <Routes>
       {/* Route for the learning page */}
       <Route path="/learn" element={<KnowYourMoney />} />
-  
+
+      {/* Route for the About Us page */}
+      <Route path="/about-us" element={<AboutUs />} />
+
       {/* Route for the main scrolling game */}
       <Route path="/" element={
         <>

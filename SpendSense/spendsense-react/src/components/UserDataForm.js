@@ -70,13 +70,30 @@ function UserDataForm({ onSubmit, onSkip }) {
       </div>
       <div>
         <label>
+          Are you currently in a full-time education?
+        </label>
+        <label>
           <input
-            type="checkbox"
-            name="full_time_education"
-            checked={formData.full_time_education}
-            onChange={handleChange}
+            type="radio"
+            className="nes-radio"
+            name="education_status"
+            value="yes"
+            checked={formData.full_time_education === true}
+            onChange={() => setFormData({ ...formData, full_time_education: true })}
           />
-          Full Time Education
+          <span>Yes</span>
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            className="nes-radio"
+            name="education_status"
+            value="no"
+            checked={formData.full_time_education === false}
+            onChange={() => setFormData({ ...formData, full_time_education: false })}
+          />
+          <span>No</span>
         </label>
       </div>
       <div className="form-buttons">

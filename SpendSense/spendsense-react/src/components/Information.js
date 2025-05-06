@@ -175,9 +175,9 @@ function Information({ goToSection }) {
             alignItems: 'center',
             justifyContent: 'center'
 
-          }}
-        >
-          <img
+            }}
+          >
+            <img
             src="images/menu.png"
             alt="Menu"
             style={{
@@ -186,29 +186,29 @@ function Information({ goToSection }) {
               imageRendering: "pixelated",
               objectFit: 'contain'
             }}
-          />
-        </button>
-      </div>
+            />
+          </button>
+          </div>
 
-      <nav
-        id="navbar"
-        ref={navRef}
-        style={{
-          position: 'fixed',
-          right: 0,
-          top: 0,
-          width: '300px',
-          height: '100%',
-          backgroundColor: 'rgba(0,0,0,0.8)',
-          transform: 'translateX(100%)',
-          opacity: 0,
-          zIndex: 1001,
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <ul
+          <nav
+          id="navbar"
+          ref={navRef}
           style={{
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            width: '300px',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            transform: 'translateX(100%)',
+            opacity: 0,
+            zIndex: 1001,
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+          >
+          <ul
+            style={{
             listStyle: 'none',
             padding: 0,
             margin: 0,
@@ -218,9 +218,9 @@ function Information({ goToSection }) {
             justifyContent: 'center',
             flexGrow: 1,
             gap: '20px'
-          }}
-        >
-          <li>
+            }}
+          >
+            <li>
             <button
               className="nes-btn is-success"
               onClick={handleButtonClick(closeNav)}
@@ -228,8 +228,8 @@ function Information({ goToSection }) {
             >
               Continue
             </button>
-          </li>
-          <li>
+            </li>
+            <li>
             <button
               className="nes-btn is-primary"
               onClick={handleButtonClick(handleNewGame)}
@@ -237,29 +237,28 @@ function Information({ goToSection }) {
             >
               New Game
             </button>
-          </li>
-          <li>
-            <button
-              className="nes-btn is-primary"
-              onClick={handleButtonClick(() => {
-                console.log("About Us clicked");
-              })}
-              style={{ width: '200px' }}
-            >
-              About Us
-            </button>
-          </li>
-          <li>
-            <Link to="/learn" style={{ textDecoration: 'none' }}>
+            </li>
+            <li>
+            <Link to="/about-us" style={{ textDecoration: 'none' }}>
               <button
-                className="nes-btn is-warning"
-                style={{ width: '200px' }}
+              className="nes-btn is-primary"
+              style={{ width: '200px' }}
               >
-                Know Your Money
+              About Us
               </button>
             </Link>
-          </li>
-          <li>
+            </li>
+            <li>
+            <Link to="/learn" style={{ textDecoration: 'none' }}>
+              <button
+              className="nes-btn is-warning"
+              style={{ width: '200px' }}
+              >
+              Know Your Money
+              </button>
+            </Link>
+            </li>
+            <li>
             <div style={{
               marginTop: '20px',
               padding: '10px',

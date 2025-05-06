@@ -65,7 +65,7 @@ const KnowYourMoney = () => {
 
         <div className="learn-chart-wrapper">
           <img
-            src={require('./pieChart.jpg')}
+            src='/images/pieChart.jpg'
             alt="Budgeting Pie Chart"
             className="budget-chart"
           />
@@ -107,7 +107,7 @@ const KnowYourMoney = () => {
 
         <div className="learn-chart-wrapper">
           <img
-            src={require('./learnPayslip.jpg')}
+            src='/images/learnPayslip.jpg'
             alt="Payslip Breakdown Diagram"
             className="payslip-chart"
           />
@@ -150,7 +150,7 @@ const KnowYourMoney = () => {
 
         <div className="learn-chart-wrapper">
           <img
-            src={require('./learnPension.jpg')}
+            src='/images/learnPension.jpg'
             alt="Pension Timeline Diagram"
             className="pension-chart"
           />

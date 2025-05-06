@@ -1,6 +1,6 @@
 .learn-page {
     font-family: 'Press Start 2P', cursive;
-    background-image: url('./space.png');
+    background-image: url('/./public/images/space.png');
     background-size: cover;
     background-position: center;
     min-height: 100vh;

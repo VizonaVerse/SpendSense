@@ -296,7 +296,7 @@ table.table-bordered {
   margin-bottom: 0.5rem;
 }
 
-/* Hover Info Tooltip */
+
 .hover-info {
   position: relative;
   display: inline-block;
@@ -344,7 +344,7 @@ table.table-bordered {
   font-size: 0.7rem;
 }
 
-/* PieChart Section - Budget Blaster */
+
 .piechart-section {
   padding: 2rem;
   font-family: 'Press Start 2P', monospace;
@@ -495,5 +495,4 @@ table.table-bordered {
     transform: rotate(-20deg) translateY(-10px);
   }
 }
-
 

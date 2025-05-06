@@ -487,3 +487,13 @@ table.table-bordered {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+@keyframes floatHat {
+  0%, 100% {
+    transform: rotate(-20deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-20deg) translateY(-10px);
+  }
+}
+
+

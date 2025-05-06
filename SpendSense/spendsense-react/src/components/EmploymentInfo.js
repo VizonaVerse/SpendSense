@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+
 function EmploymentInfo({ onClick }) {
   const [infoText, setInfoText] = useState("Loading...");
+  const hatPixel = process.env.PUBLIC_URL + '/images/hatPixel.png';
+
 
   useEffect(() => {
     const fetchEmploymentInfo = async () => {
@@ -40,59 +43,74 @@ function EmploymentInfo({ onClick }) {
   }, []);
 
   return (
-    <div style={{
-      maxWidth: '800px',
-      margin: '40px auto',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      backdropFilter: 'blur(8px)',
-      border: '2px solid rgba(255, 255, 255, 0.3)',
-      padding: '2rem',
-      borderRadius: '12px',
-      textAlign: 'center',
-      fontFamily: "'Press Start 2P', cursive",
-      color: '#000',
-      boxShadow: '0 0 20px rgba(0,0,0,0.3)'
-    }}>
+    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+      {/* Hat */}
+      <img
+  src="/images/hatPixel.png"
+  alt="Hat Pixel"
+  style={{
+    position: 'absolute',
+    right: '-250px',     
+    top: '100px',       
+    width: '180px',     
+    height: 'auto',
+    zIndex: 1,
+    animation: 'floatHat 3s ease-in-out infinite'
+  }}
+/>
 
-      <h2 style={{
-        color: '#2c4a7a', 
-        marginBottom: '1.5rem',
-        fontSize: '1.5rem'
+
+      <div style={{
+        maxWidth: '800px',
+        margin: '40px auto',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backdropFilter: 'blur(8px)',
+        border: '2px solid rgba(255, 255, 255, 0.3)',
+        padding: '2rem',
+        borderRadius: '12px',
+        textAlign: 'center',
+        fontFamily: "'Press Start 2P', cursive",
+        color: '#000',
+        boxShadow: '0 0 20px rgba(0,0,0,0.3)'
       }}>
-        Employment Information
-      </h2>
-
-
-      <p style={{
-        fontSize: '0.85rem',
-        lineHeight: '1.8',
-        color: '#2c4a7a',  
-        textAlign: 'justify',
-        whiteSpace: 'pre-wrap'
-      }}>
-        {infoText}
-      </p>
-
-
-      <button
-        onClick={onClick}
-        style={{
-          marginTop: '2rem',
-          padding: '10px 24px',
-          backgroundColor: 'rgba(255,255,255,0.2)',
-          border: '2px solid #2c4a7a',
+        <h2 style={{
           color: '#2c4a7a',
-          fontWeight: 'bold',
-          fontFamily: "'Press Start 2P', cursive",
-          borderRadius: '6px',
-          cursor: 'pointer'
-        }}
-      >
-        Continue to Payslip
-      </button>
+          marginBottom: '1.5rem',
+          fontSize: '1.5rem'
+        }}>
+          Employment Information
+        </h2>
 
+        <p style={{
+          fontSize: '0.85rem',
+          lineHeight: '1.8',
+          color: '#2c4a7a',
+          textAlign: 'justify',
+          whiteSpace: 'pre-wrap'
+        }}>
+          {infoText}
+        </p>
+
+        <button
+          onClick={onClick}
+          style={{
+            marginTop: '2rem',
+            padding: '10px 24px',
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            border: '2px solid #2c4a7a',
+            color: '#2c4a7a',
+            fontWeight: 'bold',
+            fontFamily: "'Press Start 2P', cursive",
+            borderRadius: '6px',
+            cursor: 'pointer'
+          }}
+        >
+          Continue to Payslip
+        </button>
+      </div>
     </div>
   );
+
 }
 
 export default EmploymentInfo;

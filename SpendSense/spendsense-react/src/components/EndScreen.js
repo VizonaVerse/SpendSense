@@ -9,6 +9,7 @@ function EndScreen({ onEndScreen, isVisible }) {
     const [ending, setEnding] = useState("Good");
     const containerRef = useRef(null);
     const statsListRef = useRef([]);
+    
 
     // placehold age generator
     const generateFinalAge = (mean = 83, stdDev = 8) => {

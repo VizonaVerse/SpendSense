@@ -192,6 +192,7 @@ function App() {
   };
 
   const handleGoToPensionInfo = (selectedOption) => {
+    setMoney(money + Savings2);
     const lifeMultiplier = lifeExpectancy - 58;
     let totalMoney = 0;
 
@@ -221,7 +222,6 @@ function App() {
       // setShowStats(false);
       // goToSection("");
     } // else {
-      setMoney(money + Savings2);
       setShowEndShop(true);
       goToSection("endShop");
       addProgress(10);

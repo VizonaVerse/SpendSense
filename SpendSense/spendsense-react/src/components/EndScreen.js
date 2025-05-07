@@ -173,7 +173,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
                 {/* <li ref={addToStatsListRef} className="list-group-item">Savings: ___</li> */}
                 {/* <li ref={addToStatsListRef} className="list-group-item">Debt: ___</li> */}
                 <li ref={addToStatsListRef} className="list-group-item">Total Years Lived: {counterValue}</li>
-                <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: {calculateHappinessScore}</li>
+                <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: {calculateHappinessScore(savings)}</li>
               </ul>
             </div>
             {/* placeholder button*/}

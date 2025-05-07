@@ -12,7 +12,7 @@ function CharacterStatsDisplay({
   const [progress, setProgress] = useState(characterProgress);
   const [lifeExpectancy, setLifeExpectancy] = useState(characterLifeExpectancy);
 
-  // Listen for external updates to money and progress
+  // Listen for external updates to money, progress and life expectancy
   useEffect(() => {
     setMoney(characterMoney);
   }, [characterMoney]);
@@ -20,6 +20,10 @@ function CharacterStatsDisplay({
   useEffect(() => {
     setProgress(characterProgress);
   }, [characterProgress]);
+
+  useEffect(() => {
+    setLifeExpectancy(characterLifeExpectancy);
+  }, [characterLifeExpectancy]);
 
   // Undefined functions to update money and progress
   const addMoney = (amount) => {

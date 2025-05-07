@@ -1,48 +1,47 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 
-function EndScreen({ onEndScreen, isVisible }) {
-    const [showCounter, setShowCounter] = useState(true);
-    const [counterValue, setCounterValue] = useState(75);
-    const counterRef = useRef(null);
-    const timelineRef = useRef(null);
-    const [ending, setEnding] = useState("Good");
-    const containerRef = useRef(null);
-    const statsListRef = useRef([]);
+function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings }) {
+  const [showCounter, setShowCounter] = useState(true);
+  const [counterValue, setCounterValue] = useState(lifeExpectancy);
+  const counterRef = useRef(null);
+  const timelineRef = useRef(null);
+  const [ending, setEnding] = useState("Good");
+  const containerRef = useRef(null);
+  const statsListRef = useRef([]);
 
-    // placehold age generator
-    const generateFinalAge = (mean = 83, stdDev = 8) => {
+  function calculateHappinessScore(savings) {
+    const pieSavings = savings / 100;
+    const LE = Math.abs(parseFloat(lifeExpectancy) - 70) * -50;
+    const S = Math.abs(parseFloat(pieSavings / 100) - 0.2) - 500;
+    const happinessScore = (finalWealth / 1000) + S + LE;
+    return Math.max(0, Math.min(100, happinessScore));
+  }
 
-        let x = mean + stdDev * ((Math.random() * 2) -1);
-        x = Math.round(x);
-        return x;
+  // show counter 
+  useEffect(() => {
+    if (isVisible) {
+      // only show ending after counter animation completes
+      if (showCounter) {
+        // hide ending initially
+        if (containerRef.current) {
+          gsap.set(containerRef.current, { opacity: 0 });
+        }
+      } else {
+        animateEndScreen();
+      }
     }
-    // show counter 
-    useEffect(() => {
-        if (isVisible) {
-            // only show ending after counter animation completes
-            if (showCounter) {
-                // hide ending initially
-                if (containerRef.current) {
-                gsap.set(containerRef.current, { opacity: 0 });
-                }
-            } else {
-                animateEndScreen();
-            }
-        }
-    }, [isVisible, showCounter]);
+  }, [isVisible, showCounter]);
 
-    // start the counter animation
-    const startCounterAnimation = () => {
+  // start the counter animation
+  const startCounterAnimation = () => {
+    const finalAge = lifeExpectancy; // Use lifeExpectancy from props
+    const midpoint = Math.round(66 + (finalAge - 66) * 0.7);
 
-        const finalAge = generateFinalAge();
-        
-        const midpoint = Math.round(75 + (finalAge - 75) * 0.7);
-
-        // Clear any existing animations
-        if (timelineRef.current) {
-        timelineRef.current.kill();
-        }
+    // Clear any existing animations
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+    }
 
     // new timeline
     timelineRef.current = gsap.timeline({
@@ -54,7 +53,7 @@ function EndScreen({ onEndScreen, isVisible }) {
     // part 1/2 animation
     timelineRef.current.to(counterRef.current, {
       innerText: midpoint,
-      duration: 1.4,
+      duration: 1,
       ease: "power1.inOut",
       snap: { innerText: 1 },
       onUpdate: () => {
@@ -65,14 +64,14 @@ function EndScreen({ onEndScreen, isVisible }) {
     // part 2/2 animation
     timelineRef.current.to(counterRef.current, {
       innerText: finalAge,
-      duration: 2,
+      duration: 1.4,
       ease: "power1.out",
       snap: { innerText: 1 },
       onUpdate: () => {
         const currentValue = parseInt(counterRef.current.innerText, 10);
         setCounterValue(currentValue);
-        if(currentValue === finalAge) {
-            counterRef.current.style.color = "red";
+        if (currentValue === finalAge) {
+          counterRef.current.style.color = "red";
         }
       },
       onComplete: () => {
@@ -94,7 +93,7 @@ function EndScreen({ onEndScreen, isVisible }) {
       { opacity: 0.76, y: 40 },
       { opacity: 1, y: 0, duration: 0.5 }
     );
-    
+
     // stats list stagger animation
     if (statsListRef.current.length > 0) {
       gsap.fromTo(
@@ -110,6 +109,7 @@ function EndScreen({ onEndScreen, isVisible }) {
       statsListRef.current.push(el);
     }
   };
+
 
   const getContainerClass = () => {
     switch (ending) {
@@ -147,8 +147,8 @@ function EndScreen({ onEndScreen, isVisible }) {
       {showCounter && isVisible ? (
         <div className=" w-100 d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
           <h1 className="display-1 mb-4" ref={counterRef}>{counterValue}</h1>
-          <button 
-            className="btn btn-outline-light btn-lg" 
+          <button
+            className="btn btn-outline-light btn-lg"
             onClick={startCounterAnimation}
           >
             Finish Story
@@ -161,18 +161,19 @@ function EndScreen({ onEndScreen, isVisible }) {
         >
           {/* Header */}
           <header className="w-100 py-3 bg-dark text-white text-center">
-            <h1>Ending: <strong>{ending}</strong></h1>
+            {/* <h1>Ending: <strong>{ending}</strong></h1> */}
+            <h1>The End!</h1>
           </header>
           {/* Stats */}
           <main className="flex-grow-1 d-flex flex-column justify-content-center align-items-center p-4">
             <div className="card p-4 shadow-lg text-center w-50">
               <h2 className="text-dark mb-3">Your Stats</h2>
               <ul className="list-group">
-                <li ref={addToStatsListRef} className="list-group-item">Total Earnings: ___ </li>
-                <li ref={addToStatsListRef} className="list-group-item">Savings: ___</li>
-                <li ref={addToStatsListRef} className="list-group-item">Debt: ___</li>
+                {/* <li ref={addToStatsListRef} className="list-group-item">Total Earnings: ___ </li> */}
+                {/* <li ref={addToStatsListRef} className="list-group-item">Savings: ___</li> */}
+                {/* <li ref={addToStatsListRef} className="list-group-item">Debt: ___</li> */}
                 <li ref={addToStatsListRef} className="list-group-item">Total Years Lived: {counterValue}</li>
-                <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: ___</li>
+                <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: {calculateHappinessScore}</li>
               </ul>
             </div>
             {/* placeholder button*/}

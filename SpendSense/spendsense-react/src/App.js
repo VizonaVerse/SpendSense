@@ -48,6 +48,7 @@ function App() {
   const [pension2, setPension2] = useState(0);
   const [Savings1, setSavings1] = useState(0);
   const [Savings2, setSavings2] = useState(0);
+  const [budgetSavings, setBudgetSavings] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -152,6 +153,7 @@ function App() {
   };
 
   const handleBudgetComplete = (data) => {
+    setBudgetSavings(data.Savings);
     setBudgetData(data);
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
@@ -395,6 +397,9 @@ function App() {
               <section className="section end-screen-section">
                 <EndScreen
                   isVisible={showEndScreen}
+                  lifeExpectancy={lifeExpectancy}
+                  finalWealth={money}
+                  savings={budgetSavings}
                   onEndScreen={(endingType) => {
                     console.log("Ending selected:", endingType);
                   }}

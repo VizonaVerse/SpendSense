@@ -30,11 +30,6 @@ function Home({ onStart }) {
       tooltipPosition: "right"
     },
     {
-      title: "Falling Coins",
-      description: "These falling coins represent your savings. The more you save, the more coins you'll see!",
-      tooltipPosition: "left"
-    },
-    {
       title: "Tracking Expenses",
       image: "images/tutorial/expenses.png", // Replace with your actual screenshot
       description: "Add your expenses by category and see them visualized in fun ways. The more you save, the more coins you collect!",

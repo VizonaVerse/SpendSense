@@ -132,8 +132,16 @@ histogram[a] > histogram[b] ? a : b
 
   const handleFirstJobSelect = (job) => {
     setSelectedJob(job);
-  };
 
+    const selectedIndex = jobs.findIndex((j) => j.id === job.id);
+    const selectedCard = cardRefs.current[selectedIndex];
+
+    gsap.fromTo(
+      selectedCard,
+      { scale: 1 },
+      { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" }
+    );
+  };
   const handleContinue = () => {
     if (selectedJob) {
       onJobSelect(selectedJob);
@@ -151,7 +159,7 @@ histogram[a] > histogram[b] ? a : b
 
   const handleHoverOut = (element, job) => {
     gsap.to(element, {
-      backgroundColor: selectedJob === job ? "#cce5ff" : "white",
+      backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
       y: 0,
       duration: 0.3,
       ease: "power2.out",
@@ -175,9 +183,13 @@ histogram[a] > histogram[b] ? a : b
                 onMouseLeave={(e) => handleHoverOut(e.currentTarget, job)}
                 style={{
                   cursor: "pointer",
-                  backgroundColor: selectedJob === job ? "#cce5ff" : "white",
-                  transition: "background-color 0.3s ease",
+                  backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
+                  border: selectedJob?.id === job.id ? "3px solid #007bff" : "1px solid #ccc",
+                  boxShadow: selectedJob?.id === job.id ? "0 0 10px #007bff" : "none",
+                  transition: "all 0.3s ease",
+                  position: "relative",
                 }}
+                
               >
                 <h4>{job.title}</h4>
                 <p>
@@ -187,6 +199,29 @@ histogram[a] > histogram[b] ? a : b
                     currency: "GBP",
                   })}
                 </p>
+                {selectedJob?.id === job.id && (
+
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    backgroundColor: "green",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: "24px",
+                    height: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                  }}
+                >
+                  ✓
+                </div>
+              )}
+
               </div>
             </div>
           ))}

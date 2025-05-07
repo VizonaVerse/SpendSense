@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import "nes.css/css/nes.min.css";
-import { gsap } from 'gsap';
 
 
 const Tutorial = ({ 
@@ -23,11 +22,17 @@ const Tutorial = ({
   
   // Effect to highlight a specific element if specified in the current step
   useEffect(() => {
-    if (!isOpen) return;
-    
+    if (!isTutorialOpen) return;
+
     // Cleanup function to restore original styles
     return () => {
-      // Cleanup code here if needed
+      if (overlayRef.current) {
+        overlayRef.current.style.opacity = '';
+      }
+      if (tutorialRef.current) {
+  if (!isTutorialOpen) return null;
+        tutorialRef.current.style.opacity = '';
+      }
     };
   }, [currentStep, isOpen, tutorialSteps]);
   
@@ -50,63 +55,12 @@ const Tutorial = ({
   };
   
   const currentTutorialStep = tutorialSteps[currentStep];
-  
-  const openTutorial = () => {
-    setIsTutorialOpen(true);
-
-    // GSAP Animations
-    if (tutorialRef.current && overlayRef.current) {
-      gsap.timeline()
-        .to(overlayRef.current, {
-          opacity: 0.5,
-          duration: 0.3,
-          ease: 'power1.inOut'
-        })
-        .fromTo(tutorialRef.current,
-          { x: '100%', opacity: 0 },
-          {
-            x: '0%',
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power1.out'
-          },
-          0
-        );
-    }
-  };
-
-  const closeTutorial = () => {
-    if (tutorialRef.current && overlayRef.current) {
-      gsap.timeline()
-        .to(overlayRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power1.inOut'
-        })
-        .to(tutorialRef.current, {
-          x: '100%',
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power1.in',
-          onComplete: () => setIsTutorialOpen(false)
-        }, 0);
-    }
-  };
 
   // Determine the position of the tooltip based on the step config
   let tooltipPosition = currentTutorialStep.tooltipPosition || "center";
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-      {/* Semi-transparent overlay that covers the entire screen */}
-      <div 
-        className="absolute inset-0 pointer-events-auto" 
-        onClick={onClose}
-        style={{ 
-          background: "rgba(0, 0, 0, 0.6)",
-          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)" // Pixelated pattern
-        }} 
-      />
+    <div className="tutorial-overlay">
       
       {/* For center position, we use a full modal */}
       {tooltipPosition === "center" && (
@@ -132,7 +86,7 @@ const Tutorial = ({
                 className="nes-btn is-error" 
                 style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}
               >
-                ×
+                <i className="nes-icon close" />
               </button>
             </div>
             

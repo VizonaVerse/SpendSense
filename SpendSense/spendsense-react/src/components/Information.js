@@ -156,7 +156,7 @@ function Information({ goToSection }) {
         <button
           ref={menuButtonRef}
           id="open-menu-button"
-          class="nes-pointer"
+          class="nes-pointer is-large"
           onClick={handleButtonClick(openNav)}
           style={{
             position: "fixed",

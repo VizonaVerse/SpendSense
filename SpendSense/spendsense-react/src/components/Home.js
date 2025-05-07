@@ -95,11 +95,27 @@ function Home({ onStart }) {
   // Open the tutorial
   const handleOpenTutorial = () => {
     setIsTutorialOpen(true);
+    // Add an overlay across the entire screen
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    overlay.style.zIndex = "1000"; // Ensure it appears above other elements
+    overlay.id = "tutorial-overlay";
+    document.body.appendChild(overlay);
   };
 
   // Close the tutorial
   const handleCloseTutorial = () => {
     setIsTutorialOpen(false);
+    // Remove the overlay from the screen
+    const overlay = document.getElementById("tutorial-overlay");
+    if (overlay) {
+      document.body.removeChild(overlay);
+    }
   };
 
   // Auto-open tutorial based on URL parameter

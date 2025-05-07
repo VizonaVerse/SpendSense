@@ -81,6 +81,19 @@ html, body {
   }
 }
 
+.tutorial-overlay {
+  z-index: 1050;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* User Data Form - Pixel Style */
 .form-section {
   font-family: 'Press Start 2P', monospace; /* Retro pixel font */

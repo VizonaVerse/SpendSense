@@ -4,16 +4,46 @@ import JobSelect from './JobSelect';
 
 function CharacterInfo({ 
   characterImage = "images/sprite_base.png", 
-  selectedJob,
   initialMoney = 1000,
   initialProgress = 60,
   onMoneyChange = null,
-  onProgressChange = null
+  onProgressChange = null,
+  characterData = null
 }) {
   const [money, setMoney] = useState(initialMoney);
   const [progress, setProgress] = useState(initialProgress);
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [currentCharacterImage, setCurrentCharacterImage] = useState(characterImage);
+
+  const jobImageMap = {
+    "Part-Time Tutor": "/images/CharacterSprites/sprite_tutor.png",
+    "Deliveroo Driver": "/images/CharacterSprites/sprite_delivery.png",
+    "McDonalds Employee": "/images/CharacterSprites/sprite_md.png",
+    "Family Business Waiter": "/images/CharacterSprites/sprite_waiter.png",
+    "Doctor": "/images/CharacterSprites/sprite_doctor.png",
+    "Specialist Doctor": "/images/CharacterSprites/sprite_doctor.png",
+    "Construction Worker": "/images/CharacterSprites/sprite_builder.png",
+    "Chef": "/images/CharacterSprites/sprite_chef.png",
+    "Teacher": "/images/CharacterSprites/sprite_teacher.png",
+    "Police Officer": "/images/CharacterSprites/sprite_police.png",
+    "Software Engineer": "/images/CharacterSprites/sprite_engineer.png",
+    "Investor": "/images/CharacterSprites/sprite_investor.png",
+  };
+
+  useEffect(() => {    
+    if (characterData && characterData.title) {
+      
+      if (jobImageMap[characterData.title]) {
+        console.log(`Changing sprite to ${jobImageMap[characterData.title]}`);
+        setCurrentCharacterImage(jobImageMap[characterData.title]);
+      } else {
+        setCurrentCharacterImage(characterImage);
+      }
+    } else {
+      setCurrentCharacterImage(characterImage);
+    }
+  }, [characterData, characterImage]);
   
   // Listen for external updates to money and progress
   useEffect(() => {
@@ -98,7 +128,7 @@ function CharacterInfo({
           onClick={toggleSidebar}
         >
           <img 
-            src={characterImage}
+            src={currentCharacterImage}
             alt="Character"
             style={{
               width: '100%',
@@ -141,14 +171,14 @@ function CharacterInfo({
         }}
       >
         <img 
-          src={characterImage} 
+          src={currentCharacterImage}
           alt="Character" 
           style={{ width: '100%' }} 
         />
-
-        <div>
-          <h3>{ selectedJob }</h3>
+        <div style={{ marginTop: '20px', padding: '40px', fontSize: '18px', fontWeight: 'bold' }}>
+          <p>{characterData?.title || "Unemployed"}</p>
         </div>
+
       </div>
     </>
   );

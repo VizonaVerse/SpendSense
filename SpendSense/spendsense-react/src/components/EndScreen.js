@@ -146,6 +146,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
     <>
       {showCounter && isVisible ? (
         <div className=" w-100 d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
+          <p className="text-secondary mb-5">The average person lives to 75! Have you beaten the average persons score!</p>
           <h1 className="display-1 mb-4" ref={counterRef}>{counterValue}</h1>
           <button
             className="btn btn-outline-light btn-lg"

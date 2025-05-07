@@ -257,7 +257,7 @@ function App() {
               {/* User Data Form Section */}
               <section className="section form-section">
                 <div className="form-wrapper">
-                  <h2 className="text-center">User Data Form</h2>
+                  <h2 className="text-center">Enter your details</h2>
                   <div className="form-content">
                     <UserDataForm onSubmit={handleFormSubmit} onSkip={handleSkipForm} />
                   </div>

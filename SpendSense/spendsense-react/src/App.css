@@ -34,7 +34,7 @@ html, body {
 
 #scroll-container {
   width: 100vw;
-  height: 1000vh;
+  height: 1200vh;
 
   background: url('/public/images/tallbg.png') no-repeat center top;
   background-size: 100% 100%;

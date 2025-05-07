@@ -48,6 +48,7 @@ function App() {
   const [pension2, setPension2] = useState(0);
   const [Savings1, setSavings1] = useState(0);
   const [Savings2, setSavings2] = useState(0);
+  const [finalMoney, setFinalMoney] = useState(0);
   const [budgetSavings, setBudgetSavings] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -235,6 +236,7 @@ function App() {
   };
 
   const handleMoneyChange = (newMoney) => {
+    setFinalMoney(money);
     setMoney(newMoney); // Update money state
   };
 
@@ -398,7 +400,7 @@ function App() {
                 <EndScreen
                   isVisible={showEndScreen}
                   lifeExpectancy={lifeExpectancy}
-                  finalWealth={money}
+                  finalWealth={finalMoney}
                   savings={budgetSavings}
                   onEndScreen={(endingType) => {
                     console.log("Ending selected:", endingType);

@@ -37,43 +37,39 @@ const AboutUs = () => {
         <section className="learn-section">
           <h2 className="learn-heading"> What is SpendSense?</h2>
           <p className="learn-text">
-            <strong>SpendSense</strong> is an interactive web-based game designed to teach young adults how to make smart financial decisions through real-time budgeting and planning scenarios. We believe that learning about money shouldn't be boring — it should be hands-on, visual, and even a little fun.
+            <strong>SpendSense</strong> is an interactive web-based game designed to teach young adults how to make smart financial decisions through real-time budgeting and planning scenarios. Rather than passively learning about taxes, budgeting or pensions, players make real-time decisions and see their outcomes unfold in a simulated financial world.
             <br /><br />
-            The game simulates real-life financial events, such as receiving payslips, managing a monthly budget, planning for retirement, and balancing needs vs. wants. As players make choices, they can instantly see the impact on their character’s savings, health, and long-term financial well-being.
+            From handling payslips and building a budget to planning for long-term goals like retirement, SpendSense allows players to experiment with financial strategies in a safe and visual environment – equipping them with necessary skills to manage their real-world money with confidence.
           </p>
         </section>
   
         <section className="learn-section">
-          <h2 className="learn-heading"> Why We Built It</h2>
+          <h2 className="learn-heading"> Why We Built SpendSense</h2>
           <p className="learn-text">
-            Many young adults leave school without a solid understanding of how taxes, pensions, or budgeting work. We wanted to close that gap by providing an educational experience that doesn’t just explain finance — it immerses players in it.
+            Most young adults enter adulthood without ever being taught how to interpret payslips, plan for pensions and manage personal budgets. This gap can lead to poor long-term financial decisions, increased debt, and missed opportunities for financial stability.
             <br /><br />
-            <strong>SpendSense</strong> was created to:
+            We created <strong>SpendSense</strong> to:
           </p>
           <ul className="learn-text">
             <li>Introduce players to key financial concepts through gameplay</li>
-            <li>Encourage better decision-making with realistic trade-offs</li>
+            <li>Encourage smart decision making by simulating real-life trade-offs</li>
             <li>Provide a safe space to experiment with different money strategies</li>
-            <li>Raise awareness about long-term financial planning (like pensions!)</li>
           </ul>
           <p className="learn-text">
             <br />
-            We hope that by playing, users will leave not just with a high score — but with more confidence to handle real-world finances.
+            We believe that by turning financial education into a game, learners will not only enjoy the process – but also leave better equipped for the real world.
           </p>
         </section>
   
         <section className="learn-section">
-          <h2 className="learn-heading"> Who Made This?</h2>
+          <h2 className="learn-heading"> Who is behind SpendSense?</h2>
           <p className="learn-text">
-            <strong>SpendSense</strong> was developed as part of a Computer Science second year Software Engineering project at the University of Surrey. Built using React and Django, the platform integrates real-world APIs and data to create a responsive, educational experience for players aged 18–25.
-            <br /><br />
-            Special thanks to all contributors, testers, and everyone who gave feedback along the way!
+            <strong>SpendSense</strong> was developed by second-year Computer Science students at the University of Surrey. It combines front-end interactivity (React) with powerful back-end logic (Django) and real-world data integration to deliver a modern, meaningful learning experience for players aged 18–25.
           </p>
         </section>
       </div>
     </div>
   );
-  
 };
 
 export default AboutUs;

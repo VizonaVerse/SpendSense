@@ -35,6 +35,7 @@ function App() {
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
   const [netPay, setNetPay] = useState(null);
+  const [netPay2, setNetPay2] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
   const [processedBudgetData, setProcessedBudgetData] = useState(null);
   const [currentSection, setCurrentSection] = useState("home");
@@ -183,11 +184,31 @@ function App() {
     const savings2 = (netPay2 * (budgetData.Savings / 100) + pension2) * 30;
     setSavings2(savings2);
     setPension2(pension2);
+    setNetPay2(netPay2);
     goToSection("pensionWithdrawal");
     addProgress(10);
   };
 
-  const handleGoToPensionInfo = () => {
+  const handleGoToPensionInfo = (selectedOption) => {
+    const lifeMultiplier = lifeExpectancy - 58;
+    let totalMoney = 0;
+
+    if (selectedPension === "contribution") {
+      if (selectedOption === "Withdraw via Insurance Company") {
+        totalMoney = 1.85 * (Savings1 + Savings2);
+      } else if (selectedOption === "Deposit into a Bank") {
+        totalMoney = (Savings1 + Savings2) * Math.pow(1.03, lifeMultiplier);
+      }
+    } else if (selectedPension === "benefit") {
+      if (selectedOption === "Weekly Taxed Payments") {
+        totalMoney = 0.5 * netPay2 * lifeMultiplier + Savings1 + Savings2;
+      } else if (selectedOption === "Lump Sum Withdrawal") {
+        totalMoney = 18.75 * netPay2 + Savings1 + Savings2;
+      }
+    }
+
+    totalMoney += lifeMultiplier * 11440;
+    setMoney(totalMoney);
     goToSection("pensionInfo");
     addProgress(10);
   };
@@ -340,7 +361,7 @@ function App() {
                 {selectedPension ? (
                   <PensionWithdrawal
                     selectedPension={selectedPension}
-                    onContinue={handleGoToPensionInfo}
+                    onContinue={(selectedOption) => handleGoToPensionInfo(selectedOption)}
                   />
                 ) : (
                   <div className="d-flex justify-content-center align-items-center h-100">

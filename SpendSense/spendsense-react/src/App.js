@@ -153,12 +153,14 @@ function App() {
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
     setMoney(savings1); // Update money state
     addProgress(10);
-    if (Math.abs(savings1 - (0.2 * netPay)) < (0.3 * netPay)) {
-      const newLifeExpectancy = 100 - (Math.abs(savings1 - (0.2 * netPay)) * 150);
+    const numericalSavings = parseFloat(data.Savings) / 100;
+    if (Math.abs(numericalSavings - 0.2) < (0.3)) {
+      const newLifeExpectancy = 100 - (Math.abs(numericalSavings - 0.2) * 150);
       setLifeExpectancy(newLifeExpectancy);
     } else {
       setLifeExpectancy(55);
     }
+    // setLifeExpectancy(numericalSavings - 0.2);
     goToSection("budgetPlanner");
   };
 

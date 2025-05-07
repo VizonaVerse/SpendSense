@@ -2,11 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-
 function JobSelect({ onJobSelect }) {
   const [selectedJob, setSelectedJob] = useState();
   const [jobs, setJobs] = useState([]); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
+  const hasFetchedJobs = useRef(false);
+  const hasFetchedSalaries = useRef(false);
 
   const addToRefs = (el) => {
     if (el && !cardRefs.current.includes(el)) {
@@ -20,64 +21,63 @@ function JobSelect({ onJobSelect }) {
     });
   }, []);
 
-
-  // Fetch jobs from backend API
   useEffect(() => {
-      fetch(`http://localhost:8000/api/job/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': process.env.REACT_APP_API_TOKEN,
-        },
+    // Prevent repeated fetching of jobs
+    if (hasFetchedJobs.current) return;
+
+    fetch(`http://localhost:8000/api/job/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': process.env.REACT_APP_API_TOKEN,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Fetched data:', data);
-  
-          // Ensure `data` is an array before setting it
-          if (Array.isArray(data)) {
+      .then((data) => {
+        console.log('Fetched data:', data);
 
-            data = data.map((job) => ({
-              ...job,
-              salary: 0,
-            }));
-            // Filter jobs to meet the criteria
-            const stateJobs = data.filter(
-              (job) => job.pension === "state" && job.max_salary < 20000
-            );
-            const contributionJobs = data.filter(
-              (job) => job.pension === "contribution" && job.max_salary < 20000
-            );
-    
-            // Randomly select 2 jobs with "state" pension
-            const randomStateJobs = stateJobs
-              .sort(() => 0.5 - Math.random())
-              .slice(0, 2);
-    
-            // Randomly select 1 job with "contribution" pension
-            const randomContributionJob = contributionJobs
-              .sort(() => 0.5 - Math.random())
-              .slice(0, 1);
-    
-            // Combine the selected jobs
-            setJobs([...randomStateJobs, ...randomContributionJob]);
-            console.log(randomStateJobs);
-            console.log(randomContributionJob);
-    
-          } else {
-            console.error('Expected an array but got:', data);
-          }
-          })
-        .catch(error => console.error('Error fetching data:', error));
-    }, []);
+        if (Array.isArray(data)) {
+          data = data.map((job) => ({
+            ...job,
+            salary: job.min_salary +job.max_salary / 2,
+          }));
 
-  // Fetch salary data from Adzuna API for each job
+          const stateJobs = data.filter(
+            (job) => job.pension === 'state' && job.max_salary < 20000
+          );
+          const contributionJobs = data.filter(
+            (job) => job.pension === 'contribution' && job.max_salary < 20000
+          );
+
+          const randomStateJobs = stateJobs
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 2);
+          const randomContributionJob = contributionJobs
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 1);
+
+          setJobs([...randomStateJobs, ...randomContributionJob]);
+          console.log(randomStateJobs);
+          console.log(randomContributionJob);
+        } else {
+          console.error('Expected an array but got:', data);
+        }
+
+        // Mark jobs as fetched
+        hasFetchedJobs.current = true;
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []); // Dependency array ensures this runs only once
+
   useEffect(() => {
+    // Prevent repeated fetching of salary data
+    if (hasFetchedSalaries.current || jobs.length === 0) return;
+
     async function fetchSalaryData(job) {
       const url = `http://api.adzuna.com/v1/api/jobs/gb/histogram?app_id=edcbb643&app_key=06103ad4ff1dcb50632c176aada6968b&location0=UK&location1=London&what=${encodeURIComponent(
         job.api_title
@@ -87,22 +87,21 @@ function JobSelect({ onJobSelect }) {
         const response = await fetch(url);
         const data = await response.json();
 
-        // Extract the salary with the highest frequency
         const histogram = data.histogram;
         const highestFrequencySalary = Object.keys(histogram).reduce((a, b) =>
-histogram[a] > histogram[b] ? a : b
+          histogram[a] > histogram[b] ? a : b
         );
 
-        // Update the salary for the job
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
             j.title === job.title
               ? {
                   ...j,
                   salary:
-                    highestFrequencySalary > j.min_salary && highestFrequencySalary < j.max_salary
+                    highestFrequencySalary > j.min_salary &&
+                    highestFrequencySalary < j.max_salary
                       ? highestFrequencySalary
-                      : (j.min_salary + j.max_salary) / 2, // Set to midpoint if out of range
+                      : (j.min_salary + j.max_salary) / 2,
                 }
               : j
           )
@@ -110,7 +109,6 @@ histogram[a] > histogram[b] ? a : b
       } catch (error) {
         console.error(`Failed to fetch salary data for ${job.title}:`, error);
 
-        // If API fails, set salary to midpoint
         setJobs((prevJobs) =>
           prevJobs.map((j) =>
             j.title === job.title
@@ -128,7 +126,10 @@ histogram[a] > histogram[b] ? a : b
     jobs.forEach((job) => {
       fetchSalaryData(job);
     });
-  }, [jobs]);
+
+    // Mark salaries as fetched
+    hasFetchedSalaries.current = true;
+  }, [jobs]); // Only runs when `jobs` changes
 
   const handleFirstJobSelect = (job) => {
     setSelectedJob(job);

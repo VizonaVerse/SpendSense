@@ -192,11 +192,17 @@ function App() {
     addProgress(10);
   };
 
-  const handleGoToEndShop = () => {
-    // setShowStats(false);
-    setShowEndShop(true);
-    goToSection("endShop");
-    addProgress(10);
+  const handleBadEndOrEndShop = () => {
+    if (lifeExpectancy < 58){
+      // Meant to show the bad ending screen
+      // setShowStats(false);
+      // goToSection("");
+    } // else {
+      setMoney(money + Savings2);
+      setShowEndShop(true);
+      goToSection("endShop");
+      addProgress(10);
+    // }
   };
 
   const handleShowEndScreen = () => {
@@ -251,7 +257,7 @@ function App() {
               {/* User Data Form Section */}
               <section className="section form-section">
                 <div className="form-wrapper">
-                  <h2 className="text-center">User Data Form</h2>
+                  <h2 className="text-center">Enter your details</h2>
                   <div className="form-content">
                     <UserDataForm onSubmit={handleFormSubmit} onSkip={handleSkipForm} />
                   </div>
@@ -345,7 +351,7 @@ function App() {
 
               {/* Pension Info Section */}
               <section className="section pension-info-section">
-                <PensionInfo onClick={handleGoToEndShop} />
+                <PensionInfo onClick={handleBadEndOrEndShop} />
               </section>
 
               {/* End Shop Section */}

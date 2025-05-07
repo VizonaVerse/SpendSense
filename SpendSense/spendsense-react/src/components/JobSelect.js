@@ -230,14 +230,15 @@ histogram[a] > histogram[b] ? a : b
       {/* Continue Button */}
       {selectedJob && (
         <div className="mt-4">
-          <button
-            onClick={handleContinue}
-            onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
-            onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
-            className="btn btn-primary"
-          >
-            Continue
-          </button>
+<button
+  onClick={handleContinue}
+  onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
+  onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
+  className="pixel-button"
+>
+  Continue
+</button>
+
         </div>
       )}
     </div>

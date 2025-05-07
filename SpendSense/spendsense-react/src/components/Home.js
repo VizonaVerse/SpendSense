@@ -13,13 +13,14 @@ function Home({ onStart }) {
   const tutorialSteps = [
     {
       title: "Welcome to SpendSense!",
-      image: "public/images/Home.png", // Replace with your actual screenshot
+      image: "images/tutorial/welcome.png", // Replace with your actual screenshot
       description: "SpendSense helps you track your spending habits and save money through fun gameplay. Let's learn how to use it!",
       tooltipPosition: "center"
     },
     {
-      title: "Menu Button",
-      description: "This is the Menu Button. ",
+      title: "Game Logo",
+      description: "This is the SpendSense logo. Coins will rain down as you save more money!",
+      highlightSelector: "img[alt='SpendSense Logo']",
       tooltipPosition: "bottom"
     },
     {
@@ -29,20 +30,25 @@ function Home({ onStart }) {
       tooltipPosition: "right"
     },
     {
+      title: "Falling Coins",
+      description: "These falling coins represent your savings. The more you save, the more coins you'll see!",
+      tooltipPosition: "left"
+    },
+    {
       title: "Tracking Expenses",
-      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      image: "images/tutorial/expenses.png", // Replace with your actual screenshot
       description: "Add your expenses by category and see them visualized in fun ways. The more you save, the more coins you collect!",
       tooltipPosition: "center"
     },
     {
       title: "Setting Goals",
-      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      image: "images/tutorial/goals.png", // Replace with your actual screenshot
       description: "Create savings goals and watch your progress. Each milestone unlocks new achievements and power-ups!",
       tooltipPosition: "center"
     },
     {
       title: "Ready to Play?",
-      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      image: "images/tutorial/ready.png", // Replace with your actual screenshot
       description: "Now you're ready to start your financial journey with SpendSense! Click 'Finish' to close this tutorial and begin.",
       tooltipPosition: "center"
     }
@@ -100,11 +106,10 @@ function Home({ onStart }) {
   const handleCloseTutorial = () => {
     setIsTutorialOpen(false);
   };
+
   // Auto-open tutorial based on URL parameter
   useEffect(() => {
-    if (window.location.search.includes('showTutorial=true')) {
-      setIsTutorialOpen(true);
-    }
+    
   }, []);
 
   return (
@@ -129,39 +134,35 @@ function Home({ onStart }) {
         />
       ))}
       
-      {/* Main content */}
-        <div className="section-content text-center relative z-10">
-          <div>
-            <img
-          src="images/spendsense_logo.gif"
-          alt="SpendSense Logo"
-          style={{ height: "25vmin", zIndex: 100, position: "relative", marginBottom: "0px" }}
-            />
-          </div>
-          <div>
-            <button
-          onClick={onStart}
-          className="nes-btn is-success nes-pointer"
-          style={{ display: "block", margin: "10px auto", animation: "pulse 2s infinite" }}
-            >
-          Start Game
-            </button>
-          </div>
-          
-          <div>
-            <button 
-          onClick={handleOpenTutorial}
-          className="nes-btn is-primary nes-pointer"
-          style={{ marginTop: "20px" }}
-            >
-          Tutorial
-            </button>
-          </div>
-
-         
+      {/* Main content with higher z-index to appear above the rain */}
+      <div className="section-content text-center relative z-10">
+        <div>
+          <img
+            src="images/spendsense_logo.gif"
+            alt="SpendSense Logo"
+            style={{ height: "25vmin", zIndex: 100, position: "relative", marginBottom: "20px" }}
+          />
         </div>
+        <div>
+          <button
+            onClick={onStart}
+            className="nes-btn is-primary nes-pointer"
+            style={{ display: "block", margin: "25px auto", animation: "pulse 2s infinite" }}
+          >
+            Start Game
+          </button>
+          <button
+            onClick={handleOpenTutorial}
+            className="nes-btn is-success nes-pointer"
+            style={{ display: "block", margin: "10px auto" }}
+          >
+            Tutorial
+          </button>
+        </div>
+        
+      </div>
 
-        {/* Interactive Tutorial Component */}
+      {/* Interactive Tutorial Component with NES.css styling */}
       <Tutorial 
         isOpen={isTutorialOpen} 
         onClose={handleCloseTutorial}

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import "nes.css/css/nes.min.css";
 
-// Tutorial component with interactive element highlighting
 const Tutorial = ({ 
   isOpen, 
   onClose, 
   tutorialSteps,
-  // Optional callback for when user completes the tutorial
   onComplete = () => {}
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -32,11 +30,14 @@ const Tutorial = ({
         // Save original styles
         const originalZIndex = element.style.zIndex || '';
         const originalPosition = element.style.position || '';
-        const originalBoxShadow = element.style.boxShadow || '';
+        const originalOutline = element.style.outline || '';
+        const originalFilter = element.style.filter || '';
         
-        // Apply highlight styles
+        // Apply highlight styles with NES.css inspired pixelated outline
         element.style.position = 'relative';
         element.style.zIndex = '999';
+        element.style.outline = '4px solid #fff'; // White pixel outline
+        element.style.filter = 'drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #fd5)'; // Glowing effect
         
         // Save element reference for cleanup
         setHighlightElement({
@@ -44,7 +45,8 @@ const Tutorial = ({
           originalStyles: {
             zIndex: originalZIndex,
             position: originalPosition,
-            boxShadow: originalBoxShadow
+            outline: originalOutline,
+            filter: originalFilter
           }
         });
       }
@@ -68,7 +70,8 @@ const Tutorial = ({
       const { element, originalStyles } = highlightElement;
       element.style.zIndex = originalStyles.zIndex;
       element.style.position = originalStyles.position;
-      element.style.boxShadow = originalStyles.boxShadow;
+      element.style.outline = originalStyles.outline;
+      element.style.filter = originalStyles.filter;
       setHighlightElement(null);
     }
   };
@@ -95,89 +98,91 @@ const Tutorial = ({
   
   // Determine the position of the tooltip based on the step config
   let tooltipPosition = currentTutorialStep.tooltipPosition || "center";
-  let tooltipClass = "fixed bg-gray-900 border-2 border-yellow-400 rounded-lg p-4 max-w-md shadow-lg";
-  
-  switch (tooltipPosition) {
-    case "top":
-      tooltipClass += " bottom-3/4 left-1/2 transform -translate-x-1/2";
-      break;
-    case "bottom":
-      tooltipClass += " top-3/4 left-1/2 transform -translate-x-1/2";
-      break;
-    case "left":
-      tooltipClass += " right-3/4 top-1/2 transform -translate-y-1/2";
-      break;
-    case "right":
-      tooltipClass += " left-3/4 top-1/2 transform -translate-y-1/2";
-      break;
-    default: // center or any other value
-      tooltipClass = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-      break;
-  }
   
   // For center position, we use a full modal
   if (tooltipPosition === "center") {
     return (
-      <div className={tooltipClass}>
-        <div className="bg-gray-900 border-4 border-yellow-400 rounded-lg p-6 max-w-2xl w-full mx-4 relative ">
-          {/* Close button */}
-          <button 
-            onClick={onClose}
-          >
-            <X size={20} />
-          </button>
+      <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0, 0, 0, 0.7)" }}>
+        <div className="nes-dialog" id="tutorial-dialog" style={{ 
+          maxWidth: "650px", 
+          background: "#212529", 
+          color: "#fff",
+          border: "4px solid #fff",
+          padding: "1rem",
+          position: "relative",
+          width: "90%"
+        }}>
+          {/* Dialog header with title */}
+          <div className="title" style={{ 
+            borderBottom: "4px solid #fff", 
+            marginBottom: "1rem", 
+            paddingBottom: "0.5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}>
+            <h2 style={{ margin: 0, color: "#fff" }}>{currentTutorialStep.title}</h2>
+            <button 
+              onClick={onClose}
+              className="nes-btn is-error" 
+              style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}
+            >
+              ×
+            </button>
+          </div>
           
           {/* Step indicator */}
-          <div className="text-center mb-2 text-white">
-            <span className="px-3 py-1 bg-gray-700 rounded-full text-sm">
-              Step {currentStep + 1} of {tutorialSteps.length}
+          <div style={{ textAlign: "center", marginBottom: "0.75rem" }}>
+            <span className="nes-badge">
+              <span className="is-primary">Step {currentStep + 1} of {tutorialSteps.length}</span>
             </span>
           </div>
           
-          {/* Title */}
-          <h2 className="text-2xl font-bold text-center mb-4 text-yellow-400">
-            {currentTutorialStep.title}
-          </h2>
-          
           {/* Screenshot */}
           {currentTutorialStep.image && (
-            <div className="flex justify-center mb-4">
-              <div className="border-2 border-gray-600 rounded-md overflow-hidden">
-                <img 
-                  src={currentTutorialStep.image} 
-                  alt={`Tutorial step ${currentStep + 1}`}
-                  className="max-h-64"
-                />
-              </div>
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "center", 
+              marginBottom: "1rem",
+              border: "4px solid #fff",
+              padding: "4px",
+              background: "#000"
+            }}>
+              <img 
+                src={currentTutorialStep.image} 
+                alt={`Tutorial step ${currentStep + 1}`}
+                style={{ maxHeight: "260px", maxWidth: "100%" }}
+              />
             </div>
           )}
           
           {/* Description */}
-          <div className="text-white mb-6 text-center px-4">
-            {currentTutorialStep.description}
+          <div style={{ 
+            marginBottom: "1.5rem", 
+            textAlign: "center", 
+            padding: "0 1rem",
+            minHeight: "60px"
+          }}>
+            <p className="nes-text">{currentTutorialStep.description}</p>
           </div>
           
-          {/* Navigation buttons */}
-          <div className="flex justify-between">
+          {/* Navigation buttons with NES.css styling */}
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className={`flex items-center px-4 py-2 rounded ${
-                currentStep === 0 
-                  ? "bg-gray-600 text-gray-400 cursor-not-allowed" 
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }`}
+              className={`nes-btn ${currentStep === 0 ? "is-disabled" : ""}`}
+              style={{ minWidth: "100px" }}
             >
-              <ChevronLeft size={20} className="mr-1" />
-              Previous
+              ◄ Prev
             </button>
             
             <button
               onClick={handleNext}
-              className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+              className="nes-btn is-primary"
+              style={{ minWidth: "100px" }}
             >
-              {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next"}
-              {currentStep < tutorialSteps.length - 1 && <ChevronRight size={20} className="ml-1" />}
+              {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next ►"}
             </button>
           </div>
         </div>
@@ -185,53 +190,105 @@ const Tutorial = ({
     );
   } else {
     // For positioned tooltips (when highlighting elements)
+    // Create positioning based on tooltipPosition
+    let tooltipStyle = {
+      position: "fixed",
+      zIndex: 1000,
+      maxWidth: "300px",
+      background: "#212529",
+      color: "#fff",
+      border: "4px solid #fff",
+      padding: "1rem",
+      boxShadow: "4px 4px 0 #000"
+    };
+    
+    // Position the tooltip
+    switch (tooltipPosition) {
+      case "top":
+        tooltipStyle = {
+          ...tooltipStyle,
+          bottom: "75%",
+          left: "50%",
+          transform: "translateX(-50%)"
+        };
+        break;
+      case "bottom":
+        tooltipStyle = {
+          ...tooltipStyle,
+          top: "75%",
+          left: "50%",
+          transform: "translateX(-50%)"
+        };
+        break;
+      case "left":
+        tooltipStyle = {
+          ...tooltipStyle,
+          right: "75%",
+          top: "50%",
+          transform: "translateY(-50%)"
+        };
+        break;
+      case "right":
+        tooltipStyle = {
+          ...tooltipStyle,
+          left: "75%",
+          top: "50%",
+          transform: "translateY(-50%)"
+        };
+        break;
+      default:
+        tooltipStyle = {
+          ...tooltipStyle,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        };
+    }
+    
     return (
       <div className="fixed inset-0 z-40 pointer-events-none">
         {/* Semi-transparent overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-30 pointer-events-auto" onClick={onClose} />
+        <div 
+          className="absolute inset-0 pointer-events-auto" 
+          onClick={onClose}
+          style={{ 
+            background: "rgba(0, 0, 0, 0.5)",
+            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)" // Pixelated pattern
+          }} 
+        />
         
-        {/* Tooltip */}
-        <div className={tooltipClass + " z-50 pointer-events-auto"}>
-          {/* Title */}
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg font-bold text-yellow-400">
-              {currentTutorialStep.title}
-            </h3>
-            <button 
-              onClick={onClose}
-              className="p-1 bg-red-500 rounded-full hover:bg-red-600 text-white"
-            >
-              <X size={16} />
-            </button>
-          </div>
+        {/* NES.css styled tooltip */}
+        <div 
+          className="nes-container is-dark with-title pointer-events-auto"
+          style={tooltipStyle}
+        >
+          <p className="title" style={{ background: "#212529" }}>{currentTutorialStep.title}</p>
           
           {/* Description */}
-          <div className="text-white text-sm mb-3">
-            {currentTutorialStep.description}
+          <div style={{ marginBottom: "1rem" }}>
+            <p className="nes-text">{currentTutorialStep.description}</p>
           </div>
           
-          {/* Step indicator */}
-          <div className="flex justify-between items-center text-xs text-gray-300">
-            <span>Step {currentStep + 1} of {tutorialSteps.length}</span>
+          {/* Step indicator and navigation */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span className="nes-text is-disabled">Step {currentStep + 1}/{tutorialSteps.length}</span>
             
-            <div className="flex space-x-2">
+            <div>
               <button
                 onClick={handlePrev}
                 disabled={currentStep === 0}
-                className={`p-1 rounded ${
-                  currentStep === 0 
-                    ? "text-gray-500 cursor-not-allowed" 
-                    : "text-blue-400 hover:text-blue-300"
-                }`}
+                className={`nes-btn is-small ${currentStep === 0 ? "is-disabled" : ""}`}
+                style={{ marginRight: "8px", fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
               >
-                <ChevronLeft size={16} />
+                ◄
               </button>
               
               <button
                 onClick={handleNext}
-                className="p-1 text-green-400 hover:text-green-300 rounded"
+                className="nes-btn is-primary is-small"
+                style={{ fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
               >
-                {currentStep === tutorialSteps.length - 1 ? "Finish" : <ChevronRight size={16} />}
+                {currentStep === tutorialSteps.length - 1 ? "✓" : "►"}
               </button>
             </div>
           </div>

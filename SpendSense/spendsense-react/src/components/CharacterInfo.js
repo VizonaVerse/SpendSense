@@ -4,6 +4,7 @@ import JobSelect from './JobSelect';
 
 function CharacterInfo({ 
   characterImage = "images/sprite_base.png", 
+  selectedJob,
   initialMoney = 1000,
   initialProgress = 60,
   onMoneyChange = null,
@@ -13,7 +14,6 @@ function CharacterInfo({
   const [progress, setProgress] = useState(initialProgress);
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
-  const [selectedJob, setSelectedJob] = useState(null);
   
   // Listen for external updates to money and progress
   useEffect(() => {
@@ -147,7 +147,7 @@ function CharacterInfo({
         />
 
         <div>
-          <h3>{selectedJob}</h3>
+          <h3>{ selectedJob }</h3>
         </div>
       </div>
     </>

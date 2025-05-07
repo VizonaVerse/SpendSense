@@ -1,10 +1,52 @@
 import React, { useState, useEffect } from "react";
 import "nes.css/css/nes.min.css";
 import "../App.css";
+import Tutorial from "./Tutorial"; 
 
 function Home({ onStart }) {
   // State to store our raining GIFs
   const [raindrops, setRaindrops] = useState([]);
+  // State to control tutorial visibility
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  // Tutorial steps data with element highlighting
+  const tutorialSteps = [
+    {
+      title: "Welcome to SpendSense!",
+      image: "public/images/Home.png", // Replace with your actual screenshot
+      description: "SpendSense helps you track your spending habits and save money through fun gameplay. Let's learn how to use it!",
+      tooltipPosition: "center"
+    },
+    {
+      title: "Menu Button",
+      description: "This is the Menu Button. ",
+      tooltipPosition: "bottom"
+    },
+    {
+      title: "Start Game Button",
+      description: "Click this button to begin playing and start managing your finances.",
+      highlightSelector: "button.nes-btn.is-primary",
+      tooltipPosition: "right"
+    },
+    {
+      title: "Tracking Expenses",
+      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      description: "Add your expenses by category and see them visualized in fun ways. The more you save, the more coins you collect!",
+      tooltipPosition: "center"
+    },
+    {
+      title: "Setting Goals",
+      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      description: "Create savings goals and watch your progress. Each milestone unlocks new achievements and power-ups!",
+      tooltipPosition: "center"
+    },
+    {
+      title: "Ready to Play?",
+      image: "/api/placeholder/600/400", // Replace with your actual screenshot
+      description: "Now you're ready to start your financial journey with SpendSense! Click 'Finish' to close this tutorial and begin.",
+      tooltipPosition: "center"
+    }
+  ];
 
   // Effect to create and manage the raining GIFs
   useEffect(() => {
@@ -49,6 +91,22 @@ function Home({ onStart }) {
     return () => clearInterval(rainInterval);
   }, []);
 
+  // Open the tutorial
+  const handleOpenTutorial = () => {
+    setIsTutorialOpen(true);
+  };
+
+  // Close the tutorial
+  const handleCloseTutorial = () => {
+    setIsTutorialOpen(false);
+  };
+  // Auto-open tutorial based on URL parameter
+  useEffect(() => {
+    if (window.location.search.includes('showTutorial=true')) {
+      setIsTutorialOpen(true);
+    }
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 relative overflow-hidden">
       {/* Rain effect - the GIFs falling from the sky */}
@@ -71,26 +129,44 @@ function Home({ onStart }) {
         />
       ))}
       
-      {/* Main content with higher z-index to appear above the rain */}
-      <div className="section-content text-center relative z-10">
-        <div>
-          <img
-            src="images/spendsense_logo.gif"
-            alt="SpendSense Logo"
-            style={{ height: "25vmin", zIndex: 100, position: "relative", marginBottom: "20px" }}
-          />
-        </div>
-        <div>
-          <button
-            onClick={onStart}
-            className="nes-btn is-primary nes-pointer"
-            style={{ display: "block", margin: "10px auto", animation: "pulse 2s infinite" }}
-          >
-            Start Game
-          </button>
+      {/* Main content */}
+        <div className="section-content text-center relative z-10">
+          <div>
+            <img
+          src="images/spendsense_logo.gif"
+          alt="SpendSense Logo"
+          style={{ height: "25vmin", zIndex: 100, position: "relative", marginBottom: "0px" }}
+            />
+          </div>
+          <div>
+            <button
+          onClick={onStart}
+          className="nes-btn is-success nes-pointer"
+          style={{ display: "block", margin: "10px auto", animation: "pulse 2s infinite" }}
+            >
+          Start Game
+            </button>
+          </div>
           
+          <div>
+            <button 
+          onClick={handleOpenTutorial}
+          className="nes-btn is-primary nes-pointer"
+          style={{ marginTop: "20px" }}
+            >
+          Tutorial
+            </button>
+          </div>
+
+         
         </div>
-      </div>
+
+        {/* Interactive Tutorial Component */}
+      <Tutorial 
+        isOpen={isTutorialOpen} 
+        onClose={handleCloseTutorial}
+        tutorialSteps={tutorialSteps} 
+      />
     </div>
   );
 }

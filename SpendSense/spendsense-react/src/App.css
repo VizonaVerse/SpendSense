@@ -33,11 +33,11 @@ html, body {
 }
 
 #scroll-container {
-  width: 100vmin;
+  width: 100vw;
   height: 1300vmin;
 
   background: url('/public/images/tallbg.png') ;
-  background-size: 100% 100%;
+  background-size: 1000% 100%;
 }
 
 
@@ -67,6 +67,19 @@ html, body {
   font-size: 1.2rem;
   padding: 10px 20px;
 } */
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
 
 /* User Data Form - Pixel Style */
 .form-section {

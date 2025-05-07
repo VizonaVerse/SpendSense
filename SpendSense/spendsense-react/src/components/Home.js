@@ -142,14 +142,14 @@ function Home({ onStart }) {
           <button
             onClick={onStart}
             className="nes-btn is-primary nes-pointer"
-            style={{ display: "block", margin: "25px auto", animation: "pulse 2s infinite" }}
+            style={{ display: "block", margin: "25px auto", animation: "pulse 2s infinite", zIndex: 100 }}
           >
             Start Game
           </button>
           <button
             onClick={handleOpenTutorial}
             className="nes-btn is-success nes-pointer"
-            style={{ display: "block", margin: "10px auto" }}
+            style={{ display: "block", margin: "10px auto", zIndex: 100 }}
           >
             Tutorial
           </button>

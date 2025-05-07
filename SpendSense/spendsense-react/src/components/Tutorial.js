@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "nes.css/css/nes.min.css";
+import { gsap } from 'gsap';
+
 
 const Tutorial = ({ 
   isOpen, 
@@ -8,7 +10,9 @@ const Tutorial = ({
   onComplete = () => {}
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [highlightElement, setHighlightElement] = useState(null);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const tutorialRef = useRef(null);
+  const overlayRef = useRef(null);
   
   // Reset to first step when tutorial is opened
   useEffect(() => {
@@ -21,60 +25,11 @@ const Tutorial = ({
   useEffect(() => {
     if (!isOpen) return;
     
-    const currentTutorialStep = tutorialSteps[currentStep];
-    
-    // If this step has a selector to highlight
-    if (currentTutorialStep.highlightSelector) {
-      const element = document.querySelector(currentTutorialStep.highlightSelector);
-      if (element) {
-        // Save original styles
-        const originalZIndex = element.style.zIndex || '';
-        const originalPosition = element.style.position || '';
-        const originalOutline = element.style.outline || '';
-        const originalFilter = element.style.filter || '';
-        
-        // Apply highlight styles with NES.css inspired pixelated outline
-        element.style.position = 'relative';
-        element.style.zIndex = '999';
-        element.style.outline = '4px solid #fff'; // White pixel outline
-        element.style.filter = 'drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #fd5)'; // Glowing effect
-        
-        // Save element reference for cleanup
-        setHighlightElement({
-          element,
-          originalStyles: {
-            zIndex: originalZIndex,
-            position: originalPosition,
-            outline: originalOutline,
-            filter: originalFilter
-          }
-        });
-      }
-    } else {
-      // Clear any existing highlight
-      if (highlightElement) {
-        resetHighlightedElement();
-      }
-    }
-    
     // Cleanup function to restore original styles
     return () => {
-      if (highlightElement) {
-        resetHighlightedElement();
-      }
+      // Cleanup code here if needed
     };
   }, [currentStep, isOpen, tutorialSteps]);
-  
-  const resetHighlightedElement = () => {
-    if (highlightElement) {
-      const { element, originalStyles } = highlightElement;
-      element.style.zIndex = originalStyles.zIndex;
-      element.style.position = originalStyles.position;
-      element.style.outline = originalStyles.outline;
-      element.style.filter = originalStyles.filter;
-      setHighlightElement(null);
-    }
-  };
   
   if (!isOpen) return null;
   
@@ -96,206 +51,264 @@ const Tutorial = ({
   
   const currentTutorialStep = tutorialSteps[currentStep];
   
+  const openTutorial = () => {
+    setIsTutorialOpen(true);
+
+    // GSAP Animations
+    if (tutorialRef.current && overlayRef.current) {
+      gsap.timeline()
+        .to(overlayRef.current, {
+          opacity: 0.5,
+          duration: 0.3,
+          ease: 'power1.inOut'
+        })
+        .fromTo(tutorialRef.current,
+          { x: '100%', opacity: 0 },
+          {
+            x: '0%',
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power1.out'
+          },
+          0
+        );
+    }
+  };
+
+  const closeTutorial = () => {
+    if (tutorialRef.current && overlayRef.current) {
+      gsap.timeline()
+        .to(overlayRef.current, {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power1.inOut'
+        })
+        .to(tutorialRef.current, {
+          x: '100%',
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power1.in',
+          onComplete: () => setIsTutorialOpen(false)
+        }, 0);
+    }
+  };
+
   // Determine the position of the tooltip based on the step config
   let tooltipPosition = currentTutorialStep.tooltipPosition || "center";
   
-  // For center position, we use a full modal
-  if (tooltipPosition === "center") {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0, 0, 0, 0.7)" }}>
-        <div className="nes-dialog" id="tutorial-dialog" style={{ 
-          maxWidth: "650px", 
-          background: "#212529", 
-          color: "#fff",
-          border: "4px solid #fff",
-          padding: "1rem",
-          position: "relative",
-          width: "90%"
-        }}>
-          {/* Dialog header with title */}
-          <div className="title" style={{ 
-            borderBottom: "4px solid #fff", 
-            marginBottom: "1rem", 
-            paddingBottom: "0.5rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+      {/* Semi-transparent overlay that covers the entire screen */}
+      <div 
+        className="absolute inset-0 pointer-events-auto" 
+        onClick={onClose}
+        style={{ 
+          background: "rgba(0, 0, 0, 0.6)",
+          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)" // Pixelated pattern
+        }} 
+      />
+      
+      {/* For center position, we use a full modal */}
+      {tooltipPosition === "center" && (
+        <div className="pointer-events-auto" style={{ position: "relative", width: "90%", maxWidth: "650px" }}>
+          <div className="nes-dialog" style={{ 
+            background: "#212529", 
+            color: "#fff",
+            border: "4px solid #fff",
+            padding: "1rem",
+            width: "100%"
           }}>
-            <h2 style={{ margin: 0, color: "#fff" }}>{currentTutorialStep.title}</h2>
-            <button 
-              onClick={onClose}
-              className="nes-btn is-error" 
-              style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}
-            >
-              ×
-            </button>
-          </div>
-          
-          {/* Step indicator */}
-          <div style={{ textAlign: "center", marginBottom: "0.75rem" }}>
-            <span className="nes-badge">
-              <span className="is-primary">Step {currentStep + 1} of {tutorialSteps.length}</span>
-            </span>
-          </div>
-          
-          {/* Screenshot */}
-          {currentTutorialStep.image && (
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "center", 
-              marginBottom: "1rem",
-              border: "4px solid #fff",
-              padding: "4px",
-              background: "#000"
+            <div className="title" style={{ 
+              borderBottom: "4px solid #fff", 
+              marginBottom: "1rem", 
+              paddingBottom: "0.5rem",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
             }}>
-              <img 
-                src={currentTutorialStep.image} 
-                alt={`Tutorial step ${currentStep + 1}`}
-                style={{ maxHeight: "260px", maxWidth: "100%" }}
-              />
+              <h2 style={{ margin: 0, color: "#fff" }}>{currentTutorialStep.title}</h2>
+              <button 
+                onClick={onClose}
+                className="nes-btn is-error" 
+                style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}
+              >
+                ×
+              </button>
             </div>
-          )}
-          
-          {/* Description */}
-          <div style={{ 
-            marginBottom: "1.5rem", 
-            textAlign: "center", 
-            padding: "0 1rem",
-            minHeight: "60px"
-          }}>
-            <p className="nes-text">{currentTutorialStep.description}</p>
-          </div>
-          
-          {/* Navigation buttons with NES.css styling */}
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <button
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              className={`nes-btn ${currentStep === 0 ? "is-disabled" : ""}`}
-              style={{ minWidth: "100px" }}
-            >
-              ◄ Prev
-            </button>
             
-            <button
-              onClick={handleNext}
-              className="nes-btn is-primary"
-              style={{ minWidth: "100px" }}
-            >
-              {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next ►"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  } else {
-    // For positioned tooltips (when highlighting elements)
-    // Create positioning based on tooltipPosition
-    let tooltipStyle = {
-      position: "fixed",
-      zIndex: 1000,
-      maxWidth: "300px",
-      background: "#212529",
-      color: "#fff",
-      border: "4px solid #fff",
-      padding: "1rem",
-      boxShadow: "4px 4px 0 #000"
-    };
-    
-    // Position the tooltip
-    switch (tooltipPosition) {
-      case "top":
-        tooltipStyle = {
-          ...tooltipStyle,
-          bottom: "75%",
-          left: "50%",
-          transform: "translateX(-50%)"
-        };
-        break;
-      case "bottom":
-        tooltipStyle = {
-          ...tooltipStyle,
-          top: "75%",
-          left: "50%",
-          transform: "translateX(-50%)"
-        };
-        break;
-      case "left":
-        tooltipStyle = {
-          ...tooltipStyle,
-          right: "75%",
-          top: "50%",
-          transform: "translateY(-50%)"
-        };
-        break;
-      case "right":
-        tooltipStyle = {
-          ...tooltipStyle,
-          left: "75%",
-          top: "50%",
-          transform: "translateY(-50%)"
-        };
-        break;
-      default:
-        tooltipStyle = {
-          ...tooltipStyle,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)"
-        };
-    }
-    
-    return (
-      <div className="fixed inset-0 z-40 pointer-events-none">
-        {/* Semi-transparent overlay */}
-        <div 
-          className="absolute inset-0 pointer-events-auto" 
-          onClick={onClose}
-          style={{ 
-            background: "rgba(0, 0, 0, 0.5)",
-            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px)" // Pixelated pattern
-          }} 
-        />
-        
-        {/* NES.css styled tooltip */}
-        <div 
-          className="nes-container is-dark with-title pointer-events-auto"
-          style={tooltipStyle}
-        >
-          <p className="title" style={{ background: "#212529" }}>{currentTutorialStep.title}</p>
-          
-          {/* Description */}
-          <div style={{ marginBottom: "1rem" }}>
-            <p className="nes-text">{currentTutorialStep.description}</p>
-          </div>
-          
-          {/* Step indicator and navigation */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span className="nes-text is-disabled">Step {currentStep + 1}/{tutorialSteps.length}</span>
+            {/* Step indicator */}
+            <div style={{ textAlign: "center", marginBottom: "0.75rem" }}>
+              <span className="nes-badge" style={{ padding: "1rem 1rem" }}>
+                <span className="is-primary"> Step {currentStep + 1} of {tutorialSteps.length}</span>
+              </span>
+            </div>
             
-            <div>
+            {/* Screenshot */}
+            {currentTutorialStep.image && (
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "center", 
+                marginBottom: "1rem",
+                border: "4px solid #fff",
+                padding: "4px",
+                background: "#000"
+              }}>
+                <img 
+                  src={currentTutorialStep.image} 
+                  alt={`Tutorial step ${currentStep + 1}`}
+                  style={{ maxHeight: "260px", maxWidth: "100%" }}
+                />
+              </div>
+            )}
+            
+            {/* Description */}
+            <div style={{ 
+              marginBottom: "1.5rem", 
+              textAlign: "center", 
+              padding: "0 1rem",
+              minHeight: "60px"
+            }}>
+              <p className="nes-text">{currentTutorialStep.description}</p>
+            </div>
+            
+            {/* Navigation buttons with NES.css styling */}
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <button
                 onClick={handlePrev}
                 disabled={currentStep === 0}
-                className={`nes-btn is-small ${currentStep === 0 ? "is-disabled" : ""}`}
-                style={{ marginRight: "8px", fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
+                className={`nes-btn ${currentStep === 0 ? "is-disabled" : ""}`}
+                style={{ minWidth: "100px" }}
               >
-                ◄
+                ◄ Prev
               </button>
               
               <button
                 onClick={handleNext}
-                className="nes-btn is-primary is-small"
-                style={{ fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
+                className="nes-btn is-primary"
+                style={{ minWidth: "100px" }}
               >
-                {currentStep === tutorialSteps.length - 1 ? "✓" : "►"}
+                {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next ►"}
               </button>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      )}
+      
+      {/* For positioned tooltips (when highlighting elements) */}
+      {tooltipPosition !== "center" && (
+        <div className="absolute pointer-events-auto" style={getPositionedTooltipStyle(tooltipPosition, currentTutorialStep)}>
+          <div className="nes-container is-dark with-title">
+            <p className="title" style={{ background: "#212529" }}>{currentTutorialStep.title}</p>
+            
+            {/* Description */}
+            <div style={{ marginBottom: "1rem" }}>
+              <p className="nes-text">{currentTutorialStep.description}</p>
+            </div>
+            
+            {/* Step indicator and navigation */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span className="nes-text is-disabled">Step {currentStep + 1}/{tutorialSteps.length}</span>
+              
+              <div>
+                <button
+                  onClick={handlePrev}
+                  disabled={currentStep === 0}
+                  className={`nes-btn is-small ${currentStep === 0 ? "is-disabled" : ""}`}
+                  style={{ marginRight: "8px", fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
+                >
+                  ◄
+                </button>
+                
+                <button
+                  onClick={handleNext}
+                  className="nes-btn is-primary is-small"
+                  style={{ fontSize: "0.75rem", padding: "0.15rem 0.3rem" }}
+                >
+                  {currentStep === tutorialSteps.length - 1 ? "✓" : "►"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
+
+// Helper function to calculate tooltip position
+function getPositionedTooltipStyle(position, step) {
+  // Default styles for tooltip
+  let style = {
+    zIndex: 1050,
+    maxWidth: "300px",
+    background: "#212529",
+    color: "#fff",
+    border: "4px solid #fff",
+    boxShadow: "4px 4px 0 #000"
+  };
+  
+  // Calculate position for the tooltip
+  // We can enhance this with actual element positioning later
+  switch (position) {
+    case "top":
+      return {
+        ...style,
+        bottom: "calc(50% + 100px)",
+        left: "50%",
+        transform: "translateX(-50%)"
+      };
+    case "bottom":
+      return {
+        ...style,
+        top: "calc(50% + 100px)",
+        left: "50%",
+        transform: "translateX(-50%)"
+      };
+    case "left":
+      return {
+        ...style,
+        right: "calc(50% + 100px)",
+        top: "50%",
+        transform: "translateY(-50%)"
+      };
+    case "right":
+      return {
+        ...style,
+        left: "calc(50% + 100px)",
+        top: "50%",
+        transform: "translateY(-50%)"
+      };
+    case "topLeft":
+      return {
+        ...style,
+        top: "10%",
+        left: "25%"
+      };
+    case "topRight":
+      return {
+        ...style,
+        top: "10%",
+        right: "25%"
+      };
+    case "bottomLeft":
+      return {
+        ...style,
+        bottom: "10%",
+        left: "25%"
+      };
+    case "bottomRight":
+      return {
+        ...style,
+        bottom: "10%",
+        right: "25%"
+      };
+    default:
+      // For specific positioning with element targeting
+      return {
+        ...style,
+        ...(step.tooltipCoordinates || {})
+      };
+  }
+}
 
 export default Tutorial;

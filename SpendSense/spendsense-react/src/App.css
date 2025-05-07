@@ -29,7 +29,7 @@ html, body {
 #main-wrapper {
   position: relative;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 #scroll-container {
@@ -512,4 +512,10 @@ table.table-bordered {
   50% {
     transform: rotate(-20deg) translateY(-10px);
   }
+}
+
+.learn-page {
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
 }

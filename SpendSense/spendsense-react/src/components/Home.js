@@ -13,37 +13,30 @@ function Home({ onStart }) {
   const tutorialSteps = [
     {
       title: "Welcome to SpendSense!",
-      image: "images/tutorial/welcome.png", // Replace with your actual screenshot
-      description: "SpendSense helps you track your spending habits and save money through fun gameplay. Let's learn how to use it!",
+      image: "images/spendsense_logo.gif", 
+      description: "SpendSense is an interactive web-based game designed to teach you how to make smart financial decisions through real-time budgeting and planning scenarios. Let's learn how to play it!",
       tooltipPosition: "center"
     },
     {
-      title: "Game Logo",
-      description: "This is the SpendSense logo. Coins will rain down as you save more money!",
-      highlightSelector: "img[alt='SpendSense Logo']",
-      tooltipPosition: "bottom"
-    },
-    {
       title: "Start Game Button",
-      description: "Click this button to begin playing and start managing your finances.",
+      description: "Click the button below to begin playing and start managing your finances.",
       highlightSelector: "button.nes-btn.is-primary",
       tooltipPosition: "right"
     },
     {
-      title: "Tracking Expenses",
-      image: "images/tutorial/expenses.png", // Replace with your actual screenshot
-      description: "Add your expenses by category and see them visualized in fun ways. The more you save, the more coins you collect!",
+      title: "Menu Button",
+      image: "images/MenuContent.png",
+      description: "Inside the menu button, you can navigate to several other pages",
       tooltipPosition: "center"
     },
     {
-      title: "Setting Goals",
-      image: "images/tutorial/goals.png", // Replace with your actual screenshot
-      description: "Create savings goals and watch your progress. Each milestone unlocks new achievements and power-ups!",
+      title: "Character Stats Bar",
+      image: "images/CharacterInfo.png",
+      description: "Later on in the game, a status bar will be shown on top of the page. It shows your character's life expectancy, money, and progress. BUT be aware as you play, your character's life expectancy will increase or decrease depending on your choices. So make sure to keep an eye on it!",
       tooltipPosition: "center"
     },
     {
       title: "Ready to Play?",
-      image: "images/tutorial/ready.png", // Replace with your actual screenshot
       description: "Now you're ready to start your financial journey with SpendSense! Click 'Finish' to close this tutorial and begin.",
       tooltipPosition: "center"
     }
@@ -102,7 +95,7 @@ function Home({ onStart }) {
     overlay.style.left = "0";
     overlay.style.width = "100%";
     overlay.style.height = "100%";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.15)";
     overlay.style.zIndex = "1000"; // Ensure it appears above other elements
     overlay.id = "tutorial-overlay";
     document.body.appendChild(overlay);

@@ -91,8 +91,8 @@ const Tutorial = ({
             </div>
             
             {/* Step indicator */}
-            <div style={{ textAlign: "center", marginBottom: "0.75rem" }}>
-              <span className="nes-badge" style={{ padding: "1rem 1rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span className="nes-text is-disabled">
                 <span className="is-primary"> Step {currentStep + 1} of {tutorialSteps.length}</span>
               </span>
             </div>

@@ -150,6 +150,18 @@ form button:hover {
   box-shadow: 2px 2px 0 #222;
 }
 
+.submit-button-wrapper{
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.skip-button-wrapper{
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
 .text-danger {
   font-size: 0.55rem;
   color: red;
@@ -524,3 +536,4 @@ table.table-bordered {
   overflow-y: auto;
   max-height: 100vh;
 }
+

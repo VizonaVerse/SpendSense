@@ -16,7 +16,7 @@ const AboutUs = () => {
 
   return (
     <div style={{ maxHeight: '100vh', overflowY: 'auto' }}>
-      <div className="learn-page">
+      <div className="learn-page about-us-page">
         <button className="back-button" onClick={() => navigate("/")}>
           ← Back to Game
         </button>

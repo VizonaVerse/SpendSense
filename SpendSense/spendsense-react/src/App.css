@@ -29,7 +29,7 @@ html, body {
 #main-wrapper {
   position: relative;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 #scroll-container {
@@ -518,4 +518,9 @@ table.table-bordered {
   min-height: 100vh;
   height: auto;
   overflow-y: auto;
+}
+
+.about-us-page {
+  overflow-y: auto;
+  max-height: 100vh;
 }

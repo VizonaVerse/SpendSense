@@ -5,5 +5,5 @@ sqlparse==0.5.3
 tzdata==2025.2
 data-wizard==2.0.0
 django-cors-headers==4.7.0
-cryptography==40.0.1
+cryptography==44.0.3
 Pillow>=11.0.0

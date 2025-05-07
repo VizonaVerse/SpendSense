@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 #Security settings
 DEBUG = True #set to false during production in order to avoid exposing sensitive information
+APPEND_SLASH = False
 ALLOWED_HOSTS = ['*'] #hosts allowed set to any
 CORS_ORIGIN_ALLOW_ALL = DEBUG #allows requests from all origins though i dont know if this is a big deal for coursework 
 CORS_ALLOW_ALL_ORIGINS = True #allows all origins to access resources of the application - should be restricted in production enviroment to enhance security

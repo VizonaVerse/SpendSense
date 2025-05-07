@@ -241,8 +241,8 @@ function getPositionedTooltipStyle(position, step) {
     case "topRight":
       return {
         ...style,
-        top: "10%",
-        right: "25%"
+        top: "1%",
+        right: "80%"
       };
     case "bottomLeft":
       return {

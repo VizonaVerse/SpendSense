@@ -42,6 +42,7 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [money, setMoney] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [lifeExpectancy, setLifeExpectancy] = useState(75);
   const [pension1, setPension1] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -152,6 +153,14 @@ function App() {
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
     setMoney(savings1); // Update money state
     addProgress(10);
+    const numericalSavings = parseFloat(data.Savings) / 100;
+    if (Math.abs(numericalSavings - 0.2) < (0.3)) {
+      const newLifeExpectancy = 100 - (Math.abs(numericalSavings - 0.2) * 150);
+      setLifeExpectancy(newLifeExpectancy);
+    } else {
+      setLifeExpectancy(55);
+    }
+    // setLifeExpectancy(numericalSavings - 0.2);
     goToSection("budgetPlanner");
   };
 
@@ -162,6 +171,7 @@ function App() {
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
+    // if (pensionType == )
     goToSection("pensionWithdrawal");
     addProgress(10);
   };
@@ -214,6 +224,7 @@ function App() {
                   currentSection={currentSection}
                   characterMoney={money}
                   characterProgress={progress}
+                  characterLifeExpectancy={lifeExpectancy}
                   onProgressChange={(newProgress) => setProgress(newProgress)}
                 />
                 <CharacterInfo characterData={selectedJob} currentSection={currentSection} />

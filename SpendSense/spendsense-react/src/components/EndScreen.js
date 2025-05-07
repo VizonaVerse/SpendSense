@@ -9,6 +9,7 @@ function EndScreen({ onEndScreen, isVisible }) {
     const [ending, setEnding] = useState("Good");
     const containerRef = useRef(null);
     const statsListRef = useRef([]);
+
     // placehold age generator
     const generateFinalAge = (mean = 83, stdDev = 8) => {
 
@@ -123,6 +124,24 @@ function EndScreen({ onEndScreen, isVisible }) {
     }
   };
 
+  const createButtonSqueeze = (button) => {
+    if (button) {
+      gsap.to(button, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
+    }
+  };
+
+  const handleNewGame = (event) => {
+    event.preventDefault();
+    createButtonSqueeze(event.currentTarget);
+    window.location.reload();
+  };
+
+  const handleButtonClick = (callback) => (event) => {
+    event.preventDefault();
+    createButtonSqueeze(event.currentTarget);
+    callback && callback(event);
+  };
+
   return (
     <>
       {showCounter && isVisible ? (
@@ -167,6 +186,14 @@ function EndScreen({ onEndScreen, isVisible }) {
               className="btn btn-dark mt-4"
             >
               Change Ending
+            </button>
+            {/* replay button*/}
+            <button
+              className="nes-btn is-primary"
+              onClick={handleButtonClick(handleNewGame)}
+              style={{ width: '200px' }}
+            >
+              New Game
             </button>
           </main>
         </div>

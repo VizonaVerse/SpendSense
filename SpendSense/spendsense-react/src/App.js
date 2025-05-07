@@ -192,11 +192,17 @@ function App() {
     addProgress(10);
   };
 
-  const handleGoToEndShop = () => {
-    // setShowStats(false);
-    setShowEndShop(true);
-    goToSection("endShop");
-    addProgress(10);
+  const handleBadEndOrEndShop = () => {
+    if (lifeExpectancy < 58){
+      // Meant to show the bad ending screen
+      // setShowStats(false);
+      // goToSection("");
+    } // else {
+      setMoney(money + Savings2);
+      setShowEndShop(true);
+      goToSection("endShop");
+      addProgress(10);
+    // }
   };
 
   const handleShowEndScreen = () => {
@@ -345,7 +351,7 @@ function App() {
 
               {/* Pension Info Section */}
               <section className="section pension-info-section">
-                <PensionInfo onClick={handleGoToEndShop} />
+                <PensionInfo onClick={handleBadEndOrEndShop} />
               </section>
 
               {/* End Shop Section */}

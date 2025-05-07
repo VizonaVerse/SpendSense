@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Pensions from "./Pensions";
 
-
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   const [selectedJob, setSelectedJob] = useState();
   const [jobs, setJobs] = useState([]); // Use state to update jobs dynamically
@@ -22,59 +21,53 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   }, []);
 
   // Fetch jobs from backend API
-    useEffect(() => {
-        fetch(`http://localhost:8000/api/job/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': process.env.REACT_APP_API_TOKEN,
-          },
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log('Fetched data:', data);
-    
-            // Ensure `data` is an array before setting it
-            if (Array.isArray(data)) {
-  
-              data = data.map((job) => ({
-                ...job,
-                salary: 0,
-              }));
-              // Filter jobs to meet the criteria
-              const benefitJobs = data.filter(
-                (job) => job.pension === "benefit" && job.min_salary > 20000
-              );
-              const contributionJobs = data.filter(
-                (job) => job.pension === "contribution" && job.min_salary > 20000
-              );
-      
-              // Randomly select 2 jobs with "state" pension
-              const randomBenefitJobs = benefitJobs
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 1);
-      
-              // Randomly select 1 job with "contribution" pension
-              const randomContributionJob = contributionJobs
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 1);
-      
-              // Combine the selected jobs
-              setJobs([...randomBenefitJobs, ...randomContributionJob]);
-              console.log(randomBenefitJobs);
-              console.log(randomContributionJob);
-      
-            } else {
-              console.error('Expected an array but got:', data);
-            }
-            })
-          .catch(error => console.error('Error fetching data:', error));
-      }, []);
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/job/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        token: process.env.REACT_APP_API_TOKEN,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched data:", data);
+
+        // Ensure `data` is an array before setting it
+        if (Array.isArray(data)) {
+          data = data.map((job) => ({
+            ...job,
+            salary: 0,
+          }));
+          // Filter jobs to meet the criteria
+          const benefitJobs = data.filter(
+            (job) => job.pension === "benefit" && job.min_salary > 20000
+          );
+          const contributionJobs = data.filter(
+            (job) => job.pension === "contribution" && job.min_salary > 20000
+          );
+
+          // Randomly select 2 jobs with "state" pension
+          const randomBenefitJobs = benefitJobs.sort(() => 0.5 - Math.random()).slice(0, 1);
+
+          // Randomly select 1 job with "contribution" pension
+          const randomContributionJob = contributionJobs.sort(() => 0.5 - Math.random()).slice(0, 1);
+
+          // Combine the selected jobs
+          setJobs([...randomBenefitJobs, ...randomContributionJob]);
+          console.log(randomBenefitJobs);
+          console.log(randomContributionJob);
+        } else {
+          console.error("Expected an array but got:", data);
+        }
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   useEffect(() => {
     async function fetchSalaryData(job) {
@@ -101,7 +94,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
                   salary:
                     highestFrequencySalary > j.min_salary && highestFrequencySalary < j.max_salary
                       ? highestFrequencySalary
-                      : (j.min_salary + j.max_salary) / 2, // Set to midpoint if out of range
+                      : (j.min_salary + j.max_salary) / 2,
                 }
               : j
           )
@@ -147,7 +140,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
 
   const handleHoverOut = (element, job) => {
     gsap.to(element, {
-      backgroundColor: selectedJob === job ? "#cce5ff" : "white",
+      backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
       y: 0,
       duration: 0.3,
       ease: "power2.out",
@@ -173,12 +166,17 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
               ref={addToRefs}
               className="card p-3 shadow-sm job-card"
               onMouseEnter={(e) => handleHover(e.currentTarget)}
-              onMouseLeave={(e) => handleHoverOut(e.currentTarget, selectedJob === initialJob)}
+              onMouseLeave={(e) =>
+                handleHoverOut(e.currentTarget, selectedJob?.id === initialJob.id)
+              }
               onClick={() => handleJobSelect(initialJob)}
               style={{
                 cursor: "pointer",
-                backgroundColor: selectedJob === initialJob ? "#cce5ff" : "white",
-                transition: "background-color 0.3s ease",
+                backgroundColor: selectedJob?.id === initialJob.id ? "#cce5ff" : "white",
+                border: selectedJob?.id === initialJob.id ? "3px solid #007bff" : "1px solid #ccc",
+                boxShadow: selectedJob?.id === initialJob.id ? "0 0 10px #007bff" : "none",
+                transition: "all 0.3s ease",
+                position: "relative",
               }}
             >
               <h4>Stay as {initialJob.title}</h4>
@@ -190,6 +188,27 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
                 })}
               </p>
               <p>Basic Pension</p>
+              {selectedJob?.id === initialJob.id && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    backgroundColor: "green",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: "24px",
+                    height: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                  }}
+                >
+                  ✓
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -204,12 +223,17 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
                 ref={addToRefs}
                 className="card p-3 shadow-sm job-card"
                 onMouseEnter={(e) => handleHover(e.currentTarget)}
-                onMouseLeave={(e) => handleHoverOut(e.currentTarget, selectedJob === job)}
+                onMouseLeave={(e) =>
+                  handleHoverOut(e.currentTarget, selectedJob?.id === job.id)
+                }
                 onClick={() => handleJobSelect(job)}
                 style={{
                   cursor: "pointer",
-                  backgroundColor: selectedJob === job ? "#cce5ff" : "white",
-                  transition: "background-color 0.3s ease",
+                  backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
+                  border: selectedJob?.id === job.id ? "3px solid #007bff" : "1px solid #ccc",
+                  boxShadow: selectedJob?.id === job.id ? "0 0 10px #007bff" : "none",
+                  transition: "all 0.3s ease",
+                  position: "relative",
                 }}
               >
                 <h4>{job.title}</h4>
@@ -225,6 +249,27 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
                     ? "Fixed Pension"
                     : "Defined Contribution Pension"}
                 </p>
+                {selectedJob?.id === job.id && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                      backgroundColor: "green",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "24px",
+                      height: "24px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                    }}
+                  >
+                    ✓
+                  </div>
+                )}
               </div>
             </div>
           ))}

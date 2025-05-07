@@ -7,6 +7,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   const [jobs, setJobs] = useState([]); // Use state to update jobs dynamically
   const cardRefs = useRef([]);
   const [hasExplicitlySelected, setHasExplicitlySelected] = useState(false);
+  const hasFetchedSalaries = useRef(false);
 
   const addToRefs = (el) => {
     if (el && !cardRefs.current.includes(el)) {
@@ -42,7 +43,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
         if (Array.isArray(data)) {
           data = data.map((job) => ({
             ...job,
-            salary: 0,
+            salary: job.min_salary + job.max_salary / 2, 
           }));
           // Filter jobs to meet the criteria
           const benefitJobs = data.filter(
@@ -53,10 +54,12 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
           );
 
           // Randomly select 2 jobs with "state" pension
-          const randomBenefitJobs = benefitJobs.sort(() => 0.5 - Math.random()).slice(0, 1);
-
-          // Randomly select 1 job with "contribution" pension
-          const randomContributionJob = contributionJobs.sort(() => 0.5 - Math.random()).slice(0, 1);
+          const randomBenefitJobs = benefitJobs.length
+            ? benefitJobs.sort(() => 0.5 - Math.random()).slice(0, Math.min(1, benefitJobs.length))
+            : [];
+          const randomContributionJob = contributionJobs.length
+            ? contributionJobs.sort(() => 0.5 - Math.random()).slice(0, Math.min(1, contributionJobs.length))
+            : [];
 
           // Combine the selected jobs
           setJobs([...randomBenefitJobs, ...randomContributionJob]);
@@ -70,6 +73,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   }, []);
 
   useEffect(() => {
+    if (hasFetchedSalaries.current || jobs.length === 0) return;
     async function fetchSalaryData(job) {
       const url = `http://api.adzuna.com/v1/api/jobs/gb/histogram?app_id=edcbb643&app_key=06103ad4ff1dcb50632c176aada6968b&location0=UK&location1=London&what=${encodeURIComponent(
         job.apiTitle
@@ -120,6 +124,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
     jobs.forEach((job) => {
       fetchSalaryData(job);
     });
+    hasFetchedSalaries.current = true;
   }, [jobs]);
 
   const handleJobSelect = (job) => {

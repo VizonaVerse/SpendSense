@@ -35,6 +35,7 @@ function App() {
   const [showEndShop, setShowEndShop] = useState(false);
   const [annualContributions, setAnnualContributions] = useState(null);
   const [netPay, setNetPay] = useState(null);
+  const [netPay2, setNetPay2] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
   const [processedBudgetData, setProcessedBudgetData] = useState(null);
   const [currentSection, setCurrentSection] = useState("home");
@@ -47,6 +48,8 @@ function App() {
   const [pension2, setPension2] = useState(0);
   const [Savings1, setSavings1] = useState(0);
   const [Savings2, setSavings2] = useState(0);
+  const [finalMoney, setFinalMoney] = useState(0);
+  const [budgetSavings, setBudgetSavings] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -151,6 +154,7 @@ function App() {
   };
 
   const handleBudgetComplete = (data) => {
+    setBudgetSavings(data.Savings);
     setBudgetData(data);
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
@@ -183,11 +187,32 @@ function App() {
     const savings2 = (netPay2 * (budgetData.Savings / 100) + pension2) * 30;
     setSavings2(savings2);
     setPension2(pension2);
+    setNetPay2(netPay2);
     goToSection("pensionWithdrawal");
     addProgress(10);
   };
 
-  const handleGoToPensionInfo = () => {
+  const handleGoToPensionInfo = (selectedOption) => {
+    setMoney(money + Savings2);
+    const lifeMultiplier = lifeExpectancy - 58;
+    let totalMoney = 0;
+
+    if (selectedPension === "contribution") {
+      if (selectedOption === "Withdraw via Insurance Company") {
+        totalMoney = 1.85 * (Savings1 + Savings2);
+      } else if (selectedOption === "Deposit into a Bank") {
+        totalMoney = (Savings1 + Savings2) * Math.pow(1.03, lifeMultiplier);
+      }
+    } else if (selectedPension === "benefit") {
+      if (selectedOption === "Weekly Taxed Payments") {
+        totalMoney = 0.5 * netPay2 * lifeMultiplier + Savings1 + Savings2;
+      } else if (selectedOption === "Lump Sum Withdrawal") {
+        totalMoney = 18.75 * netPay2 + Savings1 + Savings2;
+      }
+    }
+
+    totalMoney += lifeMultiplier * 11440;
+    setMoney(totalMoney);
     goToSection("pensionInfo");
     addProgress(10);
   };
@@ -198,7 +223,6 @@ function App() {
       // setShowStats(false);
       // goToSection("");
     } // else {
-      setMoney(money + Savings2);
       setShowEndShop(true);
       goToSection("endShop");
       addProgress(10);
@@ -212,6 +236,7 @@ function App() {
   };
 
   const handleMoneyChange = (newMoney) => {
+    setFinalMoney(money);
     setMoney(newMoney); // Update money state
   };
 
@@ -340,7 +365,7 @@ function App() {
                 {selectedPension ? (
                   <PensionWithdrawal
                     selectedPension={selectedPension}
-                    onContinue={handleGoToPensionInfo}
+                    onContinue={(selectedOption) => handleGoToPensionInfo(selectedOption)}
                   />
                 ) : (
                   <div className="d-flex justify-content-center align-items-center h-100">
@@ -374,6 +399,9 @@ function App() {
               <section className="section end-screen-section">
                 <EndScreen
                   isVisible={showEndScreen}
+                  lifeExpectancy={lifeExpectancy}
+                  finalWealth={finalMoney}
+                  savings={budgetSavings}
                   onEndScreen={(endingType) => {
                     console.log("Ending selected:", endingType);
                   }}

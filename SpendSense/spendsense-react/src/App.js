@@ -44,6 +44,9 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [lifeExpectancy, setLifeExpectancy] = useState(75);
   const [pension1, setPension1] = useState(0);
+  const [pension2, setPension2] = useState(0);
+  const [Savings1, setSavings1] = useState(0);
+  const [Savings2, setSavings2] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -152,6 +155,7 @@ function App() {
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
     setMoney(savings1); // Update money state
+    setSavings1(savings1);
     addProgress(10);
     const numericalSavings = parseFloat(data.Savings) / 100;
     if (Math.abs(numericalSavings - 0.2) < (0.3)) {
@@ -171,7 +175,14 @@ function App() {
 
   const handlePensionSelection = (pensionType) => {
     setSelectedPension(pensionType);
-    // if (pensionType == )
+    let pension2 = (0.05 * selectedJobSalary) + (0.03 * selectedJobSalary);
+    if (selectedPension === "contribution") {
+      pension2 = (0.05 * selectedJobSalary) + (0.05 * selectedJobSalary);
+    }
+    const netPay2 = (0.8 * ((selectedJobSalary * 0.95) - 12570) + 12570);
+    const savings2 = (netPay2 * (budgetData.Savings / 100) + pension2) * 30;
+    setSavings2(savings2);
+    setPension2(pension2);
     goToSection("pensionWithdrawal");
     addProgress(10);
   };
@@ -216,7 +227,7 @@ function App() {
         <>
           <div id="main-wrapper">
             <Information goToSection={goToSection} />
-  
+
             {showStats && (
               <>
                 <Stats
@@ -230,13 +241,13 @@ function App() {
                 <CharacterInfo characterData={selectedJob} currentSection={currentSection} />
               </>
             )}
-  
+
             <div id="scroll-container" ref={scrollContainerRef}>
               {/* Home Section */}
               <section className="section home-section">
                 <Home onStart={handleStart} />
               </section>
-  
+
               {/* User Data Form Section */}
               <section className="section form-section">
                 <div className="form-wrapper">
@@ -246,7 +257,7 @@ function App() {
                   </div>
                 </div>
               </section>
-  
+
               {/* Job Selection Section */}
               <section className="section job-select-section">
                 <JobSelect onJobSelect={handleJobSelect} />
@@ -291,7 +302,7 @@ function App() {
               <section className="section income-tax-info-section">
                 <IncomeTaxInfo onClick={handleGoToBudget} />
               </section>
-  
+
               {/* Budget Section */}
               <section className="section budgeting-section">
                 <div className="d-flex flex-column align-items-center">
@@ -303,7 +314,7 @@ function App() {
               <section className="section budget-planner-section">
                 <BudgetPlanner onClick={handleGoToJobSwitch} />
               </section>
-  
+
               {/* Job Switch Section */}
               <section className="section job-switch-section">
                 {budgetCompleted && (
@@ -317,7 +328,7 @@ function App() {
                   />
                 )}
               </section>
-  
+
               {/* Pension Withdrawal Section */}
               <section className="section pension-withdrawal-section">
                 {selectedPension ? (
@@ -336,7 +347,7 @@ function App() {
               <section className="section pension-info-section">
                 <PensionInfo onClick={handleGoToEndShop} />
               </section>
-  
+
               {/* End Shop Section */}
               {showEndShop && (
                 <section className="section end-shop-section">
@@ -352,7 +363,7 @@ function App() {
                   />
                 </section>
               )}
-  
+
               {/* End Screen Section */}
               <section className="section end-screen-section">
                 <EndScreen
@@ -367,7 +378,7 @@ function App() {
         </>
       } />
     </Routes>
-  );  
+  );
 }
 
 export default App;

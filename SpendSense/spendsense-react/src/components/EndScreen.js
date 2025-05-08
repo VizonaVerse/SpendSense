@@ -12,10 +12,10 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
 
   function calculateHappinessScore(savings) {
     const pieSavings = parseFloat(savings) / 100;
-    const LE = Math.abs(parseFloat(lifeExpectancy) - 70) * -50;
-    const S = (Math.abs(pieSavings / 100) - 0.2) * - 500;
-    const happinessScore = (parseFloat(finalWealth) / 1000) + S + LE;
-    return Math.max(0, Math.min(100, happinessScore));
+    const LE = Math.abs(parseFloat(lifeExpectancy) - 100) * -50;
+    const S = Math.abs(pieSavings - 0.2) * - 500;
+    const happinessScore = 2500 + parseFloat(finalWealth) / 1000 + LE + S;
+    return Math.round(happinessScore);
   }
 
   // show counter 
@@ -170,13 +170,23 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
             <div className="card p-4 shadow-lg text-center w-50">
               <h2 className="text-dark mb-3">Your Stats</h2>
               <ul className="list-group">
-                {/* <li ref={addToStatsListRef} className="list-group-item">Total Earnings: ___ </li> */}
-                {/* <li ref={addToStatsListRef} className="list-group-item">Savings: ___</li> */}
-                {/* <li ref={addToStatsListRef} className="list-group-item">Debt: ___</li> */}
+                {/* <li ref={addToStatsListRef} className="list-group-item">Total Earnings: {finalWealth} </li> */}
+                {/* <li ref={addToStatsListRef} className="list-group-item">Savings: {savings}</li> */}
                 <li ref={addToStatsListRef} className="list-group-item">Total Years Lived: {counterValue}</li>
                 <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: {calculateHappinessScore(savings)}</li>
               </ul>
             </div>
+              {/* Conditional Messages */}
+  {parseFloat(lifeExpectancy) < 75 && (
+    <div className="alert alert-danger mt-4 w-50">
+      <strong>Oh no!</strong> You lived a shorter life than the average person. Try to make better choices next time!
+    </div>
+  )}
+  {Math.abs((parseFloat(savings) / 100) - 0.2) > 0.1 && (
+    <div className="alert alert-warning mt-4 w-50">
+      <strong>Heads up!</strong> Your savings habits were not ideal. Aim to save around 20% of your income for a better future.
+    </div>
+  )}
             {/* placeholder button*/}
             {/* <button
               onClick={() => {

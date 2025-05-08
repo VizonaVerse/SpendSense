@@ -11,10 +11,10 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
   const statsListRef = useRef([]);
 
   function calculateHappinessScore(savings) {
-    const pieSavings = savings / 100;
+    const pieSavings = parseFloat(savings) / 100;
     const LE = Math.abs(parseFloat(lifeExpectancy) - 70) * -50;
-    const S = Math.abs(parseFloat(pieSavings / 100) - 0.2) - 500;
-    const happinessScore = (finalWealth / 1000) + S + LE;
+    const S = (Math.abs(pieSavings / 100) - 0.2) * - 500;
+    const happinessScore = (parseFloat(finalWealth) / 1000) + S + LE;
     return Math.max(0, Math.min(100, happinessScore));
   }
 
@@ -146,7 +146,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
     <>
       {showCounter && isVisible ? (
         <div className=" w-100 d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
-          <p className="text-secondary mb-5">The average person lives to 75! Have you beaten the average persons score!</p>
+          <p className="text-secondary mb-5">The average person lives to 75! Have you beaten the average persons score?</p>
           <h1 className="display-1 mb-4" ref={counterRef}>{counterValue}</h1>
           <button
             className="btn btn-outline-light btn-lg"

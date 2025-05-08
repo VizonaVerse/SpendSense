@@ -162,13 +162,12 @@ function App() {
     setSavings1(savings1);
     addProgress(10);
     const numericalSavings = parseFloat(data.Savings) / 100;
-    if (Math.abs(numericalSavings - 0.2) < (0.3)) {
+    if (Math.abs(numericalSavings - 0.2) <= (0.3)) {
       const newLifeExpectancy = 100 - (Math.abs(numericalSavings - 0.2) * 150);
       setLifeExpectancy(newLifeExpectancy);
     } else {
       setLifeExpectancy(55);
     }
-    // setLifeExpectancy(numericalSavings - 0.2);
     goToSection("budgetPlanner");
   };
 
@@ -213,6 +212,7 @@ function App() {
 
     totalMoney += lifeMultiplier * 11440;
     setMoney(totalMoney);
+    setFinalMoney(money);
     goToSection("pensionInfo");
     addProgress(10);
   };
@@ -236,7 +236,6 @@ function App() {
   };
 
   const handleMoneyChange = (newMoney) => {
-    setFinalMoney(money);
     setMoney(newMoney); // Update money state
   };
 

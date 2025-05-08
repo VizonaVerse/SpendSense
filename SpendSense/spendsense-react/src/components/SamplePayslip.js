@@ -104,7 +104,7 @@ export default function SamplePayslip({
             <span className="hover-info">
               (i)
               <div className="info-box">
-                Payroll Number is a unique number allocated to each worker in the payroll system.
+              Payroll Number is a unique number allocated to each worker in the payroll system.
               </div>
             </span>
           </div>

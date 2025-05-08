@@ -416,6 +416,21 @@ table.table-bordered {
 }
 
 
+
+/* incometaxinfo */
+@media (max-width: 768px) {
+  .income-tax-card {
+    padding: 1rem !important;
+    margin-top: -40px !important;
+    min-height: 360px !important;
+    height: 60vh !important;
+  }
+}
+
+
+
+
+
 .piechart-section {
   padding: 2rem;
   font-family: 'Press Start 2P', monospace;

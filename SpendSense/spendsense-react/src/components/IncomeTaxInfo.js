@@ -163,68 +163,65 @@ function IncomeTaxInfo({ onClick }) {
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
     backdropFilter: 'blur(12px)',
     padding: '2rem',
-    margin: '2rem auto',
+    margin: '1rem',
+    width: '100%',
     maxWidth: '800px',
     boxShadow: '0 0 25px rgba(58, 134, 255, 0.2)',
     fontFamily: "'Press Start 2P', cursive",
     color: '#1f3556',
     textAlign: 'center',
   };
-  
+
   const headingStyle = {
     fontSize: '1rem',
-    color: '#91273f', 
+    color: '#91273f',
     marginBottom: '1.5rem',
   };
+
   const paragraphStyle = {
     fontSize: '0.75rem',
     lineHeight: '1.6',
     color: '#333',
     marginBottom: '1rem',
   };
-  
+
   const buttonStyle = {
     marginTop: '2rem',
     padding: '12px 28px',
-    backgroundColor: 'rgba(255, 255, 255, 0.3)', 
-    color: '#1f3556',                             
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    color: '#1f3556',
     fontWeight: 'bold',
     fontFamily: "'Press Start 2P', cursive",
-    border: '2px solid black',              
+    border: '2px solid black',
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'all 0.2s ease-in-out',
     boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)',
-    backdropFilter: 'blur(6px)',                  
+    backdropFilter: 'blur(6px)',
   };
-  
-  
+
   const buttonHoverStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     transform: 'scale(1.05)',
     boxShadow: '0 0 10px rgba(111, 168, 220, 0.5)',
   };
-  
-  
+
   return (
     <div style={{
       display: 'flex',
       flexDirection: 'row',
+      flexWrap: 'wrap',
       justifyContent: 'center',
-      alignItems: 'center',
-      gap: '1rem',
-      maxWidth: '1400px',
-      margin: '0 auto',
-      paddingTop: '5rem',
-      paddingBottom: '0rem',
-      position: 'relative',
+      alignItems: 'flex-start',
+      gap: '2rem',
+      maxWidth: '100%',
+      padding: '5rem 1rem',
+      paddingTop: '159px',
+      boxSizing: 'border-box',
     }}>
-
-      {/* Main content */}
-      <div style={{ width: '900px', marginLeft: '17rem' }}>
-
-        {/* Card 1 */}
-        <div style={{ ...cardStyle, width: '100%', maxWidth: '1000px' }}>
+      {/* Cards Container */}
+      <div style={{ flex: '1 1 600px', minWidth: '300px' }}>
+        <div style={cardStyle}>
           <h2 style={headingStyle}>Personal Allowances</h2>
           <p style={paragraphStyle}>How much Income Tax you pay depends on:</p>
           <ul style={{
@@ -241,8 +238,7 @@ function IncomeTaxInfo({ onClick }) {
           <p style={paragraphStyle}>{taxYearInfo}</p>
         </div>
 
-        {/* Card 2 */}
-        <div style={{ ...cardStyle, width: '100%', maxWidth: '1000px' }}>
+        <div style={cardStyle}>
           <h2 style={headingStyle}>Income Tax Rates & Bands</h2>
           <div
             style={{
@@ -258,19 +254,18 @@ function IncomeTaxInfo({ onClick }) {
       </div>
 
       {/* Button */}
-      <div style={{ alignSelf: 'flex-start', marginTop: '17rem' }}>
-      <button
-      onClick={onClick}
-      style={{ ...buttonStyle, ...(isHovered ? buttonHoverStyle : {}) }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      Next<br />Section
-    </button>
+      <div style={{ alignSelf: 'center' }}>
+        <button
+          onClick={onClick}
+          style={{ ...buttonStyle, ...(isHovered ? buttonHoverStyle : {}) }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          Next<br />Section
+        </button>
       </div>
     </div>
   );
-
 }
 
 export default IncomeTaxInfo;

@@ -50,6 +50,9 @@ function App() {
   const [Savings2, setSavings2] = useState(0);
   const [finalMoney, setFinalMoney] = useState(0);
   const [budgetSavings, setBudgetSavings] = useState(0);
+  const [budgetWants, setBudgetWants] = useState(0);
+  const [budgetNeeds, setBudgetNeeds] = useState(0);
+
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -155,6 +158,8 @@ function App() {
 
   const handleBudgetComplete = (data) => {
     setBudgetSavings(data.Savings);
+    setBudgetWants(data.Wants);
+    setBudgetNeeds(data.Needs);
     setBudgetData(data);
     setBudgetCompleted(true);
     const savings1 = (netPay * (data.Savings / 100) + pension1) * 10;
@@ -403,6 +408,8 @@ function App() {
                   lifeExpectancy={lifeExpectancy}
                   finalWealth={finalMoney}
                   savings={budgetSavings}
+                  wants={budgetWants}
+                  needs={budgetNeeds}
                   onEndScreen={(endingType) => {
                     console.log("Ending selected:", endingType);
                   }}

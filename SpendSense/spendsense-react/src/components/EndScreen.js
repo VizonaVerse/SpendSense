@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 
-function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings }) {
+function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings, wants, needs }) {
   const [showCounter, setShowCounter] = useState(true);
   const [counterValue, setCounterValue] = useState(lifeExpectancy);
   const counterRef = useRef(null);
@@ -176,17 +176,27 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
                 <li ref={addToStatsListRef} className="list-group-item">Final Happiness Score: {calculateHappinessScore(savings)}</li>
               </ul>
             </div>
-              {/* Conditional Messages */}
-  {parseFloat(lifeExpectancy) < 75 && (
-    <div className="alert alert-danger mt-4 w-50">
-      <strong>Oh no!</strong> You lived a shorter life than the average person. Try to make better choices next time!
-    </div>
-  )}
-  {Math.abs((parseFloat(savings) / 100) - 0.2) > 0.1 && (
-    <div className="alert alert-warning mt-4 w-50">
-      <strong>Heads up!</strong> Your savings habits were not ideal. Aim to save around 20% of your income for a better future.
-    </div>
-  )}
+            {/* Conditional Messages */}
+            {parseFloat(lifeExpectancy) < 75 && (
+              <div className="alert alert-danger mt-4 w-50">
+                <strong>Oh no!</strong> You lived a shorter life than the average person. Try to make better choices next time!
+              </div>
+            )}
+            {Math.abs((parseFloat(savings) / 100) - 0.2) > 0.1 && (
+              <div className="alert alert-warning mt-4 w-50">
+                <strong>Heads up!</strong> Your savings habits were not ideal. Aim to save around 20% of your income for a better future.
+              </div>
+            )}
+            {Math.abs((parseFloat(wants) / 100) - 0.3) > 0.1 && (
+              <div className="alert alert-warning mt-4 w-50">
+                <strong>Heads up!</strong> Your habits were not ideal. Aim to spend around 30% of your income on your wants for a better future.
+              </div>
+            )}
+            {Math.abs((parseFloat(needs) / 100) - 0.5) > 0.1 && (
+              <div className="alert alert-warning mt-4 w-50">
+                <strong>Heads up!</strong> Your habits were not ideal. Aim to spend around 50% of your income on your needs for a better future.
+              </div>
+            )}
             {/* placeholder button*/}
             {/* <button
               onClick={() => {

@@ -161,8 +161,6 @@ function IncomeTaxInfo({ onClick }) {
 
   const cardStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    border: '2px solid #a0c4ff',
-    borderRadius: '16px',
     backdropFilter: 'blur(12px)',
     padding: '2rem',
     margin: '2rem auto',
@@ -192,7 +190,7 @@ function IncomeTaxInfo({ onClick }) {
     color: '#1f3556',                             
     fontWeight: 'bold',
     fontFamily: "'Press Start 2P', cursive",
-    border: '2px solid #6fa8dc',                  
+    border: '2px solid black',              
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'all 0.2s ease-in-out',

@@ -169,7 +169,7 @@ function App() {
     const numericalSavings = parseFloat(data.Savings) / 100;
     if (Math.abs(numericalSavings - 0.2) <= (0.3)) {
       const newLifeExpectancy = 100 - (Math.abs(numericalSavings - 0.2) * 150);
-      setLifeExpectancy(newLifeExpectancy);
+      setLifeExpectancy(Math.round(newLifeExpectancy));
     } else {
       setLifeExpectancy(55);
     }

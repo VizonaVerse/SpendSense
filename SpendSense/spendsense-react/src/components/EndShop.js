@@ -9,14 +9,40 @@ const defaultItems = {
   Phone: [],
   Leisure: [],
   Car: [
-    { name: "BMW X5", price: 70000 },
-    { name: "Volvo", price: 18000 },
-    { name: "VW Polo", price: 2000 }
+    {
+       name: "BMW X5", 
+       price: 70000,
+       image: process.env.PUBLIC_URL + "/images/bmw.jpeg"     
+      },
+
+    { name: "Volvo", 
+      price: 18000, 
+      image: process.env.PUBLIC_URL + "/images/volvo.jpeg"
+    },
+
+    { name: "VW Polo", 
+      price: 2000,
+      image: process.env.PUBLIC_URL + "/images/polo.jpeg" 
+    
+    }
   ],
   House: [
-    { name: "Small Country Cottage", price: 75000 },
-    { name: "3-Bedroom Suburban Home", price: 250000 },
-    { name: "Luxury City Penthouse", price: 750000 }
+    { 
+      name: "Small Country Cottage", 
+      price: 75000, 
+      image: process.env.PUBLIC_URL + "/images/cottage.jpeg"
+    },
+
+    { 
+      name: "3-Bedroom Suburban Home", 
+      price: 250000, 
+      image: process.env.PUBLIC_URL + "/images/3-bedroom.jpg"
+    },
+
+    { name: "Luxury City Penthouse", 
+      price: 750000, 
+      image: process.env.PUBLIC_URL + "/images/penthouse.jpeg"
+    }
   ],
 };
 

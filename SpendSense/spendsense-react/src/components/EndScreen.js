@@ -178,7 +178,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
               </ul>
             </div>
             {/* placeholder button*/}
-            <button
+            {/* <button
               onClick={() => {
                 const nextEnding =
                   ending === "Good" ? "Mid" : ending === "Mid" ? "Bad" : "Good";
@@ -188,8 +188,9 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
               className="btn btn-dark mt-4"
             >
               Change Ending
-            </button>
+            </button> */}
             {/* replay button*/}
+            <h2></h2>
             <button
               className="nes-btn is-primary"
               onClick={handleButtonClick(handleNewGame)}

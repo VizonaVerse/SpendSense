@@ -63,7 +63,7 @@ function Information({ goToSection }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/userdata/?key=${key}`, {
+    fetch(`/api/userdata/?key=${key}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

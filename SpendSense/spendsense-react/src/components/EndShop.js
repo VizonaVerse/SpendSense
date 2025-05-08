@@ -63,7 +63,7 @@ function EndShop({ username, formData, finalMoney, budgetData, handleGoToEndScre
       isSubmitted = true;
 
       try {
-        const response = await fetch('http://localhost:8000/api/userform/', {
+        const response = await fetch('/api/userform/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ function EndShop({ username, formData, finalMoney, budgetData, handleGoToEndScre
 
   useEffect(() => {
     if (username) {
-      fetch(`http://localhost:8000/api/userdataupdate/${username}/`, {
+      fetch(`/api/userdataupdate/${username}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -43,10 +43,32 @@ function Pensions({ selectedJob }) {
   };
 
   return (
-    <div ref={pensionRef} className="pension-container text-center p-4 shadow-sm">
-      <h2>{pensionType.title}</h2>
-      <p>{pensionType.description}</p>
-      <strong>Estimated Pension: {pensionType.amount}</strong>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        ref={pensionRef}
+        className="shadow-sm text-center"
+        style={{
+          fontSize: "1rem",
+          padding: "0.5rem 0.5rem",
+          border: "5px solid ",
+          borderRadius: "5px",
+          maxWidth: "1500px",
+          lineHeight: "1.2",
+          backgroundColor: "#f9f9f9"
+        }}
+      >
+        <h2 style={{ fontSize: "1.8rem", margin: "0.2rem 0" }}>{pensionType.title}</h2>
+        <p style={{ margin: "1.5rem 0" }}>{pensionType.description}</p>
+        <strong style={{ fontSize: "1rem" }}>
+          Estimated Pension: {pensionType.amount}
+        </strong>
+      </div>
     </div>
   );
 }

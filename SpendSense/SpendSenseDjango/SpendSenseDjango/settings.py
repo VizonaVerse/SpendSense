@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #Security settings
 DEBUG = True #set to false during production in order to avoid exposing sensitive information
 APPEND_SLASH = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.2.8.31'] #hosts allowed set to any
+ALLOWED_HOSTS = ['*'] #hosts allowed set to any
 CORS_ORIGIN_ALLOW_ALL = DEBUG #allows requests from all origins though i dont know if this is a big deal for coursework 
 CORS_ALLOW_ALL_ORIGINS = True #allows all origins to access resources of the application - should be restricted in production enviroment to enhance security
 SECRET_KEY = 'django-insecure-e$-579#f=%lfjbs)t55hro-45&ov+^i@8&kxyyzls__7^j5s1i'

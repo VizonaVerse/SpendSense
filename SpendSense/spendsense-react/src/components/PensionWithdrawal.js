@@ -128,14 +128,14 @@ function PensionWithdrawal({ selectedPension, onContinue }) {
 
             {selectedOption && (
                 <div className="mt-5">
-                    <button
-                        className="btn btn-primary btn-lg"
-                        onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
-                        onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
-                        onClick={() => onContinue(selectedOption)}
-                    >
-                        Continue
-                    </button>
+                <button
+                className="pixel-button"
+                onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.05, boxShadow: '2px 2px 8px rgba(0, 0, 0, 0.2)', duration: 0.2 })}
+                onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1, boxShadow: '2px 2px 0 #333', duration: 0.2 })}
+                onClick={() => onContinue(selectedOption)}
+                >
+                Continue
+                </button>
                 </div>
             )}
         </div>

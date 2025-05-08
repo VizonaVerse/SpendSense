@@ -5,6 +5,8 @@ function IncomeTaxInfo({ onClick }) {
   const [personalAllowanceInfo, setPersonalAllowanceInfo] = useState("Loading...");
   const [incomeTaxRates, setIncomeTaxRates] = useState("Loading...");
   const [highEarnerInfo, setHighEarnerInfo] = useState("Loading...");
+  const [isHovered, setIsHovered] = useState(false); 
+
 
   useEffect(() => {
     const fetchPersonalAllowanceInfo = async () => {
@@ -186,21 +188,25 @@ function IncomeTaxInfo({ onClick }) {
   const buttonStyle = {
     marginTop: '2rem',
     padding: '12px 28px',
-    backgroundColor: '#bbe8ed', 
-    color: '#91273f',          
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+    color: '#1f3556',                             
     fontWeight: 'bold',
     fontFamily: "'Press Start 2P', cursive",
-    border: '2px solid #a0c4ff',
+    border: '2px solid #6fa8dc',                  
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'all 0.2s ease-in-out',
+    boxShadow: '0 0 8px rgba(0, 0, 0, 0.15)',
+    backdropFilter: 'blur(6px)',                  
   };
   
+  
   const buttonHoverStyle = {
-    backgroundColor: '#d8f3dc', 
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     transform: 'scale(1.05)',
-    boxShadow: '0 0 10px rgba(255, 153, 200, 0.4)',
+    boxShadow: '0 0 10px rgba(111, 168, 220, 0.5)',
   };
+  
   
   return (
     <div style={{
@@ -255,9 +261,14 @@ function IncomeTaxInfo({ onClick }) {
 
       {/* Button */}
       <div style={{ alignSelf: 'flex-start', marginTop: '17rem' }}>
-        <button onClick={onClick} style={buttonStyle}>
-          Next<br />Section
-        </button>
+      <button
+      onClick={onClick}
+      style={{ ...buttonStyle, ...(isHovered ? buttonHoverStyle : {}) }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      Next<br />Section
+    </button>
       </div>
     </div>
   );

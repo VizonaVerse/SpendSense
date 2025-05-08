@@ -285,17 +285,17 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
         <div className="mt-4">
           <Pensions selectedJob={selectedJob} />
           <div className="d-flex justify-content-center mt-4">
-            <button
-              onClick={() => {
-                handleContinue();
-                onPensionSelect(selectedJob.pension);
-              }}
-              onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
-              onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
-              className="btn btn-primary mt-3"
-            >
-              Continue to Pension Withdrawal
-            </button>
+          <button
+          onClick={() => {
+            handleContinue();
+            onPensionSelect(selectedJob.pension);
+          }}
+          onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
+          onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
+          className="pixel-button"
+        >
+          Continue to Pension Withdrawal
+        </button>
           </div>
         </div>
       )}

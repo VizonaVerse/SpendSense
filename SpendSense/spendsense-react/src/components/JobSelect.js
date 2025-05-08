@@ -133,16 +133,28 @@ function JobSelect({ onJobSelect }) {
 
   const handleFirstJobSelect = (job) => {
     setSelectedJob(job);
-
+  
+    cardRefs.current.forEach((card, index) => {
+      const jobAtIndex = jobs[index];
+      gsap.set(card, {
+        backgroundColor:
+          jobAtIndex.id === job.id
+            ? "rgba(255, 239, 170, 0.9)" 
+            : "rgba(255, 255, 255, 0.8)", 
+      });
+    });
+  
     const selectedIndex = jobs.findIndex((j) => j.id === job.id);
     const selectedCard = cardRefs.current[selectedIndex];
-
+  
     gsap.fromTo(
       selectedCard,
       { scale: 1 },
       { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" }
     );
   };
+  
+
   const handleContinue = () => {
     if (selectedJob) {
       onJobSelect(selectedJob);
@@ -158,39 +170,39 @@ function JobSelect({ onJobSelect }) {
     });
   };
 
-  const handleHoverOut = (element, job) => {
-    gsap.to(element, {
-      backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
-      y: 0,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  };
+const handleHoverOut = (element, job) => {
+  gsap.to(element, {
+    backgroundColor:
+      selectedJob?.id === job.id
+        ? "rgba(255, 239, 170, 0.9)" // soft pixel-style yellow
+        : "rgba(255, 255, 255, 0.8)",
+    y: 0,
+    duration: 0.3,
+    ease: "power2.out",
+  });
+};
+
 
   return (
     <div className="section-content text-center">
       <h2>Pick Your First Job</h2>
       <div className="row mt-4 justify-content-center">
         {jobs
-          .slice() // Create a shallow copy to avoid mutating the original state
-          .sort((a, b) => a.salary - b.salary) // Sort jobs by salary in ascending order
+          .slice()
+          .sort((a, b) => a.salary - b.salary)
           .map((job) => (
             <div key={job.id} className="col-md-4">
               <div
                 ref={addToRefs}
-                className="card p-3 shadow-sm job-card"
+                className={`card p-3 shadow-sm job-card ${selectedJob?.id === job.id ? "job-card-selected" : ""}`}
                 onClick={() => handleFirstJobSelect(job)}
                 onMouseEnter={(e) => handleHover(e.currentTarget)}
                 onMouseLeave={(e) => handleHoverOut(e.currentTarget, job)}
                 style={{
                   cursor: "pointer",
-                  backgroundColor: selectedJob?.id === job.id ? "#cce5ff" : "white",
-                  border: selectedJob?.id === job.id ? "3px solid #007bff" : "1px solid #ccc",
-                  boxShadow: selectedJob?.id === job.id ? "0 0 10px #007bff" : "none",
                   transition: "all 0.3s ease",
                   position: "relative",
                 }}
-                
               >
                 <h4>{job.title}</h4>
                 <p>
@@ -200,50 +212,48 @@ function JobSelect({ onJobSelect }) {
                     currency: "GBP",
                   })}
                 </p>
+  
                 {selectedJob?.id === job.id && (
-
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                    backgroundColor: "green",
-                    color: "white",
-                    borderRadius: "50%",
-                    width: "24px",
-                    height: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                  }}
-                >
-                  ✓
-                </div>
-              )}
-
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                      backgroundColor: "green",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "24px",
+                      height: "24px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                    }}
+                  >
+                    ✓
+                  </div>
+                )}
               </div>
             </div>
           ))}
       </div>
-
-      {/* Continue Button */}
+  
       {selectedJob && (
         <div className="mt-4">
-<button
-  onClick={handleContinue}
-  onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
-  onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
-  className="pixel-button"
->
-  Continue
-</button>
-
+          <button
+            onClick={handleContinue}
+            onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
+            onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
+            className="pixel-button"
+          >
+            Continue
+          </button>
         </div>
       )}
     </div>
   );
+  
 }
 
 export default JobSelect;

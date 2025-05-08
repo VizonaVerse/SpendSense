@@ -162,13 +162,12 @@ function App() {
     setSavings1(savings1);
     addProgress(10);
     const numericalSavings = parseFloat(data.Savings) / 100;
-    if (Math.abs(numericalSavings - 0.2) < (0.3)) {
+    if (Math.abs(numericalSavings - 0.2) <= (0.3)) {
       const newLifeExpectancy = 100 - (Math.abs(numericalSavings - 0.2) * 150);
       setLifeExpectancy(newLifeExpectancy);
     } else {
       setLifeExpectancy(55);
     }
-    // setLifeExpectancy(numericalSavings - 0.2);
     goToSection("budgetPlanner");
   };
 
@@ -197,35 +196,37 @@ function App() {
     const lifeMultiplier = lifeExpectancy - 58;
     let totalMoney = 0;
 
-    if (selectedPension === "contribution") {
-      if (selectedOption === "Withdraw via Insurance Company") {
-        totalMoney = 1.85 * (Savings1 + Savings2);
-      } else if (selectedOption === "Deposit into a Bank") {
-        totalMoney = (Savings1 + Savings2) * Math.pow(1.03, lifeMultiplier);
+    if (lifeExpectancy >= 58) {
+      if (selectedPension === "contribution") {
+        if (selectedOption === "Withdraw via Insurance Company") {
+          totalMoney = 1.85 * (Savings1 + Savings2);
+        } else if (selectedOption === "Deposit into a Bank") {
+          totalMoney = (Savings1 + Savings2) * Math.pow(1.03, lifeMultiplier);
+        }
+      } else if (selectedPension === "benefit") {
+        if (selectedOption === "Weekly Taxed Payments") {
+          totalMoney = 0.5 * netPay2 * lifeMultiplier + Savings1 + Savings2;
+        } else if (selectedOption === "Lump Sum Withdrawal") {
+          totalMoney = 18.75 * netPay2 + Savings1 + Savings2;
+        }
       }
-    } else if (selectedPension === "benefit") {
-      if (selectedOption === "Weekly Taxed Payments") {
-        totalMoney = 0.5 * netPay2 * lifeMultiplier + Savings1 + Savings2;
-      } else if (selectedOption === "Lump Sum Withdrawal") {
-        totalMoney = 18.75 * netPay2 + Savings1 + Savings2;
-      }
-    }
-
-    totalMoney += lifeMultiplier * 11440;
-    setMoney(totalMoney);
+      totalMoney += lifeMultiplier * 11440;
+      setMoney(Math.round(totalMoney));
+    } 
+    setFinalMoney(money);
     goToSection("pensionInfo");
     addProgress(10);
   };
 
   const handleBadEndOrEndShop = () => {
-    if (lifeExpectancy < 58){
+    if (lifeExpectancy < 58) {
       // Meant to show the bad ending screen
       // setShowStats(false);
       // goToSection("");
     } // else {
-      setShowEndShop(true);
-      goToSection("endShop");
-      addProgress(10);
+    setShowEndShop(true);
+    goToSection("endShop");
+    addProgress(10);
     // }
   };
 
@@ -236,7 +237,6 @@ function App() {
   };
 
   const handleMoneyChange = (newMoney) => {
-    setFinalMoney(money);
     setMoney(newMoney); // Update money state
   };
 
@@ -385,10 +385,11 @@ function App() {
                   <EndShop
                     username={formData.username}
                     formData={formData}
-                    netPay={netPay * 12}
-                    netPay2={selectedJobSalary}
+                    // netPay={netPay * 12}
+                    // netPay2={selectedJobSalary}
                     annualContributions={annualContributions}
                     budgetData={budgetData}
+                    finalMoney={money}
                     handleGoToEndScreen={handleShowEndScreen}
                     onMoneyChange={handleMoneyChange}
                   />

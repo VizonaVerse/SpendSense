@@ -89,7 +89,13 @@ function App() {
     };
   }, []);
 
+  // Detect test environment (Playwright, Cypress, or Jest)
+  const isTest =
+    process.env.NODE_ENV === 'test' ||
+    typeof window !== 'undefined' && window.navigator && window.navigator.webdriver;
+
   let scrollMultiplier = 100; // Adjust this value to control scroll distance
+
   // Animate scroll to a section with improved transition handling
   const goToSection = (sectionName) => {
     if (isTransitioning) return; // Prevent multiple transitions
@@ -100,7 +106,7 @@ function App() {
     const yValue = `-${sectionIndex * scrollMultiplier}vh`;
 
     gsap.to(scrollContainerRef.current, {
-      duration: 1,
+      duration: isTest ? 0.01 : 1, // <-- Make animation instant in test mode
       y: yValue,
       ease: "power2.out",
       onComplete: () => {

@@ -116,6 +116,8 @@ function Home({ onStart }) {
     
   }, []);
 
+  const isTest = process.env.NODE_ENV === 'test' || window.navigator.webdriver;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 relative overflow-hidden">
       {/* Rain effect - the GIFs falling from the sky */}
@@ -149,9 +151,15 @@ function Home({ onStart }) {
         </div>
         <div>
           <button
+            data-testid="start-game-button"
             onClick={onStart}
             className="nes-btn is-primary nes-pointer"
-            style={{ display: "block", margin: "25px auto", animation: "pulse 2s infinite", zIndex: 100 }}
+            style={{
+              display: "block",
+              margin: "25px auto",
+              animation: isTest ? "none" : "pulse 2s infinite", // Disable animation in test mode
+              zIndex: 100,
+            }}
           >
             Start Game
           </button>

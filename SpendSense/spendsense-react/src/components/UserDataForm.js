@@ -50,27 +50,27 @@ function UserDataForm({ onSubmit, onSkip }) {
       <>
         <form onSubmit={handleSubmit} className="user-form">
           <div>
-            <label>Name:</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} />
-            {errors.name && <small className="text-danger">{errors.name}</small>}
+            <label htmlFor="name">Name:</label>
+            <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} data-testid="name-input" />
+            {errors.name && <small className="text-danger" data-testid="name-error">{errors.name}</small>}
           </div>
     
           <div>
-            <label>Username:</label>
-            <input type="text" name="username" value={formData.username} onChange={handleChange} />
-            {errors.username && <small className="text-danger">{errors.username}</small>}
+            <label htmlFor="username">Username:</label>
+            <input id="username" type="text" name="username" value={formData.username} onChange={handleChange} data-testid="username-input" />
+            {errors.username && <small className="text-danger" data-testid="username-error">{errors.username}</small>}
           </div>
     
           <div>
-            <label>Age:</label>
-            <input type="number" name="age" value={formData.age} onChange={handleChange} />
-            {errors.age && <small className="text-danger">{errors.age}</small>}
+            <label htmlFor="age">Age:</label>
+            <input id="age" type="number" name="age" value={formData.age} onChange={handleChange} data-testid="age-input" />
+            {errors.age && <small className="text-danger" data-testid="age-error">{errors.age}</small>}
           </div>
     
           <div>
-            <label>Location:</label>
-            <input type="text" name="location" value={formData.location} onChange={handleChange} />
-            {errors.location && <small className="text-danger">{errors.location}</small>}
+            <label htmlFor="location">Location:</label>
+            <input id="location" type="text" name="location" value={formData.location} onChange={handleChange} data-testid="location-input" />
+            {errors.location && <small className="text-danger" data-testid="location-error">{errors.location}</small>}
           </div>
     
           <div>

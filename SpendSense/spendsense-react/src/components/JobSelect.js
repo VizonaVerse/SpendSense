@@ -182,6 +182,7 @@ const handleHoverOut = (element, job) => {
   });
 };
 
+const isTest = process.env.NODE_ENV === 'test' || window.navigator.webdriver;
 
   return (
     <div className="section-content text-center">
@@ -242,9 +243,10 @@ const handleHoverOut = (element, job) => {
       {selectedJob && (
         <div className="mt-4">
           <button
+            data-testid="continue-button"
             onClick={handleContinue}
-            onMouseEnter={(e) => gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
-            onMouseLeave={(e) => gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
+            onMouseEnter={(e) => !isTest && gsap.to(e.currentTarget, { y: -3, duration: 0.2 })}
+            onMouseLeave={(e) => !isTest && gsap.to(e.currentTarget, { y: 0, duration: 0.2 })}
             className="pixel-button"
           >
             Continue

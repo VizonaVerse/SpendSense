@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Pensions from "./Pensions";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   const [selectedJob, setSelectedJob] = useState();
@@ -22,7 +23,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   }, []);
 
   useEffect(() => {
-    fetch(`/api/job/`, {
+    fetch(`${API_BASE_URL}/api/job/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

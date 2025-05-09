@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { gsap } from 'gsap';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 function Information({ goToSection }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -63,7 +64,7 @@ function Information({ goToSection }) {
   };
 
   useEffect(() => {
-    fetch(`/api/userdata/?key=${key}`, {
+    fetch(`${API_BASE_URL}/api/userdata/?key=${key}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

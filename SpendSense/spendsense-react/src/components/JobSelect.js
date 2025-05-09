@@ -1,7 +1,7 @@
 // src/components/JobSelect.js
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 function JobSelect({ onJobSelect }) {
   const [selectedJob, setSelectedJob] = useState();
   const [jobs, setJobs] = useState([]); // Use state to update jobs dynamically
@@ -25,7 +25,7 @@ function JobSelect({ onJobSelect }) {
     // Prevent repeated fetching of jobs
     if (hasFetchedJobs.current) return;
 
-    fetch(`/api/job/`, {
+    fetch(`${API_BASE_URL}/api/job/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

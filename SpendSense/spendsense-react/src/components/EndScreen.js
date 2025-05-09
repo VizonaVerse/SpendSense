@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
 
 function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings, wants, needs, formData, username }) {
   const [showCounter, setShowCounter] = useState(true);
@@ -27,7 +29,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
       if (formData.username) {
         console.log('Form data:', formData);
         console.log('Request body:', JSON.stringify({ ...formData, final_money: happinessScore }));
-        fetch('/api/userform/', {
+        fetch(`${API_BASE_URL}/api/userform/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
 
       // Update leaderboard with happiness score
       if (formData.username) {
-        fetch(`/api/userdataupdate/${formData.username}/`, {
+        fetch(`${API_BASE_URL}/api/userdataupdate/${formData.username}/`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

@@ -71,8 +71,6 @@ describe('EmploymentInfo Component', () => {
 
   it('displays an error message when the API call fails', async () => {
     global.fetch.mockRejectedValueOnce(new Error('API error'));
-
-    // Wrap the initial render in act
     await act(async () => {
       render(<EmploymentInfo onClick={jest.fn()} />);
     });
@@ -101,8 +99,6 @@ describe('EmploymentInfo Component', () => {
       ok: true,
       json: async () => mockApiResponse,
     });
-
-    // Wrap the initial render in act
     await act(async () => {
       render(<EmploymentInfo onClick={jest.fn()} />);
     });

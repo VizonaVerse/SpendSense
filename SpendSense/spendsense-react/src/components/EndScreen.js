@@ -27,7 +27,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
       if (formData.username) {
         console.log('Form data:', formData);
         console.log('Request body:', JSON.stringify({ ...formData, final_money: happinessScore }));
-        fetch('http://localhost:8000/api/userform/', {
+        fetch('/api/userform/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
 
       // Update leaderboard with happiness score
       if (formData.username) {
-        fetch(`http://localhost:8000/api/userdataupdate/${formData.username}/`, {
+        fetch(`/api/userdataupdate/${formData.username}/`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

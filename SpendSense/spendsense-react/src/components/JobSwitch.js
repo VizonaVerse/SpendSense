@@ -22,7 +22,7 @@ function JobSwitch({ onJobSelect, initialJob, onPensionSelect }) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/job/`, {
+    fetch(`/api/job/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

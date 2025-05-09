@@ -223,7 +223,7 @@ function App() {
       }
       totalMoney += lifeMultiplier * 11440;
       setMoney(Math.round(totalMoney));
-    } 
+    }
     setFinalMoney(money);
     goToSection("pensionInfo");
     addProgress(10);
@@ -394,10 +394,6 @@ function App() {
               {showEndShop && (
                 <section className="section end-shop-section">
                   <EndShop
-                    username={formData.username}
-                    formData={formData}
-                    // netPay={netPay * 12}
-                    // netPay2={selectedJobSalary}
                     annualContributions={annualContributions}
                     budgetData={budgetData}
                     finalMoney={money}
@@ -410,6 +406,8 @@ function App() {
               {/* End Screen Section */}
               <section className="section end-screen-section">
                 <EndScreen
+                  username={formData.username}
+                  formData={formData}
                   isVisible={showEndScreen}
                   lifeExpectancy={lifeExpectancy}
                   finalWealth={finalMoney}

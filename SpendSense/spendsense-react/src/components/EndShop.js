@@ -46,7 +46,7 @@ const defaultItems = {
   ],
 };
 
-function EndShop({ username, formData, finalMoney, budgetData, handleGoToEndScreen, onMoneyChange }) {
+function EndShop({finalMoney, budgetData, handleGoToEndScreen, onMoneyChange }) {
   const salary_savings = finalMoney;
   const [activeCategories, setActiveCategories] = useState([]);
   const [money, setMoney] = useState(salary_savings);
@@ -54,60 +54,6 @@ function EndShop({ username, formData, finalMoney, budgetData, handleGoToEndScre
   const [loadingLeisure, setLoadingLeisure] = useState(true);
   const [loadingPhone, setLoadingPhone] = useState(true);
   const itemRefs = useRef({});
-
-  useEffect(() => {
-    let isSubmitted = false;
-
-    const submitFormData = async () => {
-      if (isSubmitted) return; // Prevent duplicate submissions
-      isSubmitted = true;
-
-      try {
-        const response = await fetch('/api/userform/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-        if (!response.ok) {
-          throw new Error('Failed to submit form data');
-        }
-        console.log('Form data submitted successfully');
-      } catch (error) {
-        console.error('Error submitting form data:', error);
-      }
-    };
-
-    if (formData.username) {
-      submitFormData();
-    }
-  }, [formData]);
-
-  useEffect(() => {
-    if (username) {
-      fetch(`/api/userdataupdate/${username}/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "token": process.env.REACT_APP_API_TOKEN, //passes token to backend
-        },
-        body: JSON.stringify({ final_money: salary_savings }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to update money");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Money updated successfully:", data);
-        })
-        .catch((error) => {
-          console.error("Error updating money:", error);
-        });
-    }
-  }, [money, username]);
 
   useEffect(() => {
     if (onMoneyChange) onMoneyChange(money);

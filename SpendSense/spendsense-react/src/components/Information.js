@@ -274,13 +274,14 @@ function Information({ goToSection }) {
               <ol style={{ paddingLeft: '65px' }}>
                 {users.slice().sort((a, b) => b.final_money - a.final_money).slice(0, 10).map((user, index) => (
                   <li key={index} style={{ marginBottom: '10px' }} className="leaderboard-item">
+                    <strong>Username:</strong>
                     <div style={{
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       maxWidth: '200px' // Adjust as needed to fit your layout
                     }}>
-                      <strong>Username:</strong> {user.username}
+                       {user.username}
                     </div>
                     <div><strong>Score:</strong> {user.final_money} pts</div>
                   </li>

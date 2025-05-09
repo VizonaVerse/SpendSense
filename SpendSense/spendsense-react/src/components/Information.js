@@ -63,7 +63,7 @@ function Information({ goToSection }) {
   };
 
   useEffect(() => {
-    fetch(`/api/userdata/?key=${key}`, {
+    fetch(`http://localhost:8000/api/userdata/?key=${key}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ function Information({ goToSection }) {
                 {users.slice().sort((a, b) => b.final_money - a.final_money).slice(0, 10).map((user, index) => (
                   <li key={index} style={{ marginBottom: '10px' }} className="leaderboard-item">
                     <div><strong>Username:</strong> {user.username}</div>
-                    <div><strong>Money:</strong> £{user.final_money}</div>
+                    <div><strong>Score:</strong> {user.final_money} pts</div>
                   </li>
                 ))}
               </ul>

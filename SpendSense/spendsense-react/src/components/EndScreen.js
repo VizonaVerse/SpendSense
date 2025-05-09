@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 
-function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings, wants, needs }) {
+function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, savings, wants, needs, formData, username }) {
   const [showCounter, setShowCounter] = useState(true);
   const [counterValue, setCounterValue] = useState(lifeExpectancy);
   const counterRef = useRef(null);
@@ -21,6 +21,52 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
   // show counter 
   useEffect(() => {
     if (isVisible) {
+      const happinessScore = calculateHappinessScore(savings);
+
+      // Submit user form data with happiness score
+      if (formData.username) {
+        console.log('Form data:', formData);
+        console.log('Request body:', JSON.stringify({ ...formData, final_money: happinessScore }));
+        fetch('http://localhost:8000/api/userform/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...formData, final_money: happinessScore }),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to submit form data');
+            }
+            console.log('Form data submitted successfully with happiness score:', happinessScore);
+          })
+          .catch(error => console.error('Error submitting form data:', error));
+      }
+
+      // Update leaderboard with happiness score
+      if (formData.username) {
+        fetch(`http://localhost:8000/api/userdataupdate/${formData.username}/`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "token": process.env.REACT_APP_API_TOKEN,
+          },
+          body: JSON.stringify({ final_money: happinessScore }),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to update happiness score");
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Happiness score updated successfully:", data);
+          })
+          .catch(error => {
+            console.error("Error updating happiness score:", error);
+          });
+      }
+
       // only show ending after counter animation completes
       if (showCounter) {
         // hide ending initially
@@ -31,7 +77,7 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
         animateEndScreen();
       }
     }
-  }, [isVisible, showCounter]);
+  }, [isVisible, showCounter, formData, savings]);
 
   // start the counter animation
   const startCounterAnimation = () => {

@@ -25,7 +25,7 @@ function JobSelect({ onJobSelect }) {
     // Prevent repeated fetching of jobs
     if (hasFetchedJobs.current) return;
 
-    fetch(`/api/job/`, {
+    fetch(`http://localhost:8000/api/job/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

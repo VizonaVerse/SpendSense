@@ -27,8 +27,6 @@ function EndScreen({ onEndScreen, isVisible, lifeExpectancy, finalWealth, saving
 
       // Submit user form data with happiness score
       if (formData.username) {
-        console.log('Form data:', formData);
-        console.log('Request body:', JSON.stringify({ ...formData, final_money: happinessScore }));
         fetch(`${API_BASE_URL}/api/userform/`, {
           method: 'POST',
           headers: {

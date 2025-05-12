@@ -1,0 +1,186 @@
+.learn-page {
+    font-family: 'Press Start 2P', cursive;
+    background-image: url('/public/images/space.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    height: auto;
+    padding: 2rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+  } 
+  
+html {
+  scroll-behavior: smooth;
+}
+
+.learn-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: rgb(255, 254, 254); 
+}
+
+.learn-intro {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: white; 
+}
+  .back-button {
+    background: black;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .learn-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .learn-intro {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .learn-section {
+    background: rgba(25, 25, 40, 0.85); 
+    border: 2px solid #555;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+    color: #e0e0ff;
+  }
+  
+  .learn-heading {
+    font-size: 1.4rem;
+    color: #00ffff;
+    margin-bottom: 1rem;
+  }
+  
+  .learn-text {
+    font-size: 0.9rem;
+    color: #f0f0f0;
+    line-height: 1.6;
+  }
+  
+  .learn-placeholder {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px dashed #888;
+    color: #c5c5ff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    padding: 1rem;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  
+  .learn-section:hover {
+    transform: scale(1.01);
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  
+  .learn-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .title-coin {
+    width: 40px;
+    height: auto;
+    image-rendering: pixelated;
+  }
+  
+  .title-coin.left {
+    margin-right: -0.5rem;
+  }
+  
+  .title-coin.right {
+    margin-left: -0.5rem;
+  }
+
+  .learn-chart-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .budget-chart {
+    max-width: 300px;
+    width: 100%;
+    border: 2px dashed #888;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  .learn-chart-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .payslip-chart {
+    max-width: 320px;
+    width: 100%;
+    border: 2px dashed #888;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  .pension-chart {
+    max-width: 320px;
+    width: 100%;
+    border: 2px dashed #888;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  
+  .floating-logo {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 450px;
+    height: auto;
+    z-index: 999;
+    image-rendering: pixelated;
+    opacity: 0.85;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  .floating-logo:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  
+  .title-coin {
+    width: 36px;
+    height: auto;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+    align-self: flex-start;
+    margin-top: 1px; 
+  }
+  
+  

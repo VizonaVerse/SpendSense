@@ -1,15 +1,20 @@
-Welcome to your repo for COM2027, Group 21!
-=====================================================
+## About this project
 
-Feel free to change this README.
+This repository is a mirror of a group university project originally hosted on GitLab.
 
-Getting started
----------------
+In this project, I was primarily responsible for:
+- Developing interactive UI components, including custom pie charts with border dragging and mouse tracking.
+- Implementing core financial calculations and choice-based logic (such as savings, life expectancy, pension withdrawals etc).
+-  Styling and (helping in) designing user leaderboards, status bars, and retro-themed progress indicators.
+- Configuring back-end data sorting, database handling, Docker setup, and deployment server settings.
 
-Before you get started, you should update your com2027.yml file with your team members and project details. This will appear at [your static site](https://csee.pages.surrey.ac.uk/com2027/2024-25/Group21).
+## SpendSense
 
-You have two branches created for you, `trunk` and `release`. The final commit on `release` will be marked.
+A personal finance tracker application developed as part of a university group project (COM2027).
 
-Commits must be merged into `release` using a merge request, which requires two approvals. Force-pushing is disabled for both branches, as this can destroy your work. Only `trunk` can be merged into `release`.
+## Setup
 
-You may develop directly on `trunk`, although it is recommended that you branch from `trunk` and submit merge requests (or merge directly onto the branch). How you use `trunk` is up to your team.
+Clone this repository and follow the setup instructions below:
+
+```bash
+git clone [https://github.com/VizonaVerse/SpendSense.git](https://github.com/VizonaVerse/SpendSense.git)

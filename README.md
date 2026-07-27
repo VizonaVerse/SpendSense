@@ -10,7 +10,7 @@ In this project, I was primarily responsible for:
 
 ## SpendSense
 
-A personal finance tracker application developed as part of a university group project (COM2027).
+An application developed to help understand budgeting practices as part of a university group project (COM2027).
 
 ## Setup
 

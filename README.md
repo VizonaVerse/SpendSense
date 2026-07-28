@@ -14,7 +14,7 @@ An application developed to help understand budgeting practices as part of a uni
 
 ## Setup
 
-Clone this repository and follow the setup instructions below:
+Clone this repository and launch the application using Docker Compose:
 
 ```bash
 git clone [https://github.com/VizonaVerse/SpendSense.git](https://github.com/VizonaVerse/SpendSense.git)

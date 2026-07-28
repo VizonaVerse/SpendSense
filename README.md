@@ -18,3 +18,5 @@ Clone this repository and follow the setup instructions below:
 
 ```bash
 git clone [https://github.com/VizonaVerse/SpendSense.git](https://github.com/VizonaVerse/SpendSense.git)
+cd SpendSense
+docker compose up --build
